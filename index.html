@@ -1,7 +1,14 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/index.html b/index.html
+index 334ff3ee8774daa446805c10d52e526b59e0e840..0b8c0e2146a48cde32a6b26fceded29af0f00ad0 100644
+--- a/index.html
++++ b/index.html
+@@ -1,125 +1,300 @@
  <!DOCTYPE html>
  <html lang="ko">
  <head>
    <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>부부 가계부</title>
    <style>
 +    :root {
@@ -346,3 +353,6 @@
 +  </div>
  </body>
  </html>
+ 
+EOF
+)
