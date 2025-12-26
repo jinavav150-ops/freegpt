@@ -2,401 +2,777 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>포켓몬 배틀 게임</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>포켓몬 어드벤처</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
             font-family: 'Malgun Gothic', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .game-container {
-            max-width: 800px;
-            width: 100%;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
-        .screen {
-            display: none;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        /* 시작 화면 */
-        .start-screen {
-            padding: 60px 40px;
-            text-align: center;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .start-screen h1 {
-            font-size: 3em;
-            color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            margin-bottom: 30px;
-        }
-
-        .pokemon-select {
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #0f3460;
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin: 40px 0;
+            flex-direction: column;
         }
 
-        .pokemon-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 3px solid transparent;
+        canvas {
+            display: block;
+            background: #2d2d44;
+            width: 100%;
+            flex: 1;
+            touch-action: none;
         }
 
-        .pokemon-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .pokemon-card.selected {
-            border-color: #4CAF50;
-            background: #e8f5e9;
-        }
-
-        .pokemon-card img {
-            width: 120px;
-            height: 120px;
-            font-size: 80px;
-            margin-bottom: 10px;
-        }
-
-        .pokemon-card h3 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .pokemon-card .type {
-            background: #2196F3;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            display: inline-block;
-        }
-
-        .type.fire { background: #ff6b6b; }
-        .type.water { background: #4ecdc4; }
-        .type.grass { background: #95e1d3; }
-        .type.electric { background: #f9ca24; color: #333; }
-
-        .start-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 50px;
-            font-size: 1.3em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .start-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
-        }
-
-        .start-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: scale(1);
-        }
-
-        /* 배틀 화면 */
-        .battle-screen {
-            padding: 40px;
-            background: linear-gradient(to bottom, #87CEEB 0%, #98D8C8 100%);
-        }
-
-        .battle-field {
+        .ui-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 40px;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .pokemon-display {
-            flex: 1;
-            text-align: center;
-        }
-
-        .enemy {
-            animation: slideInRight 0.5s;
-        }
-
-        .player {
-            animation: slideInLeft 0.5s;
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideInLeft {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .pokemon-sprite {
-            font-size: 100px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-
-        .attack-animation {
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .pokemon-info {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 0 20px;
-        }
-
-        .pokemon-name {
-            font-size: 1.5em;
+        .stat-box {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
             font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
+            font-size: 14px;
+        }
+
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .hp-bar-container {
-            background: #ddd;
-            height: 25px;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            min-width: 150px;
+        }
+
+        .pokemon-name {
+            color: #ffd700;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .hp-bar-bg {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 5px;
+            border: 2px solid #555;
         }
 
         .hp-bar {
-            background: linear-gradient(to right, #4CAF50, #8BC34A);
             height: 100%;
-            transition: width 0.5s;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            font-size: 11px;
             font-weight: bold;
         }
 
         .hp-bar.low {
-            background: linear-gradient(to right, #ff6b6b, #ee5a6f);
+            background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
         }
 
-        .hp-bar.critical {
-            background: linear-gradient(to right, #c0392b, #e74c3c);
-            animation: pulse 0.5s infinite;
+        .game-stats {
+            text-align: right;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        .level-display {
+            color: #4ecdc4;
+            font-size: 16px;
+            margin-bottom: 4px;
         }
 
-        .battle-message {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            min-height: 80px;
-            font-size: 1.1em;
-            color: #333;
-            border: 3px solid #333;
+        .exp-bar {
+            width: 100px;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 3px;
+        }
+
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9b59b6, #e74c3c);
+            transition: width 0.3s;
+        }
+
+        .score-display {
+            color: #ffd700;
+            font-size: 14px;
+        }
+
+        /* 모바일 컨트롤 */
+        .mobile-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .joystick-area {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 140px;
+            height: 140px;
+            pointer-events: auto;
+        }
+
+        .joystick-base {
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .joystick-stick {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(78, 205, 196, 0.7);
+            border-radius: 50%;
+            border: 3px solid #4ecdc4;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
             gap: 15px;
+            pointer-events: auto;
         }
 
         .action-btn {
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 20px;
-            font-size: 1.1em;
-            border-radius: 10px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.1s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .action-btn:active {
+            transform: scale(0.9);
+        }
+
+        .attack-btn {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        .skill-btn {
+            border-color: #9b59b6;
+            background: rgba(155, 89, 182, 0.3);
+        }
+
+        .skill-cooldown {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
             font-weight: bold;
         }
 
-        .action-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        /* 시작 화면 */
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
         }
 
-        .action-btn.attack { background: #ff6b6b; }
-        .action-btn.defend { background: #4ecdc4; }
-        .action-btn.heal { background: #95e1d3; }
-        .action-btn.special { background: #f9ca24; color: #333; }
+        #startScreen.hidden {
+            display: none;
+        }
 
-        /* 결과 화면 */
-        .result-screen {
-            padding: 60px 40px;
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
             text-align: center;
         }
 
-        .result-screen.win {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .result-screen.lose {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .result-screen h2 {
-            font-size: 3em;
-            color: white;
+        .subtitle {
+            color: #4ecdc4;
+            font-size: 16px;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .result-screen p {
-            font-size: 1.5em;
+        .trainer-name-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #4ecdc4;
             color: white;
-            margin-bottom: 40px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 250px;
         }
 
-        .restart-btn {
-            background: white;
-            color: #667eea;
+        .trainer-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .pokemon-select {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pokemon-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .pokemon-card.selected {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .pokemon-icon {
+            font-size: 50px;
+            margin-bottom: 8px;
+        }
+
+        .pokemon-name-display {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .pokemon-type {
+            font-size: 11px;
+            color: #aaa;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .pokemon-stats {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        .start-btn {
+            background: #4ecdc4;
+            color: white;
             border: none;
-            padding: 15px 50px;
-            font-size: 1.3em;
-            border-radius: 50px;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
+            margin-top: 20px;
         }
 
-        .restart-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        .start-btn:active {
+            transform: scale(0.95);
+        }
+
+        .start-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .leaderboard-btn {
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            padding: 10px 30px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        /* 게임오버 화면 */
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        #gameOverScreen.hidden {
+            display: none;
+        }
+
+        .game-over-title {
+            font-size: 2.5em;
+            color: #e74c3c;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+        }
+
+        .final-stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .stats {
+            color: white;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .restart-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .restart-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 리더보드 화면 */
+        #leaderboardScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #leaderboardScreen.hidden {
+            display: none;
+        }
+
+        .leaderboard-list {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px 0;
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .leaderboard-item.top3 {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+        }
+
+        .rank {
+            font-size: 24px;
+            font-weight: bold;
+            width: 50px;
+        }
+
+        .trainer-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .trainer-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .trainer-pokemon {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .score {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .close-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .loading {
+            color: white;
+            font-size: 18px;
+            margin: 20px;
+        }
+
+        .level-up-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 215, 0, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 500;
+            animation: popupAppear 0.3s;
+        }
+
+        @keyframes popupAppear {
+            from {
+                transform: translate(-50%, -50%) scale(0);
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .level-up-popup h2 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .level-up-popup p {
+            color: #666;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- 시작 화면 -->
-        <div class="screen active start-screen">
-            <h1>⚡ 포켓몬 배틀 ⚡</h1>
-            <p style="color: white; font-size: 1.2em; margin-bottom: 20px;">당신의 포켓몬을 선택하세요!</p>
-            
-            <div class="pokemon-select">
-                <div class="pokemon-card" data-pokemon="pikachu">
-                    <div class="pokemon-sprite">⚡</div>
-                    <h3>피카츄</h3>
-                    <span class="type electric">전기</span>
-                    <p style="margin-top: 10px; color: #666;">HP: 100 | 공격: 25</p>
-                </div>
-                <div class="pokemon-card" data-pokemon="charizard">
-                    <div class="pokemon-sprite">🔥</div>
-                    <h3>리자몽</h3>
-                    <span class="type fire">불꽃</span>
-                    <p style="margin-top: 10px; color: #666;">HP: 120 | 공격: 30</p>
-                </div>
-                <div class="pokemon-card" data-pokemon="blastoise">
-                    <div class="pokemon-sprite">💧</div>
-                    <h3>거북왕</h3>
-                    <span class="type water">물</span>
-                    <p style="margin-top: 10px; color: #666;">HP: 110 | 공격: 28</p>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="player-info">
+                <div class="hp-bar-container">
+                    <div class="pokemon-name" id="pokemonName">피카츄</div>
+                    <div class="hp-bar-bg">
+                        <div class="hp-bar" id="hpBar" style="width: 100%;">100/100</div>
+                    </div>
                 </div>
             </div>
-
-            <button class="start-btn" disabled>배틀 시작!</button>
+            <div class="stat-box game-stats">
+                <div class="level-display" id="levelDisplay">레벨: 1</div>
+                <div class="exp-bar">
+                    <div class="exp-fill" id="expBar" style="width: 0%"></div>
+                </div>
+                <div class="score-display" id="scoreDisplay">점수: 0</div>
+            </div>
         </div>
 
-        <!-- 배틀 화면 -->
-        <div class="screen battle-screen">
-            <div class="battle-field">
-                <div class="pokemon-display enemy">
-                    <div class="pokemon-sprite" id="enemySprite">🔥</div>
-                    <div class="pokemon-info">
-                        <div class="pokemon-name" id="enemyName">야생의 리자몽</div>
-                        <div class="hp-bar-container">
-                            <div class="hp-bar" id="enemyHp" style="width: 100%;">100/100</div>
-                        </div>
-                    </div>
+        <div class="mobile-controls">
+            <div class="joystick-area" id="joystickArea">
+                <div class="joystick-base">
+                    <div class="joystick-stick" id="joystickStick"></div>
                 </div>
-
-                <div class="pokemon-display player">
-                    <div class="pokemon-sprite" id="playerSprite">⚡</div>
-                    <div class="pokemon-info">
-                        <div class="pokemon-name" id="playerName">피카츄</div>
-                        <div class="hp-bar-container">
-                            <div class="hp-bar" id="playerHp" style="width: 100%;">100/100</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="battle-message" id="battleMessage">
-                야생의 포켓몬이 나타났다! 어떻게 하시겠습니까?
             </div>
 
             <div class="action-buttons">
-                <button class="action-btn attack" onclick="playerAttack()">⚔️ 공격하기</button>
-                <button class="action-btn defend" onclick="playerDefend()">🛡️ 방어하기</button>
-                <button class="action-btn heal" onclick="playerHeal()">💚 회복하기</button>
-                <button class="action-btn special" onclick="playerSpecial()">✨ 필살기</button>
+                <div class="action-btn attack-btn" id="attackBtn">⚡</div>
+                <div class="action-btn skill-btn" id="skillBtn">
+                    💥
+                    <div class="skill-cooldown hidden" id="skillCooldown">0</div>
+                </div>
             </div>
         </div>
 
-        <!-- 결과 화면 -->
-        <div class="screen result-screen">
-            <h2 id="resultTitle">승리!</h2>
-            <p id="resultMessage">축하합니다! 야생의 포켓몬을 물리쳤습니다!</p>
-            <button class="restart-btn" onclick="restartGame()">다시 시작</button>
+        <div id="startScreen">
+            <h1>⚡ 포켓몬 어드벤처 ⚡</h1>
+            <p class="subtitle">트레이너 이름을 입력하고 포켓몬을 선택하세요!</p>
+            
+            <input type="text" class="trainer-name-input" id="trainerName" placeholder="트레이너 이름" maxlength="10">
+
+            <div class="pokemon-select">
+                <div class="pokemon-card" data-pokemon="pikachu">
+                    <div class="pokemon-icon">⚡</div>
+                    <div class="pokemon-name-display">피카츄</div>
+                    <div class="pokemon-type">전기</div>
+                    <div class="pokemon-stats">HP: 100 | 빠른 공격</div>
+                </div>
+                <div class="pokemon-card" data-pokemon="charmander">
+                    <div class="pokemon-icon">🔥</div>
+                    <div class="pokemon-name-display">파이리</div>
+                    <div class="pokemon-type">불꽃</div>
+                    <div class="pokemon-stats">HP: 120 | 강한 공격</div>
+                </div>
+                <div class="pokemon-card" data-pokemon="squirtle">
+                    <div class="pokemon-icon">💧</div>
+                    <div class="pokemon-name-display">꼬부기</div>
+                    <div class="pokemon-type">물</div>
+                    <div class="pokemon-stats">HP: 130 | 방어력 높음</div>
+                </div>
+            </div>
+
+            <button class="start-btn" id="startBtn" disabled>게임 시작</button>
+            <button class="leaderboard-btn" id="showLeaderboardBtn">🏆 리더보드</button>
+        </div>
+
+        <div id="gameOverScreen" class="hidden">
+            <h1 class="game-over-title">게임 오버</h1>
+            <div class="final-stats">
+                <div class="stats">레벨: <span id="finalLevel">0</span></div>
+                <div class="stats">점수: <span id="finalScore">0</span></div>
+                <div class="stats">처치: <span id="finalKills">0</span></div>
+            </div>
+            <p style="color: #4ecdc4; font-size: 16px; margin: 10px 0;">점수가 저장되었습니다!</p>
+            <button class="restart-btn" id="restartBtn">다시 시작</button>
+            <button class="leaderboard-btn" id="showLeaderboardBtn2">🏆 리더보드</button>
+        </div>
+
+        <div id="leaderboardScreen" class="hidden">
+            <h1>🏆 리더보드 🏆</h1>
+            <div class="loading" id="leaderboardLoading">로딩중...</div>
+            <div class="leaderboard-list" id="leaderboardList"></div>
+            <button class="close-btn" id="closeLeaderboardBtn">닫기</button>
         </div>
     </div>
 
-    <script>
-        const pokemonData = {
-            pikachu: { name: '피카츄', sprite: '⚡', maxHp: 100, attack: 25, type: '전기' },
-            charizard: { name: '리자몽', sprite: '🔥', maxHp: 120, attack: 30, type: '불꽃' },
-            blastoise: { name: '거북왕', sprite: '💧', maxHp: 110, attack: 28, type: '물' }
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, push, get, query, orderByChild, limitToLast } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAj0M7AuQnOlnWV1ZDcuY0Ij9eOV7SRUlg",
+            authDomain: "free-96bc0.firebaseapp.com",
+            databaseURL: "https://free-96bc0-default-rtdb.firebaseio.com",
+            projectId: "free-96bc0",
+            storageBucket: "free-96bc0.firebasestorage.app",
+            messagingSenderId: "131017218548",
+            appId: "1:131017218548:web:55ee3cb626695ede9841a1"
         };
 
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Firebase 함수를 전역으로 노출
+        window.saveScore = async function(trainerName, pokemon, level, score, kills) {
+            try {
+                const scoresRef = ref(database, 'pokemon-game/scores');
+                const newScoreRef = push(scoresRef);
+                await set(newScoreRef, {
+                    trainerName: trainerName,
+                    pokemon: pokemon,
+                    level: level,
+                    score: score,
+                    kills: kills,
+                    timestamp: Date.now()
+                });
+                console.log('점수 저장 성공!');
+            } catch (error) {
+                console.error('점수 저장 실패:', error);
+            }
+        };
+
+        window.loadLeaderboard = async function() {
+            try {
+                const scoresRef = ref(database, 'pokemon-game/scores');
+                const topScoresQuery = query(scoresRef, orderByChild('score'), limitToLast(10));
+                const snapshot = await get(topScoresQuery);
+                
+                const scores = [];
+                snapshot.forEach((childSnapshot) => {
+                    scores.push(childSnapshot.val());
+                });
+                
+                // 점수 높은 순으로 정렬
+                scores.sort((a, b) => b.score - a.score);
+                return scores;
+            } catch (error) {
+                console.error('리더보드 로딩 실패:', error);
+                return [];
+            }
+        };
+
+        console.log('Firebase 초기화 완료!');
+    </script>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 200;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 게임 상태
+        let gameState = 'menu';
         let selectedPokemon = null;
-        let playerPokemon = null;
-        let enemyPokemon = null;
-        let isDefending = false;
-        let healCount = 3;
+        let trainerNameValue = '';
+        let player = null;
+        let enemies = [];
+        let projectiles = [];
+        let particles = [];
+        let level = 1;
+        let exp = 0;
+        let expToNextLevel = 100;
+        let score = 0;
+        let kills = 0;
+        let enemiesInWave = 0;
+
+        // 조이스틱
+        let joystickActive = false;
+        let joystickStart = { x: 0, y: 0 };
+        let joystickCurrent = { x: 0, y: 0 };
+        let moveDirection = { x: 0, y: 0 };
+
+        // 포켓몬 데이터
+        const pokemonData = {
+            pikachu: {
+                name: '피카츄',
+                icon: '⚡',
+                maxHp: 100,
+                speed: 4,
+                attackDamage: 20,
+                attackRange: 150,
+                attackCooldown: 300,
+                skillDamage: 60,
+                skillRange: 200,
+                skillCooldown: 4000,
+                color: '#FFD700',
+                projectileColor: '#FFFF00'
+            },
+            charmander: {
+                name: '파이리',
+                icon: '🔥',
+                maxHp: 120,
+                speed: 3,
+                attackDamage: 30,
+                attackRange: 130,
+                attackCooldown: 400,
+                skillDamage: 100,
+                skillRange: 180,
+                skillCooldown: 5000,
+                color: '#FF6B4A',
+                projectileColor: '#FF4500'
+            },
+            squirtle: {
+                name: '꼬부기',
+                icon: '💧',
+                maxHp: 130,
+                speed: 3.5,
+                attackDamage: 25,
+                attackRange: 140,
+                attackCooldown: 350,
+                skillDamage: 80,
+                skillRange: 190,
+                skillCooldown: 4500,
+                color: '#4A90E2',
+                projectileColor: '#1E90FF'
+            }
+        };
 
         // 포켓몬 선택
         document.querySelectorAll('.pokemon-card').forEach(card => {
@@ -404,200 +780,574 @@
                 document.querySelectorAll('.pokemon-card').forEach(c => c.classList.remove('selected'));
                 this.classList.add('selected');
                 selectedPokemon = this.dataset.pokemon;
-                document.querySelector('.start-btn').disabled = false;
+                checkStartButton();
             });
         });
 
-        // 게임 시작
-        document.querySelector('.start-btn').addEventListener('click', startBattle);
+        document.getElementById('trainerName').addEventListener('input', checkStartButton);
 
-        function startBattle() {
-            if (!selectedPokemon) return;
-
-            // 플레이어 포켓몬 설정
-            const playerData = pokemonData[selectedPokemon];
-            playerPokemon = {
-                ...playerData,
-                hp: playerData.maxHp,
-                currentHp: playerData.maxHp
-            };
-
-            // 적 포켓몬 랜덤 선택
-            const enemyKeys = Object.keys(pokemonData).filter(k => k !== selectedPokemon);
-            const enemyKey = enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
-            const enemyData = pokemonData[enemyKey];
-            enemyPokemon = {
-                ...enemyData,
-                hp: enemyData.maxHp,
-                currentHp: enemyData.maxHp
-            };
-
-            // UI 업데이트
-            document.getElementById('playerSprite').textContent = playerPokemon.sprite;
-            document.getElementById('playerName').textContent = playerPokemon.name;
-            document.getElementById('enemySprite').textContent = enemyPokemon.sprite;
-            document.getElementById('enemyName').textContent = '야생의 ' + enemyPokemon.name;
-
-            updateHP();
-            healCount = 3;
-
-            // 화면 전환
-            document.querySelector('.start-screen').classList.remove('active');
-            document.querySelector('.battle-screen').classList.add('active');
-        }
-
-        function updateHP() {
-            const playerPercent = (playerPokemon.currentHp / playerPokemon.hp) * 100;
-            const enemyPercent = (enemyPokemon.currentHp / enemyPokemon.hp) * 100;
-
-            const playerHpBar = document.getElementById('playerHp');
-            const enemyHpBar = document.getElementById('enemyHp');
-
-            playerHpBar.style.width = playerPercent + '%';
-            playerHpBar.textContent = Math.max(0, playerPokemon.currentHp) + '/' + playerPokemon.hp;
-            
-            enemyHpBar.style.width = enemyPercent + '%';
-            enemyHpBar.textContent = Math.max(0, enemyPokemon.currentHp) + '/' + enemyPokemon.hp;
-
-            // HP 색상 변경
-            updateHpColor(playerHpBar, playerPercent);
-            updateHpColor(enemyHpBar, enemyPercent);
-        }
-
-        function updateHpColor(bar, percent) {
-            bar.classList.remove('low', 'critical');
-            if (percent < 20) {
-                bar.classList.add('critical');
-            } else if (percent < 50) {
-                bar.classList.add('low');
+        function checkStartButton() {
+            const nameInput = document.getElementById('trainerName').value.trim();
+            if (nameInput && selectedPokemon) {
+                document.getElementById('startBtn').disabled = false;
+            } else {
+                document.getElementById('startBtn').disabled = true;
             }
         }
 
-        function showMessage(msg) {
-            document.getElementById('battleMessage').textContent = msg;
-        }
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        });
 
-        function playerAttack() {
-            const damage = playerPokemon.attack + Math.floor(Math.random() * 10);
-            enemyPokemon.currentHp -= damage;
+        document.getElementById('showLeaderboardBtn').addEventListener('click', showLeaderboard);
+        document.getElementById('showLeaderboardBtn2').addEventListener('click', showLeaderboard);
+        document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
+            document.getElementById('leaderboardScreen').classList.add('hidden');
+            if (gameState === 'menu') {
+                document.getElementById('startScreen').classList.remove('hidden');
+            } else {
+                document.getElementById('gameOverScreen').classList.remove('hidden');
+            }
+        });
+
+        async function showLeaderboard() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.remove('hidden');
+            document.getElementById('leaderboardLoading').style.display = 'block';
+            document.getElementById('leaderboardList').innerHTML = '';
+
+            const scores = await window.loadLeaderboard();
             
-            document.getElementById('enemySprite').classList.add('attack-animation');
-            setTimeout(() => {
-                document.getElementById('enemySprite').classList.remove('attack-animation');
-            }, 500);
+            document.getElementById('leaderboardLoading').style.display = 'none';
 
-            showMessage(`${playerPokemon.name}의 공격! ${damage}의 데미지를 입혔다!`);
-            updateHP();
-
-            if (checkBattleEnd()) return;
-            
-            setTimeout(enemyTurn, 1500);
-        }
-
-        function playerDefend() {
-            isDefending = true;
-            showMessage(`${playerPokemon.name}은(는) 방어 태세를 취했다!`);
-            setTimeout(enemyTurn, 1500);
-        }
-
-        function playerHeal() {
-            if (healCount <= 0) {
-                showMessage('회복약을 모두 사용했습니다!');
+            if (scores.length === 0) {
+                document.getElementById('leaderboardList').innerHTML = '<p style="color: white; text-align: center;">아직 기록이 없습니다.</p>';
                 return;
             }
 
-            healCount--;
-            const healAmount = 30;
-            playerPokemon.currentHp = Math.min(playerPokemon.hp, playerPokemon.currentHp + healAmount);
-            
-            showMessage(`${playerPokemon.name}은(는) ${healAmount}만큼 회복했다! (남은 회복: ${healCount})`);
-            updateHP();
-
-            setTimeout(enemyTurn, 1500);
-        }
-
-        function playerSpecial() {
-            const damage = playerPokemon.attack * 2 + Math.floor(Math.random() * 15);
-            enemyPokemon.currentHp -= damage;
-            
-            document.getElementById('enemySprite').classList.add('attack-animation');
-            setTimeout(() => {
-                document.getElementById('enemySprite').classList.remove('attack-animation');
-            }, 500);
-
-            showMessage(`${playerPokemon.name}의 필살기! 강력한 공격으로 ${damage}의 데미지!`);
-            updateHP();
-
-            if (checkBattleEnd()) return;
-            
-            setTimeout(enemyTurn, 1500);
-        }
-
-        function enemyTurn() {
-            const action = Math.random();
-            let damage;
-
-            if (action < 0.7) {
-                damage = enemyPokemon.attack + Math.floor(Math.random() * 10);
-                if (isDefending) {
-                    damage = Math.floor(damage / 2);
-                    showMessage(`${enemyPokemon.name}의 공격! 방어로 ${damage}의 데미지만 받았다!`);
-                } else {
-                    showMessage(`${enemyPokemon.name}의 공격! ${damage}의 데미지를 받았다!`);
-                }
-                playerPokemon.currentHp -= damage;
+            const listHtml = scores.map((score, index) => {
+                const rank = index + 1;
+                const isTop3 = rank <= 3;
+                const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
                 
-                document.getElementById('playerSprite').classList.add('attack-animation');
-                setTimeout(() => {
-                    document.getElementById('playerSprite').classList.remove('attack-animation');
-                }, 500);
+                return `
+                    <div class="leaderboard-item ${isTop3 ? 'top3' : ''}">
+                        <div class="rank">${medal || rank}</div>
+                        <div class="trainer-info">
+                            <div class="trainer-name">${score.trainerName}</div>
+                            <div class="trainer-pokemon">${score.pokemon} | 레벨 ${score.level}</div>
+                        </div>
+                        <div class="score">${score.score.toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('leaderboardList').innerHTML = listHtml;
+        }
+
+        // 조이스틱
+        const joystickArea = document.getElementById('joystickArea');
+        const joystickStick = document.getElementById('joystickStick');
+
+        joystickArea.addEventListener('touchstart', handleJoystickStart);
+        joystickArea.addEventListener('touchmove', handleJoystickMove);
+        joystickArea.addEventListener('touchend', handleJoystickEnd);
+
+        function handleJoystickStart(e) {
+            e.preventDefault();
+            joystickActive = true;
+            const rect = joystickArea.getBoundingClientRect();
+            joystickStart.x = rect.left + rect.width / 2;
+            joystickStart.y = rect.top + rect.height / 2;
+        }
+
+        function handleJoystickMove(e) {
+            e.preventDefault();
+            if (!joystickActive) return;
+
+            const touch = e.touches[0];
+            const dx = touch.clientX - joystickStart.x;
+            const dy = touch.clientY - joystickStart.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxDistance = 45;
+
+            if (distance > maxDistance) {
+                joystickCurrent.x = (dx / distance) * maxDistance;
+                joystickCurrent.y = (dy / distance) * maxDistance;
             } else {
-                showMessage(`${enemyPokemon.name}은(는) 힘을 모으고 있다...`);
+                joystickCurrent.x = dx;
+                joystickCurrent.y = dy;
             }
 
-            isDefending = false;
-            updateHP();
-            checkBattleEnd();
+            joystickStick.style.transform = `translate(calc(-50% + ${joystickCurrent.x}px), calc(-50% + ${joystickCurrent.y}px))`;
+
+            moveDirection.x = joystickCurrent.x / maxDistance;
+            moveDirection.y = joystickCurrent.y / maxDistance;
         }
 
-        function checkBattleEnd() {
-            if (enemyPokemon.currentHp <= 0) {
-                endBattle(true);
-                return true;
-            }
-            if (playerPokemon.currentHp <= 0) {
-                endBattle(false);
-                return true;
-            }
-            return false;
+        function handleJoystickEnd(e) {
+            e.preventDefault();
+            joystickActive = false;
+            joystickStick.style.transform = 'translate(-50%, -50%)';
+            moveDirection.x = 0;
+            moveDirection.y = 0;
         }
 
-        function endBattle(won) {
-            document.querySelector('.battle-screen').classList.remove('active');
-            const resultScreen = document.querySelector('.result-screen');
-            resultScreen.classList.add('active');
+        // 공격/스킬
+        let lastAttackTime = 0;
+        let lastSkillTime = 0;
+        let skillCooldownRemaining = 0;
 
-            if (won) {
-                resultScreen.classList.add('win');
-                resultScreen.classList.remove('lose');
-                document.getElementById('resultTitle').textContent = '🎉 승리! 🎉';
-                document.getElementById('resultMessage').textContent = 
-                    `축하합니다! 야생의 ${enemyPokemon.name}을(를) 물리쳤습니다!`;
+        document.getElementById('attackBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            performAttack();
+        });
+
+        document.getElementById('skillBtn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            performSkill();
+        });
+
+        function startGame() {
+            trainerNameValue = document.getElementById('trainerName').value.trim();
+            if (!trainerNameValue || !selectedPokemon) return;
+
+            const pokemonInfo = pokemonData[selectedPokemon];
+            player = {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                size: 25,
+                hp: pokemonInfo.maxHp,
+                maxHp: pokemonInfo.maxHp,
+                invulnerable: 0,
+                ...pokemonInfo
+            };
+
+            enemies = [];
+            projectiles = [];
+            particles = [];
+            level = 1;
+            exp = 0;
+            expToNextLevel = 100;
+            score = 0;
+            kills = 0;
+            enemiesInWave = 0;
+            lastAttackTime = 0;
+            lastSkillTime = 0;
+
+            document.getElementById('pokemonName').textContent = pokemonInfo.name;
+            
+            spawnWave();
+            updateUI();
+
+            gameState = 'playing';
+            document.getElementById('startScreen').classList.add('hidden');
+            
+            gameLoop();
+        }
+
+        function spawnWave() {
+            const count = 3 + level * 2;
+            enemiesInWave = count;
+
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => spawnEnemy(), i * 700);
+            }
+        }
+
+        function spawnEnemy() {
+            const side = Math.floor(Math.random() * 4);
+            let x, y;
+
+            const margin = 50;
+            switch(side) {
+                case 0: x = Math.random() * canvas.width; y = -margin; break;
+                case 1: x = canvas.width + margin; y = Math.random() * canvas.height; break;
+                case 2: x = Math.random() * canvas.width; y = canvas.height + margin; break;
+                case 3: x = -margin; y = Math.random() * canvas.height; break;
+            }
+
+            const wildPokemon = [
+                { icon: '👾', hp: 20 + level * 5, speed: 1.5, size: 18, color: '#e74c3c', damage: 8, expReward: 10, scoreReward: 50 },
+                { icon: '🦇', hp: 30 + level * 7, speed: 2, size: 20, color: '#8e44ad', damage: 12, expReward: 15, scoreReward: 75 },
+                { icon: '👻', hp: 40 + level * 10, speed: 1.2, size: 22, color: '#3498db', damage: 15, expReward: 20, scoreReward: 100 }
+            ];
+
+            const typeIndex = Math.min(Math.floor(level / 2), 2);
+            const enemyType = wildPokemon[typeIndex];
+
+            enemies.push({
+                x, y,
+                ...enemyType,
+                maxHp: enemyType.hp
+            });
+        }
+
+        function performAttack() {
+            const now = Date.now();
+            if (now - lastAttackTime < player.attackCooldown) return;
+            lastAttackTime = now;
+
+            const nearestEnemy = findNearestEnemy();
+            if (!nearestEnemy) return;
+
+            const dx = nearestEnemy.x - player.x;
+            const dy = nearestEnemy.y - player.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            projectiles.push({
+                x: player.x,
+                y: player.y,
+                vx: (dx / dist) * 8,
+                vy: (dy / dist) * 8,
+                damage: player.attackDamage,
+                size: 8,
+                color: player.projectileColor,
+                maxDist: player.attackRange,
+                traveled: 0
+            });
+        }
+
+        function performSkill() {
+            const now = Date.now();
+            if (now - lastSkillTime < player.skillCooldown) return;
+            lastSkillTime = now;
+
+            // 광역 공격
+            enemies.forEach(enemy => {
+                const dx = enemy.x - player.x;
+                const dy = enemy.y - player.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < player.skillRange) {
+                    enemy.hp -= player.skillDamage;
+                    createParticles(enemy.x, enemy.y, player.color, 15);
+
+                    if (enemy.hp <= 0) {
+                        killEnemy(enemy);
+                    }
+                }
+            });
+
+            createSkillEffect(player.x, player.y, player.skillRange, player.color);
+        }
+
+        function findNearestEnemy() {
+            let nearest = null;
+            let minDist = Infinity;
+
+            enemies.forEach(enemy => {
+                const dx = enemy.x - player.x;
+                const dy = enemy.y - player.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = enemy;
+                }
+            });
+
+            return nearest;
+        }
+
+        function killEnemy(enemy) {
+            const index = enemies.indexOf(enemy);
+            if (index > -1) {
+                enemies.splice(index, 1);
+                kills++;
+                enemiesInWave--;
+                
+                exp += enemy.expReward;
+                score += enemy.scoreReward;
+
+                checkLevelUp();
+                updateUI();
+
+                createParticles(enemy.x, enemy.y, enemy.color, 20);
+
+                if (enemiesInWave === 0 && enemies.length === 0) {
+                    setTimeout(spawnWave, 2000);
+                }
+            }
+        }
+
+        function checkLevelUp() {
+            while (exp >= expToNextLevel) {
+                exp -= expToNextLevel;
+                level++;
+                expToNextLevel = Math.floor(expToNextLevel * 1.5);
+                
+                // 레벨업 보상
+                player.hp = Math.min(player.maxHp, player.hp + 20);
+                player.attackDamage += 5;
+                
+                showLevelUpPopup();
+                updateUI();
+            }
+        }
+
+        function showLevelUpPopup() {
+            const popup = document.createElement('div');
+            popup.className = 'level-up-popup';
+            popup.innerHTML = `
+                <h2>레벨 업!</h2>
+                <p>레벨 ${level}</p>
+            `;
+            document.getElementById('gameContainer').appendChild(popup);
+
+            setTimeout(() => {
+                popup.remove();
+            }, 2000);
+        }
+
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    life: 30,
+                    maxLife: 30,
+                    size: 3 + Math.random() * 3,
+                    color
+                });
+            }
+        }
+
+        function createSkillEffect(x, y, range, color) {
+            for (let i = 0; i < 40; i++) {
+                const angle = (Math.PI * 2 / 40) * i;
+                particles.push({
+                    x: x + Math.cos(angle) * range,
+                    y: y + Math.sin(angle) * range,
+                    vx: Math.cos(angle) * 3,
+                    vy: Math.sin(angle) * 3,
+                    life: 25,
+                    maxLife: 25,
+                    size: 6,
+                    color
+                });
+            }
+        }
+
+        function gameLoop() {
+            if (gameState !== 'playing') return;
+
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function update() {
+            // 플레이어 이동
+            if (moveDirection.x !== 0 || moveDirection.y !== 0) {
+                player.x += moveDirection.x * player.speed;
+                player.y += moveDirection.y * player.speed;
+
+                player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
+                player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
+            }
+
+            if (player.invulnerable > 0) player.invulnerable--;
+
+            // 발사체
+            projectiles = projectiles.filter(proj => {
+                proj.x += proj.vx;
+                proj.y += proj.vy;
+                proj.traveled += Math.sqrt(proj.vx * proj.vx + proj.vy * proj.vy);
+
+                if (proj.traveled > proj.maxDist) return false;
+                if (proj.x < 0 || proj.x > canvas.width || proj.y < 0 || proj.y > canvas.height) return false;
+
+                for (let i = enemies.length - 1; i >= 0; i--) {
+                    const enemy = enemies[i];
+                    const dx = proj.x - enemy.x;
+                    const dy = proj.y - enemy.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < enemy.size + proj.size) {
+                        enemy.hp -= proj.damage;
+                        createParticles(enemy.x, enemy.y, enemy.color, 5);
+
+                        if (enemy.hp <= 0) {
+                            killEnemy(enemy);
+                        }
+
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // 적 이동
+            enemies.forEach(enemy => {
+                const dx = player.x - enemy.x;
+                const dy = player.y - enemy.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist > 0) {
+                    enemy.x += (dx / dist) * enemy.speed;
+                    enemy.y += (dy / dist) * enemy.speed;
+                }
+
+                if (dist < player.size + enemy.size && player.invulnerable === 0) {
+                    player.hp -= enemy.damage;
+                    player.invulnerable = 60;
+                    updateUI();
+
+                    if (player.hp <= 0) {
+                        gameOver();
+                    }
+                }
+            });
+
+            // 파티클
+            particles = particles.filter(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.15;
+                p.life--;
+                return p.life > 0;
+            });
+
+            // 스킬 쿨다운
+            if (Date.now() - lastSkillTime < player.skillCooldown) {
+                skillCooldownRemaining = Math.ceil((player.skillCooldown - (Date.now() - lastSkillTime)) / 1000);
+                document.getElementById('skillCooldown').textContent = skillCooldownRemaining;
+                document.getElementById('skillCooldown').classList.remove('hidden');
             } else {
-                resultScreen.classList.add('lose');
-                resultScreen.classList.remove('win');
-                document.getElementById('resultTitle').textContent = '😢 패배... 😢';
-                document.getElementById('resultMessage').textContent = 
-                    `${playerPokemon.name}은(는) 쓰러졌습니다... 다시 도전해보세요!`;
+                document.getElementById('skillCooldown').classList.add('hidden');
             }
         }
 
-        function restartGame() {
-            document.querySelector('.result-screen').classList.remove('active');
-            document.querySelector('.start-screen').classList.add('active');
-            document.querySelectorAll('.pokemon-card').forEach(c => c.classList.remove('selected'));
-            document.querySelector('.start-btn').disabled = true;
-            selectedPokemon = null;
+        function render() {
+            ctx.fillStyle = '#2d2d44';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 그리드
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.lineWidth = 1;
+            const gridSize = 40;
+            for (let i = 0; i < canvas.width; i += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < canvas.height; i += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // 파티클
+            particles.forEach(p => {
+                const alpha = p.life / p.maxLife;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = alpha;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+
+            // 발사체
+            projectiles.forEach(proj => {
+                ctx.fillStyle = proj.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = proj.color;
+                ctx.beginPath();
+                ctx.arc(proj.x, proj.y, proj.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // 적
+            enemies.forEach(enemy => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.beginPath();
+                ctx.ellipse(enemy.x, enemy.y + enemy.size + 3, enemy.size * 0.8, enemy.size * 0.3, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = enemy.color;
+                ctx.beginPath();
+                ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.font = `${enemy.size * 1.5}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(enemy.icon, enemy.x, enemy.y);
+
+                // HP 바
+                const barWidth = enemy.size * 2;
+                const hpPercent = enemy.hp / enemy.maxHp;
+
+                ctx.fillStyle = '#333';
+                ctx.fillRect(enemy.x - barWidth / 2, enemy.y - enemy.size - 12, barWidth, 4);
+                
+                ctx.fillStyle = hpPercent > 0.5 ? '#4CAF50' : '#e74c3c';
+                ctx.fillRect(enemy.x - barWidth / 2, enemy.y - enemy.size - 12, barWidth * hpPercent, 4);
+            });
+
+            // 플레이어
+            if (player.invulnerable === 0 || Math.floor(Date.now() / 100) % 2 === 0) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.beginPath();
+                ctx.ellipse(player.x, player.y + player.size + 3, player.size * 0.8, player.size * 0.3, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = player.color;
+                ctx.beginPath();
+                ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                ctx.font = `${player.size * 1.2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(player.icon, player.x, player.y);
+            }
+        }
+
+        function updateUI() {
+            const hpPercent = (player.hp / player.maxHp) * 100;
+            const hpBar = document.getElementById('hpBar');
+            hpBar.style.width = Math.max(0, hpPercent) + '%';
+            hpBar.textContent = `${Math.max(0, Math.floor(player.hp))}/${player.maxHp}`;
+            
+            if (hpPercent < 30) {
+                hpBar.classList.add('low');
+            } else {
+                hpBar.classList.remove('low');
+            }
+
+            document.getElementById('levelDisplay').textContent = `레벨: ${level}`;
+            
+            const expPercent = (exp / expToNextLevel) * 100;
+            document.getElementById('expBar').style.width = expPercent + '%';
+            
+            document.getElementById('scoreDisplay').textContent = `점수: ${score.toLocaleString()}`;
+        }
+
+        async function gameOver() {
+            gameState = 'gameover';
+            
+            // Firebase에 점수 저장
+            await window.saveScore(trainerNameValue, pokemonData[selectedPokemon].name, level, score, kills);
+            
+            document.getElementById('finalLevel').textContent = level;
+            document.getElementById('finalScore').textContent = score.toLocaleString();
+            document.getElementById('finalKills').textContent = kills;
+            document.getElementById('gameOverScreen').classList.remove('hidden');
         }
     </script>
 </body>
