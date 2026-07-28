@@ -3149,6 +3149,8 @@ function goSub(sub){
   document.querySelectorAll("nav button[data-g]").forEach(b=>b.classList.toggle("on", b.dataset.g===CURGROUP));
   const vn=document.getElementById("vNoticeBtn"); if(vn) vn.classList.toggle("on", CURGROUP==="notice");   // 공지 칩(헤더) 활성 표시
   showView(meta.view);
+  // 🔇 게시판을 벗어나면 재생 중이던 영상을 멈춘다 (안 그러면 다른 메뉴에서 소리만 계속 들림)
+  if(meta.view !== "board" && window.rsBdPauseVideos) window.rsBdPauseVideos();
   renderSubnav();
   const active=document.querySelector(`#subNav button[data-sub="${sub}"]`);
   if(active && active.scrollIntoView) try{ active.scrollIntoView({inline:"center",block:"nearest"}); }catch(e){}
@@ -3507,7 +3509,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.29-a";
+const SITE_VERSION = "2026.07.29-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -4937,6 +4939,7 @@ const BD_VIDEO_MAXBYTES = 10 * 1024 * 1024;
 const BD_IMG_RE = /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+/=]+$/;
 const BD_VID_RE = /^data:video\/[\w.+-]+(;codecs=[\w.,+-]+)?;base64,[A-Za-z0-9+/=]+$/;
 let bdCache = [], bdOpen = new Set(), bdMediaCache = {}, bdVideoState = {};
+let bdVidPos = {}, bdVidPlaying = {};   // 영상 재생 위치·재생중 여부 (다시 그릴 때 복원용 — bdSaveVideos/bdRestoreVideos)
 let bdDraftPhotos = [], bdDraftVideo = null;
 const bdTrCache = {};   // "p:<pid>" 글(제목+본문) / "r:<pid>|<rid>" 댓글 → 번역문 (null = 같은 언어)
 const BD_IC = {
@@ -5085,6 +5088,7 @@ async function bdPlayVideo(pid){
     const arr = new Uint8Array(bin.length);
     for(let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
     bdVideoState[pid] = URL.createObjectURL(new Blob([arr], { type: mime }));
+    bdVidPos[pid] = 0; bdVidPlaying[pid] = true;   // ▶를 눌러 불러온 것이므로 이번 렌더에서 바로 재생
   }catch(e){ bdVideoState[pid] = null; toast(BL("vidFail")); }
   renderBd();
 }
@@ -5096,8 +5100,38 @@ window.bdViewPhoto = src => {
   ov.addEventListener("click", () => ov.remove());
   document.body.appendChild(ov);
 };
+/* ⚠️ 영상 재생 상태 보존 (2026-07-29 버그 수정)
+   renderBd()가 돌 때마다 목록 HTML을 통째로 새로 만들기 때문에 <video>도 매번 새 요소가 된다.
+   예전엔 여기에 autoplay가 붙어 있어서, 게시판을 떠난 뒤 언어를 바꾸거나(→renderBd) 새 글이 올라올 때마다
+   보이지도 않는 화면의 영상이 처음부터 다시 재생돼 소리만 들리는 문제가 있었다.
+   → autoplay를 빼고, 다시 그리기 전에 재생 위치·재생 여부를 기억했다가
+     "게시판이 실제로 화면에 보일 때만" 이어서 재생한다. */
+function bdSaveVideos(){
+  document.querySelectorAll("#bdList video[data-bd-vid]").forEach(v => {
+    const id = v.dataset.bdVid;
+    bdVidPos[id] = v.currentTime || 0;
+    bdVidPlaying[id] = !v.paused && !v.ended;
+    v.pause();   // 요소가 교체되기 전에 소리부터 끊는다
+  });
+}
+function bdRestoreVideos(){
+  const bt = document.getElementById("tab-board");
+  const visible = !!(bt && bt.offsetParent !== null);
+  document.querySelectorAll("#bdList video[data-bd-vid]").forEach(v => {
+    const id = v.dataset.bdVid, t = bdVidPos[id] || 0, want = !!bdVidPlaying[id];
+    const go = () => {
+      if(t > 0){ try{ v.currentTime = t; }catch(e){} }
+      if(visible && want) v.play().catch(()=>{});   // 화면에 없으면 재생하지 않음 = 소리 안 남
+    };
+    if(v.readyState >= 1) go(); else v.addEventListener("loadedmetadata", go, { once:true });
+  });
+}
+// 다른 메뉴로 나갈 때 classic 스크립트(goSub)에서 호출 — 배경에서 소리가 계속 나는 것 방지
+window.rsBdPauseVideos = bdSaveVideos;
+
 function renderBd(){
   const list = document.getElementById("bdList");
+  bdSaveVideos();   // ⚠️ innerHTML 교체 전에 반드시 — 안 하면 재생 위치를 잃고 소리가 되살아남
   const items = bdCache.slice().sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,50);   // 최신순
   if(!items.length){ list.innerHTML = `<div class="cmtempty">${BL("empty")}</div>`; return; }
   list.innerHTML = items.map(p => {
@@ -5119,7 +5153,7 @@ function renderBd(){
     if(p.vid){   // 영상: 재생 버튼 바로 표시, 누르면 그 자리에서 재생 (전송량 보호)
       const vs = bdVideoState[p.id];
       if(typeof vs === "string" && vs.startsWith("blob:"))
-        media += `<div class="bdvidbox"><video controls autoplay playsinline src="${vs}"></video></div>`;
+        media += `<div class="bdvidbox"><video controls playsinline data-bd-vid="${p.id}" src="${vs}"></video></div>`;
       else if(vs === "loading")
         media += `<div class="bdvidbox"><div class="bdloading">${BL("vidLoading")}</div></div>`;
       else
@@ -5150,6 +5184,7 @@ function renderBd(){
     </div>`;
   }).join("");
   bdObservePhotos();
+  bdRestoreVideos();   // 새로 만들어진 <video>에 재생 위치 복원 (+ 게시판이 보일 때만 이어재생)
 }
 /* 사진 로드: 화면 근처 글은 렌더 즉시 로드(바로 보임) + 아래쪽 글은 스크롤로 들어올 때(전송량 보호) */
 let bdIO = null;
