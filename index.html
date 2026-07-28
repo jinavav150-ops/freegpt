@@ -145,6 +145,11 @@
   #featBanner .fbtxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #featBanner .fbmore{flex-shrink:0;font-size:11px;color:#e6a700;font-weight:800}
   #featBanner .fbx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
+  /* 🔔 관리자 전용 새 글 배너 (MAMMON에게만 · 다른 배너와 구분되게 초록 계열) */
+  #newPostBanner{display:flex;align-items:center;gap:8px;width:100%;border:none;background:linear-gradient(90deg,rgba(74,222,128,.20),rgba(74,222,128,.05));border-bottom:1px solid rgba(74,222,128,.45);color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;text-align:left}
+  #newPostBanner .nptxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #newPostBanner .npmore{flex-shrink:0;font-size:11px;color:#4ade80;font-weight:800}
+  #newPostBanner .npx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
   /* 🗺️ 공식 맵 추가 알림 배너 */
   #mapBanner{display:flex;align-items:center;gap:8px;width:100%;border:none;background:linear-gradient(90deg,rgba(93,169,255,.20),rgba(93,169,255,.05));border-bottom:1px solid rgba(93,169,255,.4);color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;text-align:left}
   #mapBanner .mbtxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1018,6 +1023,12 @@
 <button id="mapBanner" style="display:none" onclick="rsMapBannerGo()">
   <span class="mbtxt"></span><span class="mbmore"></span>
   <span class="mbx" onclick="rsMapBannerClose(event)">✕</span>
+</button>
+<!-- 🔔 관리자 전용 새 글 배너 — MAMMON에게만 보임(IS_ADMIN). 안 본 글이 있는 곳을 한 줄로 알려줌.
+     누르면 그 위치로 이동 + 그곳만 읽음 처리 / ✕는 전부 읽음 처리. 기기별 저장(rs_seen). -->
+<button id="newPostBanner" style="display:none" onclick="rsNewGo()">
+  <span class="nptxt"></span><span class="npmore"></span>
+  <span class="npx" onclick="rsNewSeenAll(event)">✕</span>
 </button>
 
 <main>
@@ -2901,7 +2912,8 @@ window.rsGoRelay = function(){
    우선순위 = 이슈(게임 문제·유용) > 공식소개(신뢰) > 새 맵(콘텐츠) > 티어 넛지(참여 유도).
    각 배너 sync는 자기 노출여부를 dataset.want("1"/"0")에 적고 rsBannerReflow()를 부르면,
    여기서 우선순위대로 위 2개만 실제로 표시. 유저가 하나 닫으면 다음 우선순위가 자동 승격. */
-const BANNER_ORDER = ["issueBanner","featBanner","mapBanner","tierNudge"];
+/* 🔔 newPostBanner(관리자 새 글)는 MAMMON에게만 뜨고 운영에 직접 쓰이므로 최우선. 일반 유저에겐 아예 안 뜸 */
+const BANNER_ORDER = ["newPostBanner","issueBanner","featBanner","mapBanner","tierNudge"];
 const BANNER_MAX = 2;
 function rsBannerReflow(){
   let shown = 0;
@@ -3509,7 +3521,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.28-a";
+const SITE_VERSION = "2026.07.28-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5443,7 +5455,7 @@ FB.onValue(FB.ref(FB.db,"pubfb"), snap=>{
   const v=snap.val()||{};
   pubfbCache=Object.entries(v).map(([id,f])=>({id, cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||0, likes:f.likes, dislikes:f.dislikes, reply:f.reply}))
     .filter(f=>typeof f.text==="string");
-  renderPubFb();
+  renderPubFb(); rsNewSync();
 }, ()=>{ pubfbCache=[]; renderPubFb(); });
 document.getElementById("pubFbList").addEventListener("click", async e=>{
   const rsend=e.target.closest("[data-pfrsend]"), rdel=e.target.closest("[data-pfrdel]");
@@ -5906,18 +5918,104 @@ document.addEventListener("rs-lang-changed", () => {
   bdStatic(); renderBd(); gStatic(); renderGreets();
   const fbv = document.getElementById("commv-fb"); if(fbv && getComputedStyle(fbv).display !== "none") renderMyFb();
   renderCmts(); renderChat(); renderStats(statsCache); renderMembers();
+  rsNewSync();   // 🔔 언어가 바뀌면 배너 문구도 다시
   if(MY_UID && !IS_BANNED) document.getElementById("voteHint").textContent = "✅ " + T("연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.");
 });
+/* ════════ 🔔 관리자 전용 "새 글" 배너 ════════
+   목적: MAMMON이 새 글을 찾으려고 탭을 하나하나 눌러보는 일을 없앰. 앱을 켜면 어디에 새 글이 있는지 한 줄로.
+   ⚠️ 서버 푸시가 아님(앱을 열어야 보임) — 진짜 푸시는 외부 서버가 필요(HANDOFF 참고).
+   ⚠️ IS_ADMIN일 때만 동작. 일반 유저에겐 계산도 표시도 하지 않음.
+   ⚠️ 새 리스너를 만들지 않고 이미 구독 중인 캐시(chatCache 등)만 읽음 = 데이터 사용량 증가 0.
+   기준시각은 기기별 localStorage(rs_seen) — 폰과 PC가 따로 셈. */
+const NEW_SEEN_KEY = "rs_seen";
+const NEW_SRC = [
+  { k:"chat",     sub:"chat",  label:{ko:"채팅",en:"Chat",ja:"チャット",zh:"聊天"},        get:()=> (typeof chatCache  !=="undefined" ? chatCache  : []) },
+  { k:"board",    sub:"board", label:{ko:"자유게시판",en:"Board",ja:"掲示板",zh:"留言板"}, get:()=> (typeof bdCache    !=="undefined" ? bdCache    : []) },
+  { k:"comments", sub:"tips",  label:{ko:"팁",en:"Tips",ja:"攻略メモ",zh:"攻略"},          get:()=> (typeof cmtCache   !=="undefined" ? cmtCache   : []) },
+  { k:"pubfb",    sub:"fb",    label:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋"}, get:()=> (typeof pubfbCache!=="undefined" ? pubfbCache : []) },
+  { k:"greets",   sub:"board", label:{ko:"방명록",en:"Guestbook",ja:"ゲストブック",zh:"留言"}, get:()=> (typeof gCache    !=="undefined" ? gCache     : []) }
+];
+const NEW_L = {
+  title:{ko:"새 글",en:"New posts",ja:"新着",zh:"新貼文",fr:"Nouveaux messages",de:"Neue Beiträge",es:"Nuevas publicaciones",pt:"Novas postagens",ru:"Новые записи"},
+  unit:{ko:"건",en:"",ja:"件",zh:"則",fr:"",de:"",es:"",pt:"",ru:""},
+  go:{ko:"보러가기",en:"View",ja:"見る",zh:"前往",fr:"Voir",de:"Ansehen",es:"Ver",pt:"Ver",ru:"Открыть"},
+  done:{ko:"모두 읽음 처리했어요",en:"Marked all as read",ja:"すべて既読にしました",zh:"已全部標為已讀",fr:"Tout marqué comme lu",de:"Alles als gelesen markiert",es:"Todo marcado como leído",pt:"Tudo marcado como lido",ru:"Всё отмечено как прочитанное"}
+};
+/* ⚠️ 빈 문자열("")도 정상 번역값이므로 || 폴백을 쓰면 안 됨 — 영어 unit=""이 한국어 "건"으로 새던 버그 */
+const NL = k => { const d = NEW_L[k]; return d[LANG] !== undefined ? d[LANG] : (d.en !== undefined ? d.en : d.ko); };
+const nlabel = o => (o.label[LANG] || o.label.en || o.label.ko);
+function newSeenGet(){ try{ return JSON.parse(localStorage.getItem(NEW_SEEN_KEY)) || {}; }catch(e){ return {}; } }
+function newSeenSet(o){ try{ localStorage.setItem(NEW_SEEN_KEY, JSON.stringify(o)); }catch(e){} }
+/* 내가 쓴 글은 제외(내 글에 내가 알림받을 이유 없음). ts가 없는 옛 글은 세지 않음 */
+function newCounts(){
+  const seen = newSeenGet(), out = [];
+  for(const s of NEW_SRC){
+    const base = seen[s.k];
+    const rows = (s.get()||[]).filter(x => x && typeof x.ts === "number" && x.uid !== MY_UID);
+    if(base === undefined){ out.push({ ...s, n:0, last:rows.reduce((m,x)=>Math.max(m,x.ts),0) }); continue; }
+    const fresh = rows.filter(x => x.ts > base);
+    out.push({ ...s, n:fresh.length, last:fresh.reduce((m,x)=>Math.max(m,x.ts),0) });
+  }
+  return out;
+}
+let NEW_FORCE = false;   // 점검용(rsNewDebug.force) — 화면 표시만 바꿈, 데이터 권한과 무관
+function rsNewSync(){
+  const b = document.getElementById("newPostBanner"); if(!b) return;
+  if(!IS_ADMIN && !NEW_FORCE){ b.dataset.want = "0"; if(window.rsBannerReflow) window.rsBannerReflow(); return; }
+  const seen = newSeenGet();
+  /* 첫 실행: 기준시각이 없으면 "지금까지는 다 봤다"로 잡음 — 안 그러면 누적 180건이 새 글로 뜸 */
+  let init = false;
+  for(const s of NEW_SRC) if(seen[s.k] === undefined){ seen[s.k] = Date.now(); init = true; }
+  if(init){ newSeenSet(seen); }
+  const c = newCounts().filter(x => x.n > 0);
+  const total = c.reduce((a,x)=>a+x.n, 0);
+  if(!total){ b.dataset.want = "0"; if(window.rsBannerReflow) window.rsBannerReflow(); return; }
+  const detail = c.map(x => `${nlabel(x)} ${x.n}`).join(" · ");
+  b.querySelector(".nptxt").textContent = `🔔 ${NL("title")} ${total}${NL("unit")} — ${detail}`.replace(/\s+—/, " —");
+  b.querySelector(".npmore").textContent = NL("go");
+  b.dataset.want = "1";
+  if(window.rsBannerReflow) window.rsBannerReflow();
+}
+/* 누르면 새 글이 가장 최근에 올라온 곳으로 이동 + 그곳만 읽음 처리(나머지는 남아서 배너가 계속 안내) */
+function rsNewGo(){
+  const c = newCounts().filter(x => x.n > 0).sort((a,b)=> b.last - a.last);
+  if(!c.length){ rsNewSync(); return; }
+  const t = c[0], seen = newSeenGet();
+  seen[t.k] = Math.max(seen[t.k] || 0, t.last);
+  newSeenSet(seen);
+  if(window.goSub) window.goSub(t.sub);
+  rsNewSync();
+}
+function rsNewSeenAll(e){
+  if(e){ e.stopPropagation(); e.preventDefault(); }
+  const seen = newSeenGet();
+  for(const s of NEW_SRC){ const rows = (s.get()||[]).filter(x=>x&&typeof x.ts==="number"); seen[s.k] = Math.max(seen[s.k]||0, rows.reduce((m,x)=>Math.max(m,x.ts), Date.now())); }
+  newSeenSet(seen);
+  rsNewSync();
+  toast("✅ " + NL("done"));
+}
+window.rsNewGo = rsNewGo; window.rsNewSeenAll = rsNewSeenAll; window.rsNewSync = rsNewSync;
+/* 점검용 콘솔 도구 (rsDmDebug·rsStDebug와 같은 패턴)
+   rsNewDebug.counts()  현재 안 본 글 집계 / .seen() 기준시각 / .reset() 기준 초기화
+   rsNewDebug.force(true) 관리자가 아니어도 배너를 그려봄(표시만, 권한과 무관) */
+window.rsNewDebug = {
+  counts: () => newCounts().map(x => ({ 곳:x.k, 안본:x.n, 최근:x.last ? new Date(x.last).toISOString().slice(0,16).replace("T"," ") : "-" })),
+  seen:   () => newSeenGet(),
+  reset:  () => { try{ localStorage.removeItem(NEW_SEEN_KEY); }catch(e){} rsNewSync(); return "기준 초기화됨"; },
+  force:  v => { NEW_FORCE = !!v; rsNewSync(); return "force=" + NEW_FORCE; },
+  admin:  () => IS_ADMIN
+};
+
 FB.onValue(FB.ref(FB.db, "tiervote/agg"), snap => { aggCache = snap.val(); renderBoard(); });
 FB.onValue(FB.query(FB.ref(FB.db, "comments"), FB.limitToLast(100)), snap => {
   const v = snap.val() || {};
   cmtCache = Object.entries(v).map(([id,c]) => ({ id, ...c }));
-  renderCmts();
+  renderCmts(); rsNewSync();
 });
 FB.onValue(FB.query(FB.ref(FB.db, "chat"), FB.limitToLast(100)), snap => {
   const v = snap.val() || {};
   chatCache = Object.entries(v).map(([id,c]) => ({ id, ...c }));
-  renderChat();
+  renderChat(); rsNewSync();
   autoTranslateNew();
 });
 FB.onValue(FB.ref(FB.db, "reports"), snap => {
@@ -5930,12 +6028,12 @@ FB.onValue(FB.ref(FB.db, "reports"), snap => {
 FB.onValue(FB.query(FB.ref(FB.db, "board"), FB.limitToLast(50)), snap => {
   const v = snap.val() || {};
   bdCache = Object.entries(v).map(([id,p]) => ({ id, ...p }));
-  renderBd();
+  renderBd(); rsNewSync();
 });
 FB.onValue(FB.query(FB.ref(FB.db, "greets"), FB.limitToLast(300)), snap => {
   const v = snap.val() || {};
   gCache = Object.entries(v).map(([id,g]) => ({ id, ...g }));
-  renderGreets();
+  renderGreets(); rsNewSync();
 });
 FB.onValue(FB.ref(FB.db, "stats"), snap => { statsCache = snap.val(); renderStats(statsCache); });
 // 👥 멤버 목록(profiles=공개 읽기) + 접속중(presence=규칙 v19, 미게시 시 빈 값으로 조용히)
@@ -5960,6 +6058,7 @@ FB.authReady.then(async uid => {
     if(typeof renderCreators === "function") renderCreators();   // 🎬 크리에이터: 추가 폼 표시 + 명단 0이어도 서브탭 보이게(관리자만)
     // 운영자 열람 공간 폐지 → 예전 비공개 피드백을 공개 목록으로 이전(모두 한 곳에서 답변)
     migrateFeedbackToPublic();
+    rsNewSync();   // 🔔 관리자 확정 후 새 글 배너 첫 계산
   }
   // 공개 피드백 목록은 IS_ADMIN 확정 전에 이미 렌더됐을 수 있음 → 관리자 답변 입력·수정·삭제 버튼이 뜨도록 다시 렌더
   if(typeof renderPubFb === "function") renderPubFb();
