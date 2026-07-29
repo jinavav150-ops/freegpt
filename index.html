@@ -859,14 +859,19 @@
   #commMenu button{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:var(--txt);font-family:inherit;font-size:13px;font-weight:600;padding:10px 12px;border-radius:8px;cursor:pointer;text-align:left}
   #commMenu button:hover{background:var(--panel)}
   #commMenu button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-  .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:clamp(380px,58vh,640px);overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
-  .chatmsg{display:flex;align-items:baseline;gap:7px;font-size:12.5px;line-height:1.55;word-break:break-word}
-  .chatmsg .mtx{flex:1 1 auto;min-width:0}
+  .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:clamp(380px,58vh,640px);overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:11px;margin-bottom:8px}
+  /* 💬 채팅 한 줄: 이름 + 본문 + 시간 + ⋯(탭하면 액션 바). 버튼을 상시 노출하지 않는다(29-i) */
+  .chatmsg{font-size:12.5px;line-height:1.55;word-break:break-word;padding:2px 7px;margin:0 -7px;border-radius:9px;cursor:pointer}
+  /* 이름·본문·시간·⋯ 은 한 행에 고정(nowrap). 본문만 안에서 줄바꿈되므로 긴 글에서도 시간이 따로 놀지 않는다 */
+  .mline{display:flex;align-items:baseline;gap:7px;flex-wrap:nowrap}
+  .chatmsg .mtx{flex:1 1 auto;min-width:0;color:var(--txt)}
   .chatmsg .mnm{font-weight:700;flex-shrink:0}
-  .chatmsg .mtx{color:var(--txt)}
-  .chatmsg .mtm{font-size:10px;color:var(--sub);margin-left:auto;flex-shrink:0}
-  .chatmsg .mrep,.chatmsg .mdel{background:none;border:none;color:var(--sub);font-size:11px;padding:0 2px;cursor:pointer;flex-shrink:0;opacity:.6}
-  .chatmsg.hidden-msg{color:var(--sub);font-size:11.5px;font-style:italic}
+  .chatmsg .mtm{font-size:10px;color:var(--sub);flex-shrink:0;opacity:.75;align-self:flex-start;padding-top:2px}
+  .chatmsg .mdots{font-size:12px;color:var(--sub);opacity:.3;flex-shrink:0;letter-spacing:1px;align-self:flex-start}
+  .chatmsg.open{background:rgba(255,255,255,.05)}
+  .chatmsg.open .mdots{opacity:.75}
+  .chatmsg.cont{margin-top:-9px}                       /* 같은 사람이 이어 말한 줄은 바짝 붙여 한 덩어리로 */
+  .chatmsg.hidden-msg{color:var(--sub);font-size:11.5px;font-style:italic;cursor:default}
   .chatinput{display:flex;gap:7px}
   .chattext{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none}
   .chattext:focus{border-color:var(--ricochet)}
@@ -876,16 +881,21 @@
   .transtog{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--sub);margin-bottom:8px;cursor:pointer}
   .transtog input{accent-color:var(--ricochet)}
   .chatmsg{flex-wrap:wrap}
-  .chatmsg .mtr{flex-basis:100%;color:var(--tank);font-size:11.5px;padding:2px 0 0 4px}
+  .chatmsg .mtr{color:var(--tank);font-size:11.5px;padding:2px 0 0 4px}
   /* 💬 답장 인용 · 멘션 강조 · 이모지 반응 (2026-07-29) */
-  .chatmsg .mre{flex-basis:100%;display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub);padding:1px 0 2px 3px;cursor:pointer;opacity:.9}
+  .chatmsg .mre{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub);padding:1px 0 3px 8px;margin-bottom:1px;border-left:2px solid var(--line);cursor:pointer;opacity:.9}
   .chatmsg .mre b{color:var(--ricochet);font-weight:700;flex-shrink:0}
   .chatmsg .mre .mreq{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-  .chatmsg.mentioned{background:rgba(255,176,46,.10);border-left:2px solid var(--ricochet);border-radius:7px;padding:3px 6px;margin-left:-6px}
-  .chatrx{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px;padding:3px 0 0 3px}
+  .chatmsg.mentioned{background:rgba(255,176,46,.10);border-left:2px solid var(--ricochet)}
+  .chatrx{display:flex;flex-wrap:wrap;gap:4px;padding:3px 0 0 3px}
   .chatrx button{background:var(--panel2);border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:1px 8px;font-size:11.5px;font-family:inherit;line-height:1.75;cursor:pointer}
   .chatrx button.on{border-color:var(--ricochet);color:var(--ricochet);background:rgba(255,176,46,.13)}
-  .chatrx .rxadd{opacity:.5;font-weight:700}
+  /* 탭했을 때만 열리는 액션 바 — 손가락으로 누를 수 있게 충분히 크게 */
+  .chatact{display:flex;flex-wrap:wrap;gap:5px;padding:7px 0 3px}
+  .chatact button{background:var(--panel2);border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:6px 9px;font-size:11px;font-family:inherit;line-height:1.5;cursor:pointer;white-space:nowrap}
+  .chatact button.rxp{font-size:14px;padding:4px 8px}
+  .chatact button.on{border-color:var(--ricochet);background:rgba(255,176,46,.15)}
+  .chatact button.dang{color:var(--bad);border-color:rgba(255,93,93,.35)}
   .replybar{display:none;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--ricochet);border-radius:10px;padding:7px 10px;margin-bottom:7px;font-size:12px;color:var(--sub)}
   .replybar.on{display:flex}
   .replybar b{color:var(--ricochet)}
@@ -2667,6 +2677,16 @@ const GAME_ROADMAP = {
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-07-29",
+    ko:"💬 채팅창이 훨씬 깔끔해졌어요 — 메시지마다 붙어 있던 버튼들을 치웠습니다. 이제 메시지를 한 번 톡 누르면 반응·답장·번역·신고가 한 줄로 펼쳐져요(반응도 바로 고를 수 있어 한 단계 줄었습니다). 같은 사람이 이어서 말하면 이름을 반복하지 않고 하나로 묶어 보여줍니다",
+    en:"💬 The chat is far cleaner — the buttons that used to sit on every message are gone. Tap a message once and react / reply / translate / report open in a single row (reactions are right there now, one step fewer). Consecutive messages from the same person are grouped instead of repeating their name",
+    ja:"💬 チャットがすっきりしました — 各メッセージに常時並んでいたボタンを片付けました。メッセージを軽くタップすると、リアクション・返信・翻訳・通報が一列で開きます（リアクションもその場で選べて一手順短縮）。同じ人が続けて話した分は名前を繰り返さずまとめて表示します",
+    zh:"💬 聊天室清爽多了 — 移除了每則訊息上常駐的按鈕。輕觸訊息即可展開一列的反應／回覆／翻譯／檢舉（反應也能直接選，少一個步驟）。同一人連續發言會合併顯示，不再重複名稱",
+    fr:"💬 Le chat est bien plus net — les boutons collés à chaque message ont disparu. Touche un message et réaction / réponse / traduction / signalement s'ouvrent sur une seule ligne (les réactions sont là aussi, une étape en moins). Les messages consécutifs d'une même personne sont regroupés au lieu de répéter son pseudo",
+    de:"💬 Der Chat ist deutlich aufgeräumter — die Buttons an jeder Nachricht sind weg. Tippe eine Nachricht an und Reaktion / Antwort / Übersetzung / Meldung öffnen sich in einer Reihe (Reaktionen direkt dabei, ein Schritt weniger). Aufeinanderfolgende Nachrichten derselben Person werden gruppiert, statt den Namen zu wiederholen",
+    es:"💬 El chat quedó mucho más limpio — quitamos los botones que había en cada mensaje. Toca un mensaje y se abren en una fila reacción / responder / traducir / denunciar (las reacciones ya están ahí, un paso menos). Los mensajes seguidos de una misma persona se agrupan en vez de repetir su nombre",
+    pt:"💬 O chat ficou bem mais limpo — os botões que ficavam em cada mensagem saíram. Toque numa mensagem e reação / responder / traduzir / denunciar abrem numa única linha (as reações já estão ali, um passo a menos). Mensagens seguidas da mesma pessoa são agrupadas em vez de repetir o nome",
+    ru:"💬 Чат стал заметно чище — кнопки, висевшие на каждом сообщении, убраны. Нажми на сообщение — реакция / ответ / перевод / жалоба откроются одной строкой (реакции сразу здесь, на шаг меньше). Подряд идущие сообщения одного человека объединяются, а имя не повторяется" },
+  { date:"2026-07-29",
     ko:"🔒 신고한 사람이 누구인지 더 이상 공개되지 않아요 — 예전에는 신고 기록을 누구나 들여다볼 수 있어서 마음먹으면 신고자를 알아낼 수 있었습니다. 이제 신고 '횟수'만 공개되고 신고자는 운영자만 확인할 수 있어요. 신고 3회 자동 숨김은 그대로입니다",
     en:"🔒 Who reported a post is now private — anyone used to be able to look up the report log and work out who filed it. From now on only the report count is public, and reporters are visible to the operator only. Auto-hide after 3 reports works exactly as before",
     ja:"🔒 通報した人が誰かは非公開になりました — これまでは通報記録を誰でも見られたため、通報者を突き止めることができました。今後は通報「回数」だけが公開され、通報者は運営者のみが確認できます。通報3回で自動非表示になる仕組みはそのままです",
@@ -3667,7 +3687,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.29-h";
+const SITE_VERSION = "2026.07.29-i";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -4931,22 +4951,35 @@ window.rsChatToBottom = chatToBottom;
    ⚠️ 반응은 chat/<mid> 아래에 못 넣는다 — chat의 .write 규칙이 "새로 쓰기 or 삭제"만 허용해서
       하위 필드 쓰기가 거부되기 때문. 그래서 별도 최상위 경로 chatreact/<mid>/<종류>/<uid>=true 사용. (규칙 v24) */
 const CHAT_RX = [["up","👍"],["heart","❤️"],["lol","😂"],["fire","🔥"]];
-let chatReactCache = {}, chatRxOpen = null, chatReplyTo = null;
+let chatReactCache = {}, chatActOpen = null, chatReplyTo = null;
 
+/* 반응 칩 = "이미 눌린 반응"만 보여준다. 고르는 UI는 아래 chatActHtml(액션 바)로 옮겼음(29-i). */
 function chatRxHtml(mid){
   const r = chatReactCache[mid] || {};
-  const open = chatRxOpen === mid;
   let chips = "";
   for(const [k, emo] of CHAT_RX){
     const users = r[k] || {};
     const n = Object.keys(users).length;
-    if(!n && !open) continue;                    // 평소엔 눌린 반응만, ＋를 누르면 전체 표시
-    const mineR = MY_UID && users[MY_UID];
-    chips += `<button class="${mineR?"on":""}" data-rx="${mid}|${k}">${emo}${n?" "+n:""}</button>`;
+    if(!n) continue;
+    chips += `<button class="${MY_UID && users[MY_UID] ? "on" : ""}" data-rx="${mid}|${k}">${emo} ${n}</button>`;
   }
-  // ⚠️ 반응 줄은 "실제 반응이 있을 때 or 고르는 중"에만 만든다 — 모든 메시지에 빈 줄이 생기면 목록이 답답해짐
-  if(!chips) return "";
-  return `<div class="chatrx">${chips}${open?`<button class="rxadd" data-rx-open="${mid}">✕</button>`:""}</div>`;
+  return chips ? `<div class="chatrx">${chips}</div>` : "";
+}
+/* 💬 액션 바 — 메시지를 탭했을 때만 펼친다(29-i).
+   예전엔 😊↩🌐🚩✕ 5개가 모든 메시지에 항상 떠 있어서 글보다 버튼이 먼저 보였다.
+   반응 고르기도 여기 함께 넣어, 예전 "😊 누르고 → 이모지 고르기" 2단계가 1단계로 줄었다. */
+function chatActHtml(m, mine){
+  if(chatActOpen !== m.id) return "";
+  const r = chatReactCache[m.id] || {};
+  let rx = "";
+  if(MY_UID) for(const [k, emo] of CHAT_RX)
+    rx += `<button class="rxp${(r[k]||{})[MY_UID] ? " on" : ""}" data-rx="${m.id}|${k}" title="${esc(T("반응"))}">${emo}</button>`;
+  return `<div class="chatact">${rx}
+    ${!mine&&MY_UID?`<button data-reply="${m.id}" data-reply-name="${esc(m.name)}">↩ ${T("답장")}</button>`:""}
+    ${!mine?`<button data-tr="${m.id}">🌐 ${T("번역")}</button>`:""}
+    ${!mine&&MY_UID?`<button data-rep="${m.id}">🚩 ${T("신고")}</button>`:""}
+    ${(mine||IS_ADMIN)?`<button class="dang" data-del-chat="${m.id}">✕ ${T("삭제")}</button>`:""}
+  </div>`;
 }
 function chatQuoteHtml(m){
   const src = chatCache.find(x => x.id === m.re);
@@ -4988,24 +5021,31 @@ function renderChat(){
     box.innerHTML = `<div class="cmtempty">${T("아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋")}</div>`;
     return;
   }
-  box.innerHTML = items.map(m => {
+  box.innerHTML = items.map((m, i) => {
     if(isHidden("chat", m.id) && !IS_ADMIN)
       return `<div class="chatmsg hidden-msg">🚫 ${T("신고 누적으로 숨겨진 메시지입니다")}</div>`;
     const tm = m.ts ? new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}) : "";
     const mine = m.uid === MY_UID;
     const tr = transCache[m.id];
-    return `<div class="chatmsg${chatMentionsMe(m.text)?" mentioned":""}" data-mid="${m.id}">
+    const men = chatMentionsMe(m.text);
+    const open = chatActOpen === m.id;
+    /* 같은 사람이 5분 안에 이어서 말하면 이름·시간을 반복하지 않고 하나의 덩어리로 묶는다.
+       답장·멘션·숨김글 다음은 묶지 않는다(그 자체로 구분이 필요한 줄이라서). */
+    const p = items[i-1];
+    const cont = !!(p && p.uid === m.uid && !m.re && !men
+                    && !(isHidden("chat", p.id) && !IS_ADMIN)
+                    && Math.abs((m.ts||0) - (p.ts||0)) < 300000);
+    return `<div class="chatmsg${cont?" cont":""}${men?" mentioned":""}${open?" open":""}" data-mid="${m.id}">
       ${m.re?chatQuoteHtml(m):""}
-      <span class="mnm" style="color:${nameColor(m.uid)}" data-uprof="${m.uid}" data-uname="${esc(m.name)}">${esc(m.name)}</span>${staffBadge(m.uid)}
-      <span class="mtx">${esc(m.text)}</span>
-      <span class="mtm">${tm}</span>
-      ${MY_UID?`<button class="mrep" data-rx-open="${m.id}" title="${T("반응")}">😊</button>`:""}
-      ${!mine&&MY_UID?`<button class="mrep" data-reply="${m.id}" data-reply-name="${esc(m.name)}" title="${T("답장")}">↩</button>`:""}
-      ${!mine?`<button class="mrep" onclick="rsTranslateMsg('${m.id}')" title="${T("번역")}">🌐</button>`:""}
-      ${!mine&&MY_UID?`<button class="mrep" onclick="rsReport('chat','${m.id}')" title="${T("신고")}">🚩</button>`:""}
-      ${(mine||IS_ADMIN)?`<button class="mdel" data-del-chat="${m.id}">✕</button>`:""}
-      ${tr?`<span class="mtr">↳ ${esc(tr)}</span>`:""}
+      <div class="mline">
+        ${cont?"":`<span class="mnm" style="color:${nameColor(m.uid)}" data-uprof="${m.uid}" data-uname="${esc(m.name)}">${esc(m.name)}</span>${staffBadge(m.uid)}`}
+        <span class="mtx">${esc(m.text)}</span>
+        ${(!cont||open)?`<span class="mtm">${tm}</span>`:""}
+        <span class="mdots" aria-hidden="true">⋯</span>
+      </div>
+      ${tr?`<div class="mtr">↳ ${esc(tr)}</div>`:""}
       ${chatRxHtml(m.id)}
+      ${chatActHtml(m, mine)}
     </div>`;
   }).join("");
   // 번역 캐시 무한 증가 방지: 화면에 없는(=최근 100개 밖) 오래된 항목은 정리
@@ -5022,10 +5062,12 @@ function renderChat(){
 document.getElementById("chatBox").addEventListener("click", async e => {
   const rx = e.target.closest("[data-rx]");                    // 이모지 반응 누름
   if(rx){ const [mid, key] = rx.dataset.rx.split("|"); chatReact(mid, key); return; }
-  const rxo = e.target.closest("[data-rx-open]");              // ＋ 반응 고르기 열기/닫기
-  if(rxo){ chatRxOpen = (chatRxOpen === rxo.dataset.rxOpen) ? null : rxo.dataset.rxOpen; renderChat(); return; }
   const rp = e.target.closest("[data-reply]");                 // 답장 대상 지정
-  if(rp){ chatSetReply(rp.dataset.reply, rp.dataset.replyName||""); return; }
+  if(rp){ chatActOpen = null; chatSetReply(rp.dataset.reply, rp.dataset.replyName||""); renderChat(); return; }
+  const trb = e.target.closest("[data-tr]");                   // 🌐 번역
+  if(trb){ chatActOpen = null; rsTranslateMsg(trb.dataset.tr); return; }
+  const rpt = e.target.closest("[data-rep]");                  // 🚩 신고
+  if(rpt){ chatActOpen = null; rsReport("chat", rpt.dataset.rep); return; }
   const gt = e.target.closest("[data-goto]");                  // 인용 누르면 원본으로 이동
   if(gt){
     const el = document.querySelector(`#chatBox [data-mid="${gt.dataset.goto}"]`);
@@ -5033,9 +5075,20 @@ document.getElementById("chatBox").addEventListener("click", async e => {
     else toast(T("원본 메시지를 찾을 수 없어요"));
     return;
   }
-  const b = e.target.closest("[data-del-chat]"); if(!b) return;
-  if(!confirm(T("이 메시지를 삭제할까요?"))) return;
-  try{ await FB.remove(FB.ref(FB.db, `chat/${b.dataset.delChat}`)); }catch(err){ toast(T("삭제 실패")); }
+  const b = e.target.closest("[data-del-chat]");
+  if(b){
+    if(!confirm(T("이 메시지를 삭제할까요?"))) return;
+    chatActOpen = null;
+    try{ await FB.remove(FB.ref(FB.db, `chat/${b.dataset.delChat}`)); }catch(err){ toast(T("삭제 실패")); }
+    return;
+  }
+  /* 메시지 아무 데나 탭 → 그 메시지의 액션 바 열기/닫기 (한 번에 하나만).
+     이름(프로필 열기)·인용(원본 이동)·버튼은 위에서 이미 처리됐으므로 여기선 제외한다. */
+  const msg = e.target.closest(".chatmsg[data-mid]");
+  if(msg && !e.target.closest("button, [data-uprof], .mre")){
+    chatActOpen = (chatActOpen === msg.dataset.mid) ? null : msg.dataset.mid;
+    renderChat();
+  }
 });
 document.getElementById("chatReplyX").addEventListener("click", chatClearReply);
 let chatSending = false;
