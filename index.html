@@ -877,6 +877,20 @@
   .transtog input{accent-color:var(--ricochet)}
   .chatmsg{flex-wrap:wrap}
   .chatmsg .mtr{flex-basis:100%;color:var(--tank);font-size:11.5px;padding:2px 0 0 4px}
+  /* 💬 답장 인용 · 멘션 강조 · 이모지 반응 (2026-07-29) */
+  .chatmsg .mre{flex-basis:100%;display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub);padding:1px 0 2px 3px;cursor:pointer;opacity:.9}
+  .chatmsg .mre b{color:var(--ricochet);font-weight:700;flex-shrink:0}
+  .chatmsg .mre .mreq{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .chatmsg.mentioned{background:rgba(255,176,46,.10);border-left:2px solid var(--ricochet);border-radius:7px;padding:3px 6px;margin-left:-6px}
+  .chatrx{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px;padding:3px 0 0 3px}
+  .chatrx button{background:var(--panel2);border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:1px 8px;font-size:11.5px;font-family:inherit;line-height:1.75;cursor:pointer}
+  .chatrx button.on{border-color:var(--ricochet);color:var(--ricochet);background:rgba(255,176,46,.13)}
+  .chatrx .rxadd{opacity:.5;font-weight:700}
+  .replybar{display:none;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--ricochet);border-radius:10px;padding:7px 10px;margin-bottom:7px;font-size:12px;color:var(--sub)}
+  .replybar.on{display:flex}
+  .replybar b{color:var(--ricochet)}
+  .replybar .rbtx{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .replybar button{background:none;border:none;color:var(--sub);cursor:pointer;font-size:15px;padding:0 2px;font-family:inherit}
   .banned-notice{background:rgba(255,93,93,.1);border:1px solid var(--bad);color:var(--bad);border-radius:11px;padding:9px 12px;font-size:12px;margin-bottom:8px}
   .myuid{margin-top:8px;font-size:10.5px;color:var(--sub);text-align:right}
   .myuid code{background:var(--panel2);padding:2px 6px;border-radius:6px;font-size:10px}
@@ -1172,6 +1186,10 @@
     </div>
     <label class="transtog"><input type="checkbox" id="chatAutoTr"> <span data-ko="🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)">🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)</span></label>
     <div class="chatbox" id="chatBox"><div class="cmtempty">아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋</div></div>
+    <div class="replybar" id="chatReplyBar">
+      <span class="rbtx" id="chatReplyTx"></span>
+      <button id="chatReplyX" title="답장 취소" data-ko-title="답장 취소">✕</button>
+    </div>
     <div class="chatinput">
       <input id="chatText" class="chattext" maxlength="120" data-ko-ph="메시지 입력… (Enter로 전송)" placeholder="메시지 입력… (Enter로 전송)">
       <button class="cmtbtn" id="chatSend" data-ko="전송">전송</button>
@@ -2541,6 +2559,16 @@ const GAME_ROADMAP = {
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-07-29",
+    ko:"💬 채팅이 편해졌어요 — 메시지에 😊를 눌러 👍❤️😂🔥로 가볍게 반응할 수 있고, ↩ 답장을 누르면 누구에게 하는 말인지 인용으로 보입니다. 내 닉네임을 @로 부르면 그 메시지가 눈에 띄게 표시돼요",
+    en:"💬 Chat just got easier — tap 😊 on a message to react with 👍❤️😂🔥, and hit ↩ Reply so everyone can see who you're talking to. Messages that @mention your nickname are highlighted for you",
+    ja:"💬 チャットが使いやすくなりました — メッセージの😊から👍❤️😂🔥で気軽にリアクションでき、↩返信を押すと誰宛てかが引用で表示されます。自分のニックネームが@で呼ばれたメッセージは目立つように表示されます",
+    zh:"💬 聊天更好用了 — 點訊息上的😊即可用👍❤️😂🔥輕鬆表達反應，按下↩回覆就能讓大家看出你在跟誰說話。有人用@提到你的暱稱時，該訊息會特別標示",
+    fr:"💬 Le chat est plus pratique — appuie sur 😊 pour réagir avec 👍❤️😂🔥, et sur ↩ Répondre pour que tout le monde voie à qui tu parles. Les messages qui @mentionnent ton pseudo sont mis en évidence",
+    de:"💬 Der Chat ist jetzt einfacher — tippe auf 😊, um mit 👍❤️😂🔥 zu reagieren, und auf ↩ Antworten, damit alle sehen, wen du meinst. Nachrichten, die deinen Namen mit @ erwähnen, werden hervorgehoben",
+    es:"💬 El chat es más cómodo — toca 😊 en un mensaje para reaccionar con 👍❤️😂🔥, y pulsa ↩ Responder para que se vea a quién le hablas. Los mensajes que @mencionan tu apodo aparecen resaltados",
+    pt:"💬 O chat ficou mais prático — toque em 😊 numa mensagem para reagir com 👍❤️😂🔥 e use ↩ Responder para que todos vejam com quem você fala. Mensagens que @mencionam seu apelido ficam destacadas",
+    ru:"💬 Чат стал удобнее — нажми 😊 на сообщении, чтобы отреагировать 👍❤️😂🔥, и ↩ «Ответить», чтобы всем было видно, кому ты пишешь. Сообщения с @упоминанием твоего ника подсвечиваются" },
+  { date:"2026-07-29",
     ko:"🌐 번역·데이터 정확도 점검 — 외국어로 보면 일부 카운터픽 추천 이유와 빌드 탭이 한국어로 보이던 문제를 고쳤고, 맵 '용광로'·상자·화폐 이름을 게임 공식 표기(코인·보석·특전 상자)로 맞췄어요. 피드백에 사진을 첨부했는데 저장되지 않던 문제도 해결했습니다",
     en:"🌐 Translation & data accuracy pass — fixed counter-pick reasons and the Builds tab showing Korean to non-Korean readers, and matched the map \"The Forge\", box and currency names to the game's official wording (Coins, Gems, Perk Box). Also fixed feedback photo attachments silently failing to save",
     ja:"🌐 翻訳・データ精度の点検 — 外国語表示で一部のカウンターピック理由とビルドタブが韓国語のままだった問題を修正し、マップ「ザ・フォージ」やボックス・通貨名をゲーム公式表記（コイン・ジェム・パークボックス）に揃えました。フィードバックの写真添付が保存されない問題も解決しました",
@@ -3236,6 +3264,10 @@ Object.assign(I18N.de, {"코인":"Münzen","누적 코인":"Münzen gesamt","레
 Object.assign(I18N.es, {"코인":"Monedas","누적 코인":"Monedas totales","레벨별 코인·카드":"monedas y cartas por nivel"});
 Object.assign(I18N.pt, {"코인":"Moedas","누적 코인":"Moedas totais","레벨별 코인·카드":"moedas e cartas por nível"});
 Object.assign(I18N.ru, {"코인":"Монеты","누적 코인":"Всего монет","레벨별 코인·카드":"монеты и карты по уровням"});
+/* 💬 채팅 반응·답장 문구 (2026-07-29) — fr/de/es/pt/ru는 T()가 영어로 자동 폴백 */
+Object.assign(I18N.en, {"반응":"Reaction","답장":"Reply","답장 취소":"Cancel reply","{n}님에게 답장":"Replying to {n}","원본 메시지를 찾을 수 없어요":"Original message not found","⚙️ 서버 규칙이 아직 설정되지 않아 반응할 수 없습니다":"⚙️ Server rules aren't set up yet, so reactions can't be saved"});
+Object.assign(I18N.ja, {"반응":"リアクション","답장":"返信","답장 취소":"返信をやめる","{n}님에게 답장":"{n} さんに返信","원본 메시지를 찾을 수 없어요":"元のメッセージが見つかりません","⚙️ 서버 규칙이 아직 설정되지 않아 반응할 수 없습니다":"⚙️ サーバールールが未設定のためリアクションできません"});
+Object.assign(I18N.zh, {"반응":"反應","답장":"回覆","답장 취소":"取消回覆","{n}님에게 답장":"回覆 {n}","원본 메시지를 찾을 수 없어요":"找不到原始訊息","⚙️ 서버 규칙이 아직 설정되지 않아 반응할 수 없습니다":"⚙️ 伺服器規則尚未設定，無法送出反應"});
 /* 🌐 지원 언어 목록 — 게임이 공식 지원하는 9개 언어와 동일 (영웅·스킬명은 게임 공식 번역 사용) */
 const LANG_META=[
   {c:"ko",flag:"🇰🇷",name:"한국어"},
@@ -3509,7 +3541,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.29-b";
+const SITE_VERSION = "2026.07.29-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -4720,6 +4752,60 @@ function chatToBottom(){
   setTimeout(() => { progScrollUntil = Date.now() + 200; box.scrollTop = box.scrollHeight; }, 120);
 }
 window.rsChatToBottom = chatToBottom;
+/* ══════ 💬 채팅: 이모지 반응 + 답장/멘션 (2026-07-29) ══════
+   목적: "한 글자도 안 쓰고 참여"할 수 있게 해서 대화 문턱을 낮추고, 누구에게 하는 말인지 보이게 함.
+   ⚠️ 반응은 chat/<mid> 아래에 못 넣는다 — chat의 .write 규칙이 "새로 쓰기 or 삭제"만 허용해서
+      하위 필드 쓰기가 거부되기 때문. 그래서 별도 최상위 경로 chatreact/<mid>/<종류>/<uid>=true 사용. (규칙 v24) */
+const CHAT_RX = [["up","👍"],["heart","❤️"],["lol","😂"],["fire","🔥"]];
+let chatReactCache = {}, chatRxOpen = null, chatReplyTo = null;
+
+function chatRxHtml(mid){
+  const r = chatReactCache[mid] || {};
+  const open = chatRxOpen === mid;
+  let chips = "";
+  for(const [k, emo] of CHAT_RX){
+    const users = r[k] || {};
+    const n = Object.keys(users).length;
+    if(!n && !open) continue;                    // 평소엔 눌린 반응만, ＋를 누르면 전체 표시
+    const mineR = MY_UID && users[MY_UID];
+    chips += `<button class="${mineR?"on":""}" data-rx="${mid}|${k}">${emo}${n?" "+n:""}</button>`;
+  }
+  // ⚠️ 반응 줄은 "실제 반응이 있을 때 or 고르는 중"에만 만든다 — 모든 메시지에 빈 줄이 생기면 목록이 답답해짐
+  if(!chips) return "";
+  return `<div class="chatrx">${chips}${open?`<button class="rxadd" data-rx-open="${mid}">✕</button>`:""}</div>`;
+}
+function chatQuoteHtml(m){
+  const src = chatCache.find(x => x.id === m.re);
+  const body = src ? esc(String(src.text||"").slice(0,45)) : `<i>${T("원본 메시지를 찾을 수 없어요")}</i>`;
+  return `<div class="mre" data-goto="${esc(m.re)}">↩ <b>${esc(m.rn||"?")}</b> <span class="mreq">${body}</span></div>`;
+}
+function chatMentionsMe(text){
+  const me = (typeof getNick === "function" ? getNick() : "").trim();
+  if(!me) return false;
+  return String(text||"").toLowerCase().includes("@" + me.toLowerCase());
+}
+function chatSetReply(id, name){
+  chatReplyTo = { id, name };
+  document.getElementById("chatReplyTx").innerHTML = T("{n}님에게 답장").replace("{n}", `<b>${esc(name)}</b>`);
+  document.getElementById("chatReplyBar").classList.add("on");
+  const t = document.getElementById("chatText"); if(t) t.focus();
+}
+function chatClearReply(){
+  chatReplyTo = null;
+  const bar = document.getElementById("chatReplyBar"); if(bar) bar.classList.remove("on");
+}
+async function chatReact(mid, key){
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  const on = !!(((chatReactCache[mid]||{})[key]||{})[MY_UID]);
+  try{
+    const ref = FB.ref(FB.db, `chatreact/${mid}/${key}/${MY_UID}`);
+    if(on) await FB.remove(ref); else await FB.set(ref, true);
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 반응할 수 없습니다") : T("전송 실패 — 잠시 후 다시 시도해주세요"));
+  }
+}
 function renderChat(){
   const box = document.getElementById("chatBox");
   const nearBottom = chatStick;
@@ -4734,14 +4820,18 @@ function renderChat(){
     const tm = m.ts ? new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}) : "";
     const mine = m.uid === MY_UID;
     const tr = transCache[m.id];
-    return `<div class="chatmsg">
+    return `<div class="chatmsg${chatMentionsMe(m.text)?" mentioned":""}" data-mid="${m.id}">
+      ${m.re?chatQuoteHtml(m):""}
       <span class="mnm" style="color:${nameColor(m.uid)}" data-uprof="${m.uid}" data-uname="${esc(m.name)}">${esc(m.name)}</span>${staffBadge(m.uid)}
       <span class="mtx">${esc(m.text)}</span>
       <span class="mtm">${tm}</span>
+      ${MY_UID?`<button class="mrep" data-rx-open="${m.id}" title="${T("반응")}">😊</button>`:""}
+      ${!mine&&MY_UID?`<button class="mrep" data-reply="${m.id}" data-reply-name="${esc(m.name)}" title="${T("답장")}">↩</button>`:""}
       ${!mine?`<button class="mrep" onclick="rsTranslateMsg('${m.id}')" title="${T("번역")}">🌐</button>`:""}
       ${!mine&&MY_UID?`<button class="mrep" onclick="rsReport('chat','${m.id}')" title="${T("신고")}">🚩</button>`:""}
       ${(mine||IS_ADMIN)?`<button class="mdel" data-del-chat="${m.id}">✕</button>`:""}
       ${tr?`<span class="mtr">↳ ${esc(tr)}</span>`:""}
+      ${chatRxHtml(m.id)}
     </div>`;
   }).join("");
   // 번역 캐시 무한 증가 방지: 화면에 없는(=최근 100개 밖) 오래된 항목은 정리
@@ -4756,10 +4846,24 @@ function renderChat(){
   }
 }
 document.getElementById("chatBox").addEventListener("click", async e => {
+  const rx = e.target.closest("[data-rx]");                    // 이모지 반응 누름
+  if(rx){ const [mid, key] = rx.dataset.rx.split("|"); chatReact(mid, key); return; }
+  const rxo = e.target.closest("[data-rx-open]");              // ＋ 반응 고르기 열기/닫기
+  if(rxo){ chatRxOpen = (chatRxOpen === rxo.dataset.rxOpen) ? null : rxo.dataset.rxOpen; renderChat(); return; }
+  const rp = e.target.closest("[data-reply]");                 // 답장 대상 지정
+  if(rp){ chatSetReply(rp.dataset.reply, rp.dataset.replyName||""); return; }
+  const gt = e.target.closest("[data-goto]");                  // 인용 누르면 원본으로 이동
+  if(gt){
+    const el = document.querySelector(`#chatBox [data-mid="${gt.dataset.goto}"]`);
+    if(el){ el.scrollIntoView({block:"center", behavior:"smooth"}); el.classList.add("mentioned"); setTimeout(()=>{ renderChat(); }, 1200); }
+    else toast(T("원본 메시지를 찾을 수 없어요"));
+    return;
+  }
   const b = e.target.closest("[data-del-chat]"); if(!b) return;
   if(!confirm(T("이 메시지를 삭제할까요?"))) return;
   try{ await FB.remove(FB.ref(FB.db, `chat/${b.dataset.delChat}`)); }catch(err){ toast(T("삭제 실패")); }
 });
+document.getElementById("chatReplyX").addEventListener("click", chatClearReply);
 let chatSending = false;
 async function sendChat(){
   if(chatSending) return;                            // 전송 중 재호출 차단
@@ -4771,8 +4875,10 @@ async function sendChat(){
   if(!checkText(text, 120, 1) || !chatRateOK()) return;
   chatSending = true;
   try{
-    await FB.push(FB.ref(FB.db, "chat"), { name, text, uid: MY_UID, ts: FB.serverTimestamp() });
-    textEl.value = "";
+    const payload = { name, text, uid: MY_UID, ts: FB.serverTimestamp() };
+    if(chatReplyTo){ payload.re = chatReplyTo.id; payload.rn = String(chatReplyTo.name||"").slice(0,12); }
+    await FB.push(FB.ref(FB.db, "chat"), payload);
+    textEl.value = ""; chatClearReply();
   }catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
     toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다") : T("전송 실패 — 잠시 후 다시 시도해주세요"));
@@ -6047,6 +6153,12 @@ FB.onValue(FB.query(FB.ref(FB.db, "chat"), FB.limitToLast(100)), snap => {
   renderChat(); rsNewSync();
   autoTranslateNew();
 });
+/* 💬 채팅 이모지 반응 구독 — 최근 300개 메시지분만 (푸시키가 시간순이라 limitToLast로 최신분만 받음).
+   규칙 v24 미게시면 조용히 무시되고 반응만 안 보임(채팅 자체는 정상). */
+FB.onValue(FB.query(FB.ref(FB.db, "chatreact"), FB.limitToLast(300)), snap => {
+  chatReactCache = snap.val() || {};
+  renderChat();
+}, () => {});
 FB.onValue(FB.ref(FB.db, "reports"), snap => {
   reportsCache = snap.val() || { chat:{}, comments:{}, board:{} };
   if(!reportsCache.chat) reportsCache.chat = {};
