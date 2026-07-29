@@ -1340,7 +1340,7 @@
 <script type="module">
 /* ════════ 🔥 Firebase 연결 (Realtime Database) ════════ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, indexedDBLocalPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getDatabase, ref, get, set, update, remove, push, onValue, query, limitToLast, runTransaction, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
 const firebaseConfig = {
@@ -1356,6 +1356,15 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const fbDb = getDatabase(fbApp);
 const fbAuth = getAuth(fbApp);
+/* 🔒 로그인 유지 저장소를 명시한다.
+   익명 계정은 비밀번호가 없고 "이 기기 저장소에 있는 열쇠"가 곧 신분증이다.
+   그래서 저장소가 지워지면 조용히 다른 사람이 된다(= 운영자 권한·닉네임이 사라진 것처럼 보임).
+   IndexedDB를 우선 쓰되, 기기·브라우저 사정으로 실패하면 localStorage로 물러선다. */
+try{
+  setPersistence(fbAuth, indexedDBLocalPersistence)
+    .catch(() => setPersistence(fbAuth, browserLocalPersistence).catch(()=>{}));
+}catch(e){}
+
 /* ⚠️ 이미 로그인된 계정이 있으면 그대로 둔다.
    예전엔 무조건 signInAnonymously()를 불렀는데, 그러면 복구한 계정이
    다음 접속 때 새 익명 계정으로 덮어써진다. (2026-07-29 계정 복구 건) */
@@ -1364,6 +1373,24 @@ const authReady = new Promise(res => onAuthStateChanged(fbAuth, u => {
   if(u){ res(u.uid); return; }
   if(!rsAnonTried){ rsAnonTried = true; signInAnonymously(fbAuth).catch(()=>{}); }
 }));
+
+/* 🧭 계정 바뀜 감지 (2026-07-29) — 예전엔 uid가 조용히 바뀌어도 알 방법이 없어서
+   "계정이 삭제됐다"고 오해하게 됐다. 이제는 바뀐 사실과 이전 uid를 기억해 알려준다.
+   이전 uid를 알면 복구 토큰을 만들 수 있으므로, 이 기록 자체가 복구의 열쇠가 된다. */
+authReady.then(uid => {
+  try{
+    const prev = localStorage.getItem("rs_uid_seen") || "";
+    if(prev && prev !== uid){
+      let hist = [];
+      try{ hist = JSON.parse(localStorage.getItem("rs_uid_hist") || "[]"); }catch(e){}
+      if(!hist.includes(prev)) hist.unshift(prev);
+      localStorage.setItem("rs_uid_hist", JSON.stringify(hist.slice(0,5)));
+      window.RS_UID_CHANGED = prev;          // 아래 커뮤니티 모듈에서 안내에 사용
+    }
+    localStorage.setItem("rs_uid_seen", uid);
+  }catch(e){}
+});
+window.rsPrevUids = () => { try{ return JSON.parse(localStorage.getItem("rs_uid_hist")||"[]"); }catch(e){ return []; } };
 
 /* 🔑 계정 복구 — 익명 계정은 비밀번호가 없고, 열쇠가 그 기기 저장소에만 있다.
    저장소가 비워지면(기기 변경·iOS 정리·다른 브라우저) 같은 uid로 돌아갈 방법이 없어서,
@@ -1380,6 +1407,7 @@ function rsRecoverUI(){
     + '<b style="color:#ffb02e">\uD83D\uDD11 계정 복구</b>'
     + '<p style="color:#8b96ab;font-size:12px;margin:8px 0;line-height:1.6">복구 토큰을 붙여넣고 [복구]를 누르세요.<br>토큰은 발급 후 <b>1시간</b>만 유효합니다.</p>'
     + '<div style="color:#8b96ab;font-size:11px;margin-bottom:6px">지금 내 ID: <code id="rsRecNow" style="color:#e8ecf4">…</code></div>'
+    + '<div id="rsRecPrevWrap" style="display:none;color:#8b96ab;font-size:11px;margin-bottom:8px">이전 ID(이걸로 토큰을 만드세요): <code id="rsRecPrev" style="color:#ffb02e"></code></div>'
     + '<textarea id="rsRecTok" rows="4" placeholder="여기에 붙여넣기" style="width:100%;background:#1d2432;border:1px solid #2a3347;color:#e8ecf4;border-radius:9px;padding:8px;font-size:11px;font-family:monospace"></textarea>'
     + '<div id="rsRecMsg" style="color:#8b96ab;font-size:11.5px;margin:7px 0;min-height:16px;word-break:break-all"></div>'
     + '<div style="display:flex;gap:7px">'
@@ -1388,6 +1416,15 @@ function rsRecoverUI(){
     + '</div></div>';
   document.body.appendChild(d);
   authReady.then(u => { const n=document.getElementById("rsRecNow"); if(n) n.textContent = u; });
+  /* 이전에 쓰던 uid가 기록돼 있으면 함께 보여준다 — 그 값으로 복구 토큰을 만들면 된다.
+     예전엔 이걸 몰라서 "예전 계정이 뭐였는지" 조차 확인할 방법이 없었다. */
+  try{
+    const hist = (window.rsPrevUids && window.rsPrevUids()) || [];
+    if(hist.length){
+      document.getElementById("rsRecPrevWrap").style.display = "block";
+      document.getElementById("rsRecPrev").textContent = hist[0];
+    }
+  }catch(e){}
   const msg = m => { const e=document.getElementById("rsRecMsg"); if(e) e.textContent = m; };
   document.getElementById("rsRecX").onclick = () => d.remove();
   document.getElementById("rsRecGo").onclick = async () => {
@@ -2630,6 +2667,16 @@ const GAME_ROADMAP = {
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-07-29",
+    ko:"🔒 신고한 사람이 누구인지 더 이상 공개되지 않아요 — 예전에는 신고 기록을 누구나 들여다볼 수 있어서 마음먹으면 신고자를 알아낼 수 있었습니다. 이제 신고 '횟수'만 공개되고 신고자는 운영자만 확인할 수 있어요. 신고 3회 자동 숨김은 그대로입니다",
+    en:"🔒 Who reported a post is now private — anyone used to be able to look up the report log and work out who filed it. From now on only the report count is public, and reporters are visible to the operator only. Auto-hide after 3 reports works exactly as before",
+    ja:"🔒 通報した人が誰かは非公開になりました — これまでは通報記録を誰でも見られたため、通報者を突き止めることができました。今後は通報「回数」だけが公開され、通報者は運営者のみが確認できます。通報3回で自動非表示になる仕組みはそのままです",
+    zh:"🔒 檢舉者的身分不再公開 — 過去任何人都能查看檢舉紀錄，有心人可以查出是誰檢舉的。往後只公開檢舉「次數」，檢舉者僅營運者可見。檢舉滿3次自動隱藏的機制維持不變",
+    fr:"🔒 L'identité des personnes qui signalent est désormais privée — avant, le journal des signalements était consultable par tous. Seul le nombre de signalements est public maintenant ; les auteurs ne sont visibles que par l'opérateur. Le masquage après 3 signalements reste inchangé",
+    de:"🔒 Wer eine Meldung abgibt, bleibt jetzt privat — bisher war das Meldeprotokoll für alle einsehbar. Ab sofort ist nur noch die Anzahl der Meldungen öffentlich, die Meldenden sieht nur der Betreiber. Das automatische Ausblenden nach 3 Meldungen bleibt gleich",
+    es:"🔒 Quién denuncia una publicación ya es privado — antes cualquiera podía consultar el registro de denuncias y averiguarlo. Ahora solo el número de denuncias es público y los denunciantes solo los ve el operador. El ocultado automático tras 3 denuncias sigue igual",
+    pt:"🔒 Quem denuncia agora fica em sigilo — antes qualquer pessoa podia consultar o registro de denúncias e descobrir. Agora só a quantidade de denúncias é pública e os denunciantes só o operador vê. A ocultação automática após 3 denúncias continua igual",
+    ru:"🔒 Кто пожаловался — теперь скрыто: раньше журнал жалоб мог посмотреть кто угодно и вычислить автора. Теперь публично только число жалоб, а самих отправителей видит только оператор. Автоскрытие после 3 жалоб работает как прежде" },
+  { date:"2026-07-29",
     ko:"💬 채팅이 편해졌어요 — 메시지에 😊를 눌러 👍❤️😂🔥로 가볍게 반응할 수 있고, ↩ 답장을 누르면 누구에게 하는 말인지 인용으로 보입니다. 내 닉네임을 @로 부르면 그 메시지가 눈에 띄게 표시돼요",
     en:"💬 Chat just got easier — tap 😊 on a message to react with 👍❤️😂🔥, and hit ↩ Reply so everyone can see who you're talking to. Messages that @mention your nickname are highlighted for you",
     ja:"💬 チャットが使いやすくなりました — メッセージの😊から👍❤️😂🔥で気軽にリアクションでき、↩返信を押すと誰宛てかが引用で表示されます。自分のニックネームが@で呼ばれたメッセージは目立つように表示されます",
@@ -3343,6 +3390,10 @@ Object.assign(I18N.zh, {"반응":"反應","답장":"回覆","답장 취소":"取
 Object.assign(I18N.en, {"이전 프로필을 불러왔어요":"Restored your saved profile"});
 Object.assign(I18N.ja, {"이전 프로필을 불러왔어요":"以前のプロフィールを読み込みました"});
 Object.assign(I18N.zh, {"이전 프로필을 불러왔어요":"已載入你先前的個人資料"});
+/* 🧭 계정 바뀜 안내 문구 (2026-07-29) */
+Object.assign(I18N.en, {"이 기기의 계정이 바뀌었어요 — 피드백 탭 맨 아래 '내 ID'를 5번 눌러 복구할 수 있어요":"This device got a new account — tap 'My ID' 5 times at the bottom of the Feedback tab to recover"});
+Object.assign(I18N.ja, {"이 기기의 계정이 바뀌었어요 — 피드백 탭 맨 아래 '내 ID'를 5번 눌러 복구할 수 있어요":"この端末のアカウントが変わりました — フィードバックタブ下部の「マイID」を5回タップで復旧できます"});
+Object.assign(I18N.zh, {"이 기기의 계정이 바뀌었어요 — 피드백 탭 맨 아래 '내 ID'를 5번 눌러 복구할 수 있어요":"此裝置的帳號已變更 — 在回饋分頁底部連點「我的 ID」5 次即可復原"});
 /* 🌐 지원 언어 목록 — 게임이 공식 지원하는 9개 언어와 동일 (영웅·스킬명은 게임 공식 번역 사용) */
 const LANG_META=[
   {c:"ko",flag:"🇰🇷",name:"한국어"},
@@ -3616,7 +3667,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.29-f";
+const SITE_VERSION = "2026.07.29-h";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3693,7 +3744,9 @@ const HKEYS = Object.keys(HEROES);
 let MY_UID = null, IS_ADMIN = false, IS_BANNED = false;
 let myVotes = {}, aggCache = null;
 let cmtFilterHero = "all", cmtCache = [], chatCache = [], statsCache = null;
-let reportsCache = { chat:{}, comments:{} };
+/* 🔒 신고 수는 공개(reportcount/<종류>/<글>=숫자), "누가 신고했나"(reports)는 관리자만 읽음 — 29-h.
+   예전엔 reports 전체가 공개라 신고자 uid → profiles(공개)로 게임닉까지 특정돼 보복 위험이 있었음. */
+let rcCache = {};
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const hName = k => T(HEROES[k]?.ko || k);
@@ -4345,13 +4398,31 @@ function chatRateOK(){
   return true;
 }
 window.rsChatRate = chatRateOK;
-function reportCount(node, id){ const r = reportsCache[node]?.[id]; return r ? Object.keys(r).length : 0; }
+function reportCount(node, id){ const n = rcCache[node]?.[id]; return typeof n === "number" ? n : 0; }
 const isHidden = (node, id) => reportCount(node, id) >= 3;
+/* 신고 절차(규칙 v25): ①공개 카운트 N을 서버에서 읽어 ②내 신고기록에 N을 적고(1인 1회, 비공개)
+   ③공개 카운터를 N→N+1로 올린다. 규칙이 "내 기록값 === 현재 카운트"일 때만 ③을 허용하므로,
+   한 번 올리고 나면 내 기록(N)과 카운트(N+1)가 어긋나 같은 사람이 반복해서 올릴 수 없다. */
 async function reportItem(node, id){
   if(!MY_UID){ toast(T("연결 중입니다")); return; }
   if(!confirm(T("이 글을 신고할까요? 신고 3회 누적 시 자동으로 숨겨집니다."))) return;
-  try{ await FB.set(FB.ref(FB.db, `reports/${node}/${id}/${MY_UID}`), true); toast(T("신고가 접수되었습니다")); }
-  catch(e){ toast(T("이미 신고했거나 처리할 수 없습니다")); }
+  const myRef = FB.ref(FB.db, `reports/${node}/${id}/${MY_UID}`);
+  let cur = reportCount(node, id);
+  try{
+    const s = await FB.get(FB.ref(FB.db, `reportcount/${node}/${id}`));   // 경합을 줄이려 최신값을 직접 읽음
+    if(s.exists() && typeof s.val() === "number") cur = s.val();
+  }catch(e){}
+  try{
+    await FB.set(myRef, cur);
+  }catch(e){
+    // 규칙 v25 미게시(옛 규칙은 값이 true여야 함) → 옛 형식으로라도 신고는 접수되게 한다
+    try{ await FB.set(myRef, true); }
+    catch(e2){ toast(T("이미 신고했거나 처리할 수 없습니다")); return; }
+    toast(T("신고가 접수되었습니다")); return;
+  }
+  // 카운터 올리기 실패는 조용히 넘어간다(같은 순간에 다른 사람이 먼저 올린 경우). 신고 자체는 기록됨.
+  try{ await FB.set(FB.ref(FB.db, `reportcount/${node}/${id}`), cur + 1); }catch(e){}
+  toast(T("신고가 접수되었습니다"));
 }
 window.rsReport = reportItem;
 const NAME_COLORS = ["#ffb02e","#5da9ff","#4ade80","#f472b6","#a78bfa","#fb923c","#22d3ee","#facc15"];
@@ -6262,13 +6333,44 @@ FB.onValue(FB.query(FB.ref(FB.db, "chatreact"), FB.limitToLast(300)), snap => {
   chatReactCache = snap.val() || {};
   renderChat();
 }, () => {});
-FB.onValue(FB.ref(FB.db, "reports"), snap => {
-  reportsCache = snap.val() || { chat:{}, comments:{}, board:{} };
-  if(!reportsCache.chat) reportsCache.chat = {};
-  if(!reportsCache.comments) reportsCache.comments = {};
-  if(!reportsCache.board) reportsCache.board = {};
-  renderChat(); renderCmts(); renderBd();
-});
+/* 🔒 신고 수 구독 — 공개 카운터만 읽는다(누가 신고했는지는 관리자만 볼 수 있음).
+   규칙 v25 미게시면 읽기가 거부되므로 예전 방식(reports 전체)으로 자동 폴백해 자동숨김이 끊기지 않게 한다.
+   → 배포 순서를 신경 쓸 필요가 없어짐. 규칙 게시 뒤에는 아래 rcLegacy가 호출되지 않음(다음 정리 때 제거 가능). */
+function rcRerender(){ renderChat(); renderCmts(); renderBd(); renderGreets(); }
+let rcLegacyOn = false;
+function rcLegacy(){
+  if(rcLegacyOn) return; rcLegacyOn = true;
+  FB.onValue(FB.ref(FB.db, "reports"), snap => {
+    const v = snap.val() || {}, out = {};
+    for(const node in v){ out[node] = {}; for(const mid in v[node]) out[node][mid] = Object.keys(v[node][mid] || {}).length; }
+    rcCache = out; rcRerender();
+  }, () => {});
+}
+FB.onValue(FB.ref(FB.db, "reportcount"), snap => {
+  rcCache = snap.val() || {};
+  rcRerender();
+}, () => rcLegacy());
+/* 예전 reports 기록 → 공개 카운터 이전(관리자 1회). 이미 카운터가 더 크거나 같으면 건드리지 않는다. */
+async function rsMigrateReportCounts(){
+  if(!IS_ADMIN || localStorage.getItem("rs_rc_migrated") === "1") return 0;
+  let old, cur = {};
+  try{ old = (await FB.get(FB.ref(FB.db, "reports"))).val() || {}; }
+  catch(e){ return 0; }                                   // 규칙 v25 미게시 → 다음 방문 때 다시 시도
+  try{ cur = (await FB.get(FB.ref(FB.db, "reportcount"))).val() || {}; }catch(e){}
+  const up = {}; let n = 0;
+  for(const node in old){
+    if(!/^(chat|comments|board|greets)$/.test(node)) continue;   // 규칙이 막는 키가 섞이면 update 전체가 실패하므로 미리 거른다
+    for(const mid in (old[node] || {})){
+      if(!/^[A-Za-z0-9_-]{1,48}$/.test(mid)) continue;
+      const cnt = Object.keys(old[node][mid] || {}).length;
+      const have = typeof cur[node]?.[mid] === "number" ? cur[node][mid] : 0;
+      if(cnt > have){ up[`${node}/${mid}`] = cnt; n++; }
+    }
+  }
+  if(n) await FB.update(FB.ref(FB.db, "reportcount"), up);
+  localStorage.setItem("rs_rc_migrated", "1");
+  return n;
+}
 FB.onValue(FB.query(FB.ref(FB.db, "board"), FB.limitToLast(50)), snap => {
   const v = snap.val() || {};
   bdCache = Object.entries(v).map(([id,p]) => ({ id, ...p }));
@@ -6289,6 +6391,10 @@ FB.authReady.then(async uid => {
   document.getElementById("myUidCode").textContent = uid;
   try{ IS_ADMIN = (await FB.get(FB.ref(FB.db, `admins/${uid}`))).exists(); }catch(e){ IS_ADMIN = false; }
   try{ IS_BANNED = (await FB.get(FB.ref(FB.db, `banned/${uid}`))).exists(); }catch(e){ IS_BANNED = false; }
+  // 🧭 계정이 바뀌었으면 조용히 넘어가지 말고 반드시 알린다 (예전엔 몰라서 "계정이 삭제됐다"고 오해)
+  if(window.RS_UID_CHANGED){
+    setTimeout(() => toast("⚠️ " + T("이 기기의 계정이 바뀌었어요 — 피드백 탭 맨 아래 '내 ID'를 5번 눌러 복구할 수 있어요")), 1500);
+  }
   // 🔄 이 기기에 닉네임·프로필이 없으면 서버에 저장된 내 프로필로 되살린다 (기기 변경·저장소 초기화 대비)
   try{
     if(await rsRestoreProfileFromServer(uid)){
@@ -6308,6 +6414,9 @@ FB.authReady.then(async uid => {
   }
   if(IS_ADMIN){
     toast("🔑 " + T("관리자 모드"));
+    // 🔒 예전 신고 기록(reports)의 개수를 공개 카운터(reportcount)로 한 번 옮긴다 — 안 하면 이미 숨겨진 글이 다시 보임.
+    //    관리자만 가능(규칙상 reports 읽기·reportcount 임의 쓰기는 관리자 전용). 이미 옮긴 건 건너뛰므로 여러 번 돌아도 안전.
+    rsMigrateReportCounts().then(n => { if(n) toast(`🔒 신고 기록 ${n}건 이전 완료 / ${n} report counts migrated`); }).catch(()=>{});
     if(typeof renderCodes === "function") renderCodes();   // 관리자 코드 편집 패널 표시
     if(typeof renderCreators === "function") renderCreators();   // 🎬 크리에이터: 추가 폼 표시 + 명단 0이어도 서브탭 보이게(관리자만)
     // 운영자 열람 공간 폐지 → 예전 비공개 피드백을 공개 목록으로 이전(모두 한 곳에서 답변)
