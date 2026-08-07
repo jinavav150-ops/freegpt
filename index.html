@@ -961,6 +961,12 @@
   .rptev{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px}
   .rptev .tm{color:var(--sub);font-variant-numeric:tabular-nums;min-width:44px;flex-shrink:0}
   .rptsvg{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+  .rptchip{display:inline-block;background:rgba(255,107,107,.13);border:1px solid rgba(255,107,107,.35);
+    color:#ffb3b3;border-radius:20px;padding:0 7px;font-size:10.5px;margin-left:4px;white-space:nowrap}
+  .rptdm{color:var(--sub);font-size:11px}
+  [data-pid]{cursor:pointer}
+  .rptMe{background:rgba(255,193,77,.10);outline:1px solid rgba(255,193,77,.45);border-radius:6px}
+  tr.rptMe td{background:rgba(255,193,77,.10)}
 </style>
 </head>
 <body>
@@ -3856,7 +3862,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.08-c";
+const SITE_VERSION = "2026.08.08-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3886,6 +3892,9 @@ function rsUrlRestore(){
   try{
     const p = new URLSearchParams(location.search);
     const tab = p.get("tab");
+    /* 🪤 경기분석 딥링크(m=코드)는 **여기서 붙잡아 둔다** — 아래 rsUrlSync()가 주소를
+       정리하면서 m을 지우는데, 모듈 스크립트(defer)는 그 뒤에 실행돼 못 읽는다(실측). */
+    window.__rptDeepM = (p.get("m") || "").toUpperCase();
     const en = (p.get("enemy") || "").split(",").map(s=>s.trim()).filter(Boolean);
     if(en.length) enemies = en.filter(id => HEROES[id]).slice(0,3);   // 모르는 id는 조용히 무시
     if(tab && SUB_OF[tab]) goSub(tab);
@@ -6460,9 +6469,35 @@ const RPT_L = {
   s_death:{ko:"사망 심화",en:"Death Analysis",ja:"デス分析",zh:"死亡分析"},
   s_map:{ko:"사망 위치 · 맵 장악",en:"Deaths & Map Control",ja:"デス位置・マップ支配",zh:"死亡位置・地圖控制"},
   flow_note:{ko:"⚡ = 리드가 뒤집힌 순간",en:"⚡ = lead change",ja:"⚡ = リード逆転",zh:"⚡ = 領先易主"},
-  style_note:{ko:"참여 = 교전 중 피해/회복 기록 있음 · 전방 +면 팀보다 앞에 서는 성향 · 첫진입 = 교전을 먼저 연 횟수",en:"Part. = active in fight · Front + = plays ahead of team · First = opened fights",ja:"参加=交戦で行動あり · 前方+=味方より前に出る傾向 · 先陣=交戦を開いた回数",zh:"參與=交戰中有行動 · 前排+=比隊伍更靠前 · 先手=先開戰次數"},
-  death_note:{ko:"죽기 전 10초의 피해 내역 · 🚶 = 사망 순간 근처에 아군 없음(반복되면 포지셔닝 신호)",en:"Damage in the 10s before each death · 🚶 = no ally nearby (a positioning red flag if repeated)",ja:"死亡前10秒の被ダメージ · 🚶 = 近くに味方なし",zh:"死亡前10秒的傷害 · 🚶 = 附近沒有隊友"},
-  map_note:{ko:"색 번짐 = 그 팀이 머문 지역(파랑 1팀·빨강 2팀) · 원 = 죽은 자리(번호는 순서)",en:"Shading = where each team spent time (blue T1 · red T2) · circles = deaths (numbered)",ja:"色 = 各チームの滞在エリア · 丸 = デス位置",zh:"色塊 = 隊伍活動區域 · 圓圈 = 死亡位置"},
+  style_note:{ko:"선수 이름을 누르면 이 리포트에서 그 선수와 관련된 줄이 전부 강조돼요.",
+    en:"Tap a player's name to highlight everything about them in this report.",
+    ja:"選手名をタップすると、その選手に関する行がすべて強調されます。",
+    zh:"點擊玩家名稱可在整份報告中突顯與其相關的內容。"},
+  sty_front:{ko:"⚔️ 앞에서 싸움",en:"⚔️ Front-liner",ja:"⚔️ 前衛型",zh:"⚔️ 前排型"},
+  sty_back:{ko:"🛡 뒤를 지킴",en:"🛡 Backline",ja:"🛡 後衛型",zh:"🛡 後排型"},
+  sty_mid:{ko:"⚖️ 팀과 함께",en:"⚖️ With the team",ja:"⚖️ チームと共に",zh:"⚖️ 跟隨隊伍"},
+  ult_none:{ko:"안 씀",en:"unused",ja:"未使用",zh:"未使用"},
+  ult_perf:{ko:"{n}회 → 처치 {got}",en:"{n} used → {got} kills",ja:"{n}回 → 撃破{got}",zh:"{n}次 → 擊殺{got}"},
+  death_note:{ko:"죽음마다 '그때 상황'을 붙였어요. 괄호 숫자 = 그 선수에게 받은 피해량. 번호(#)는 아래 지도의 위치 번호와 같아요.",
+    en:"Each death comes with its context. Numbers in () = damage taken from that player. The # matches the map markers below.",
+    ja:"各デスに「その時の状況」を付けました。()の数字=その選手から受けたダメージ。#は下の地図の番号と同じです。",
+    zh:"每次死亡都附上當時情況。()內數字=受到該玩家的傷害。#與下方地圖的編號相同。"},
+  d_melt:{ko:"⚡{burst}초 순삭",en:"⚡melted in {burst}s",ja:"⚡{burst}秒で溶けた",zh:"⚡{burst}秒被融化"},
+  d_fought:{ko:"{burst}초 교전 끝에",en:"after a {burst}s fight",ja:"{burst}秒の交戦の末",zh:"經過{burst}秒交戰"},
+  d_from:{ko:"받은 피해:",en:"damage from:",ja:"被ダメージ:",zh:"受到傷害:"},
+  chip_solo:{ko:"🚶 혼자였음",en:"🚶 alone",ja:"🚶 単独",zh:"🚶 落單"},
+  chip_lowhp:{ko:"🩸 체력 {hp}%로 싸움 시작",en:"🩸 started at {hp}% HP",ja:"🩸 HP{hp}%で交戦",zh:"🩸 以{hp}%血量開戰"},
+  chip_outnum:{ko:"⚔️ {a}대{e} 열세",en:"⚔️ outnumbered {a}v{e}",ja:"⚔️ {a}対{e}の劣勢",zh:"⚔️ {a}打{e}劣勢"},
+  chip_full:{ko:"만피에서 당함",en:"from full HP",ja:"満タンから",zh:"滿血被擊殺"},
+  fs_head:{ko:"교전 일지",en:"Fight Log",ja:"交戦ログ",zh:"交戰紀錄"},
+  fs_line:{ko:"{opener} 쪽이 먼저 걸었어요 · {n1}대{n2}로 시작",en:"{opener} engaged first · started {n1}v{n2}",ja:"{opener}側が先に仕掛けた · {n1}対{n2}で開始",zh:"{opener}方先開戰 · 以{n1}對{n2}開始"},
+  fs_lost:{ko:"1팀 {l1}명↓ · 2팀 {l2}명↓",en:"T1 -{l1} · T2 -{l2}",ja:"1チーム{l1}人↓ · 2チーム{l2}人↓",zh:"1隊倒{l1}人 · 2隊倒{l2}人"},
+  fs_win:{ko:"→ {team}팀 우세",en:"→ Team {team} won it",ja:"→ {team}チーム優勢",zh:"→ {team}隊佔優"},
+  fs_draw:{ko:"→ 무승부",en:"→ even",ja:"→ 引き分け",zh:"→ 平手"},
+  map_note:{ko:"공식 맵 위에 표시했어요. 원 번호 = 위 '사망 심화'의 # 번호 · 파랑 1팀 · 빨강 2팀 · 옅은 색 = 각 팀이 자주 머문 지역",
+    en:"Drawn on the official map render. Circle numbers = the # in Death Analysis above · blue T1 · red T2 · tint = where each team spent time",
+    ja:"公式マップ上に表示。丸の番号=上の「デス分析」の# · 青1チーム · 赤2チーム · 薄い色=滞在エリア",
+    zh:"顯示在官方地圖上。圓圈編號=上方死亡分析的# · 藍1隊 · 紅2隊 · 淡色=活動區域"},
   chk_ok:{ko:"게임이 보낸 전적과 전원 일치 — 숫자를 믿어도 됩니다",en:"All players match the game's own stats — numbers are verified",ja:"ゲーム送信の戦績と全員一致 — 数値は検証済み",zh:"與遊戲官方戰績全部一致 — 數據已驗證"},
   chk_warn:{ko:"게임 전적과 일부 불일치 — 해당 선수 숫자는 참고만",en:"Some players differ from game stats — treat those numbers as approximate",ja:"一部が不一致 — 該当選手の数値は参考程度に",zh:"部分與官方戰績不符 — 該玩家數據僅供參考"},
   botwarn:{ko:"⚠️ 봇/연습 경기예요 — 사람 실력으로 읽지 마세요",en:"⚠️ Bot/practice match — don't read as human skill",ja:"⚠️ BOT/練習試合です",zh:"⚠️ 機器人/練習賽"},
@@ -6475,9 +6510,11 @@ const RPT_L = {
   adm_del:{ko:"🗑 리포트 삭제(관리자)",en:"🗑 Delete report (admin)",ja:"🗑 削除(管理者)",zh:"🗑 刪除(管理員)"},
   s_coach:{ko:"코칭 코멘트",en:"Coaching Comments",ja:"コーチングコメント",zh:"教練點評"},
   coach_note:{ko:"경기 데이터로 자동 판정한 코멘트예요 — 상황 맥락(핑·역할 분담)까지는 모르니 참고용으로 봐주세요.",en:"Auto-generated from match data — it can't know context (ping, role swaps), so treat as guidance.",ja:"試合データから自動判定したコメントです — 状況の文脈までは分かりません。",zh:"由對局數據自動判定 — 無法得知情境脈絡，僅供參考。"},
-  cols:{ko:["선수","영웅","처치","죽음","어시","딜","받은딜","회복","궁"],en:["Player","Hero","K","D","A","Dmg","Taken","Heal","Ult"],ja:["プレイヤー","ヒーロー","撃破","デス","アシスト","与ダメ","被ダメ","回復","ULT"],zh:["玩家","英雄","擊殺","死亡","助攻","輸出","承傷","治療","大招"]},
-  scols:{ko:["선수","교전참여","전방","이동","첫진입","생존율","궁 값어치"],en:["Player","Part.","Front","Dist","First","Alive","Ult value"],ja:["プレイヤー","参加","前方","移動","先陣","生存","ULT価値"],zh:["玩家","參與","前排","移動","先手","存活","大招價值"]},
-  ultv:{ko:"궁 뒤 8초: 잡음/잃음",en:"8s after ult: got/lost",ja:"ULT後8秒: 撃破/損失",zh:"大招後8秒: 擊殺/損失"}
+  /* 어시스트 열은 뺐다(2026-08-09) — 이 게임은 어시를 기록하지 않는다(로그 kind6 = 18경기에서 0회,
+     PlayerStats에도 없음, 게임 결과 화면도 처치·죽음·딜 3개만). 처치가 기여자 전원에게 가는 방식. */
+  cols:{ko:["선수","영웅","처치","죽음","딜","받은딜","회복","궁"],en:["Player","Hero","K","D","Dmg","Taken","Heal","Ult"],ja:["プレイヤー","ヒーロー","撃破","デス","与ダメ","被ダメ","回復","ULT"],zh:["玩家","英雄","擊殺","死亡","輸出","承傷","治療","大招"]},
+  scols:{ko:["선수","싸움 위치","교전 참여","생존 시간","궁 성과"],en:["Player","Position","Fights joined","Alive","Ult results"],ja:["プレイヤー","戦い方","交戦参加","生存","ULT成果"],zh:["玩家","站位","參與交戰","存活","大招成果"]},
+  part_fmt:{ko:"{n}번 중 {p}번",en:"{p} of {n}",ja:"{n}回中{p}回",zh:"{n}次中{p}次"}
 };
 const RPL = k => { const o=RPT_L[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
 /* 🎓 코칭 문장 템플릿 — 서버는 판정(키+숫자)만 보내고 문장은 여기서 만든다.
@@ -6503,10 +6540,26 @@ const RPT_COACH = {
     en:"{name}: {n} of {of} deaths happened with no ally nearby — stay with your team.",
     ja:"{name}: デス{of}回中{n}回は近くに味方なし — チームと一緒に動きましょう。",
     zh:"{name}：{of} 次死亡中有 {n} 次附近沒有隊友 — 跟緊隊伍。"},
-  p_melt:{ko:"{name}: 3초 안에 녹은 죽음이 {n}번 — 각을 잡기 전에 몸이 먼저 나갔다는 신호예요. 엄폐물을 끼고 진입하세요.",
-    en:"{name}: melted in under 3s {n} times — you're exposed before the angle is set. Use cover on entry.",
-    ja:"{name}: 3秒以内に溶けたデスが{n}回 — 角度を作る前に体が出ています。遮蔽物を使って。",
-    zh:"{name}：{n} 次在 3 秒內被融化 — 進場先找掩體。"},
+  p_melt:{ko:"{name}: 3초 안에 녹은 죽음이 {n}번(주로 {by}에게) — 각을 잡기 전에 몸이 먼저 나갔다는 신호예요. 엄폐물을 끼고 진입하세요.",
+    en:"{name}: melted in under 3s {n} times (mostly by {by}) — you're exposed before the angle is set. Use cover on entry.",
+    ja:"{name}: 3秒以内に溶けたデスが{n}回(主に{by}に) — 角度を作る前に体が出ています。遮蔽物を使って。",
+    zh:"{name}：{n} 次在 3 秒內被融化（主要被 {by}）— 進場先找掩體。"},
+  p_lowhp:{ko:"{name}: 체력이 이미 깎인 채({hp}%까지) 교전을 받다 죽은 게 {n}번 — 무리하지 말고 빠져서 회복한 뒤 재진입하세요.",
+    en:"{name}: died {n} times after taking fights on low HP (down to {hp}%) — back off, heal up, re-engage.",
+    ja:"{name}: HPが削れたまま({hp}%まで)交戦して死んだのが{n}回 — 無理せず下がって回復してから再突入を。",
+    zh:"{name}：{n} 次在血量已被削減（低至{hp}%）時接戰而死 — 先撤退回血再進場。"},
+  p_outnum:{ko:"{name}: 인원 열세({a}대{e})에서 싸우다 죽은 게 {n}번 — 아군 부활까지 시간을 끌거나 함께 빠졌어야 해요.",
+    en:"{name}: died {n} times fighting outnumbered ({a}v{e}) — stall for respawns or fall back together.",
+    ja:"{name}: 数的劣勢({a}対{e})で戦って死んだのが{n}回 — 味方の復活まで時間を稼ぐか一緒に下がりましょう。",
+    zh:"{name}：{n} 次以少打多（{a}打{e}）陣亡 — 該拖時間等隊友復活或一起撤退。"},
+  p_selfheal:{ko:"{name}: 회복 스킬의 {pct}%가 본인에게 갔어요 — 아군에게 나눠주면 팀 전체 생존이 크게 올라갑니다.",
+    en:"{name}: {pct}% of your healing went to yourself — sharing it with allies lifts the whole team.",
+    ja:"{name}: 回復の{pct}%が自分向けでした — 味方に分けるとチーム全体の生存が上がります。",
+    zh:"{name}：治療的 {pct}% 都用在自己身上 — 分給隊友能大幅提升團隊生存。"},
+  p_goodheal:{ko:"{name}: 아군 회복 {ally} — 팀을 살리는 힐 분배가 좋았어요.",
+    en:"{name}: {ally} healing given to allies — great support play.",
+    ja:"{name}: 味方への回復{ally} — 良いヒール配分でした。",
+    zh:"{name}：為隊友治療 {ally} — 出色的輔助表現。"},
   p_lowpart:{ko:"{name}: 교전 {of}번 중 {n}번만 참여 — 팀이 인원 열세로 싸우는 동안 다른 곳에 있었어요. 미니맵에서 팀 위치를 자주 보세요.",
     en:"{name}: joined only {n} of {of} fights — your team fought outnumbered. Watch the minimap.",
     ja:"{name}: 交戦{of}回中{n}回のみ参加 — チームが数的不利で戦っていました。ミニマップ確認を。",
@@ -6537,19 +6590,37 @@ const RPT_COACH = {
     zh:"{name}：{k_n} 次擊殺・全隊最高輸出（{dmg}）— 本場的王牌。"}
 };
 const RPT_SEV_IC = { team:"🏁", bad:"🔴", info:"💡", good:"🟢" };
+const rptMMSS = s => { const v=Math.max(0,Math.round(s)); return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0"); };
 function rptCoachLine(c, P){
   const o = RPT_COACH[c.k]; if(!o) return null;          // 모르는 키 = 서버가 더 새것 → 건너뜀
   let t = o[LANG] !== undefined ? o[LANG] : (o.en !== undefined ? o.en : o.ko);
   const vals = Object.assign({}, c);
   if(c.pid !== undefined && P[c.pid]) vals.name = P[c.pid].name;
+  if(c.by_pid !== undefined) vals.by = (P[c.by_pid] && P[c.by_pid].name) || "?";
   if(c.s !== undefined){
     const v = Math.max(0, Math.round(c.s));
     vals.mm = String(Math.floor(v/60)).padStart(2,"0"); vals.ss = String(v%60).padStart(2,"0");
   }
   if(vals.dmg !== undefined) vals.dmg = Number(vals.dmg).toLocaleString();
-  return t.replace(/\{(\w+)\}/g, (_, k) => esc(String(vals[k] !== undefined ? vals[k] : "?")));
+  if(vals.ally !== undefined) vals.ally = Number(vals.ally).toLocaleString();
+  let line = t.replace(/\{(\w+)\}/g, (_, k) => esc(String(vals[k] !== undefined ? vals[k] : "?")));
+  if(c.ex && c.ex.length){                                // 🕒 언제 그랬는지 — 시각 예시
+    const lbl = {ko:"예:", en:"e.g.", ja:"例:", zh:"例："}[LANG] || "e.g.";
+    line += ` <span style="color:var(--sub)">(${lbl} ${c.ex.slice(0,2).map(rptMMSS).join(", ")})</span>`;
+  }
+  return line;
 }
+/* 🗺 공식 맵 렌더 보정값 (2026-08-09 실측 — 리플레이 18경기의 이동·스폰·사망을 렌더에 겹쳐 맞춤)
+   변환: u=(x-x0)/(x1-x0), w=(z-z0)/(z1-z0) → swap이면 u↔w → fx/fy면 반전 → 이미지(1200×1200) 좌표 */
+const RPT_MAPCAL = {
+  "퍼시피카":     {img:"mapfull/pacifica.jpg", swap:0, fx:0, fy:1, x0:-55,   x1:52,   z0:-45,   z1:55},
+  "항구":         {img:"mapfull/harbor.jpg",   swap:0, fx:0, fy:1, x0:-69.3, x1:61.1, z0:-84.1, z1:48.3},
+  "하늘공원":     {img:"mapfull/skypark.jpg",  swap:1, fx:0, fy:1, x0:-47,   x1:49,   z0:-60,   z1:54},
+  "균열 관측소":  {img:"mapfull/rift.jpg",     swap:0, fx:0, fy:1, x0:-53.8, x1:74.2, z0:-46.5, z1:50.5},
+  "용광로":       {img:"mapfull/forge.jpg",    swap:0, fx:0, fy:1, x0:-35.3, x1:40,   z0:-51.8, z1:59.2}
+};
 let rptCur = null;   // 지금 화면의 리포트 (URL 공유용)
+window.rsRptRender = r => rptRender(r);   // 🔬 점검용(정밀검사 스크립트가 부른다)
 window.rsReplayHead = () => [RPL("head"), RPL("sub")];
 window.rsReplayCode = () => (rptCur && rptCur.code) || "";
 
@@ -6646,42 +6717,48 @@ function rptUrl(code){
 
 function rptRender(r){
   const out = document.getElementById("rptOut"); if(!out || !r) return;
-  const P = {}; (r.players||[]).forEach(p => P[p.pid] = p);
-  const nm = pid => { const p=P[pid]; return p ? esc(p.name) : "P"+pid; };
-  const tcls = pid => (P[pid]&&P[pid].team===1) ? "rptt1" : "rptt2";
+  /* 🔒 리포트 JSON은 **로그인한 아무나** Firebase(replayrpt)에 한 번 쓸 수 있다(규칙 v26).
+     즉 조작된 리포트가 들어올 수 있으므로, 화면에 넣는 값은 전부
+     ①숫자는 Number로 강제(N) ②문자열은 esc() 를 거친다. 하나라도 빠지면 XSS 통로가 된다. */
+  const N = v => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+  const P = {}; (r.players||[]).forEach(p => { if(p && p.pid!==undefined) P[N(p.pid)] = p; });
+  const nm = pid => { const p=P[N(pid)]; return p ? esc(p.name) : "P"+N(pid); };
+  const tcls = pid => (P[N(pid)]&&P[N(pid)].team===1) ? "rptt1" : "rptt2";
   const H = [];
   // ── 요약 ──
   const hasBot = (r.players||[]).some(p=>p.bot);
   const meta = [r.mode, r.map, (r.mods&&r.mods.length?r.mods.join("+"):null),
                 r.rating?("⌀"+r.rating):null, r.date].filter(Boolean).map(esc).join(" · ");
-  const wtxt = r.winner ? (LANG==="ko"?`${r.winner}${RPL("win")}`:(LANG==="en"?`Team ${r.winner}${RPL("win")}`:`${r.winner}${RPL("win")}`)) : RPL("draw");
+  const wTeam = (N(r.winner)===1||N(r.winner)===2) ? N(r.winner) : 0;
+  const wtxt = wTeam ? (LANG==="ko"?`${wTeam}${RPL("win")}`:(LANG==="en"?`Team ${wTeam}${RPL("win")}`:`${wTeam}${RPL("win")}`)) : RPL("draw");
   const chkAll = r.check_ok && r.check_ok[0]===r.check_ok[1];
   H.push(`<div class="rptcard"><h3>${esc(r.code)} — ${esc(wtxt)} <small style="color:var(--sub);font-weight:400">(${esc(r.why||"")})</small></h3>`
     + `<div class="rnote">${meta}</div>`
     + (hasBot?`<div class="rnote">${RPL("botwarn")}</div>`:"")
-    + `<div class="rnote">${chkAll?"✅ "+RPL("chk_ok"):"⚠️ "+RPL("chk_warn")} (${r.check_ok?r.check_ok.join("/"):"?"})</div></div>`);
+    + `<div class="rnote">${chkAll?"✅ "+RPL("chk_ok"):"⚠️ "+RPL("chk_warn")} (${r.check_ok?N(r.check_ok[0])+"/"+N(r.check_ok[1]):"?"})</div></div>`);
   // ── 🎓 코칭 코멘트 (제일 위 — 유저가 제일 궁금한 "왜 졌나·뭘 고치나") ──
   if(r.coach && r.coach.length){
     const lines = r.coach.map(c => {
       const t = rptCoachLine(c, P);
-      return t ? `<div class="rptev"><span>${RPT_SEV_IC[c.sev]||"·"} ${t}</span></div>` : "";
+      return t ? `<div class="rptev"${c.pid!==undefined?` data-pid="${N(c.pid)}"`:""}><span>${RPT_SEV_IC[c.sev]||"·"} ${t}</span></div>` : "";
     }).filter(Boolean);
     if(lines.length){
       H.push(`<div class="rptcard"><h3>🎓 ${RPL("s_coach")}</h3>`
         + `<div class="rnote">${RPL("coach_note")}</div>` + lines.join("") + `</div>`);
     }
   }
-  // ── 명단 · 전적 ──
+  // ── 명단 · 전적 (어시 열 없음 — 이 게임은 어시를 기록하지 않는다) ──
+  const acePid = ((r.coach||[]).find(c=>c.k==="p_carry")||{}).pid;   // 👑 에이스 표시
   const C = RPL("cols");
   const rows = (r.players||[]).slice().sort((a,b)=>(a.team-b.team)||((b.stats&&b.stats.dmg)||0)-((a.stats&&a.stats.dmg)||0));
-  H.push(`<div class="rptcard"><h3>${RPL("s_roster")}</h3><div class="rptwrap"><table class="rpttbl">`
+  H.push(`<div class="rptcard"><h3>${RPL("s_roster")}</h3><div class="rnote">${RPL("style_note")}</div><div class="rptwrap"><table class="rpttbl">`
     + `<tr>${C.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>`
     + rows.map(p => { const s=p.stats||{};
-        return `<tr><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}${p.bot?" 🤖":""}${p.check===false?" ⚠️":""}</td>`
-          + `<td>${esc(p.hero||"?")}${p.level?" Lv"+p.level:""}</td>`
-          + `<td>${s.k||0}</td><td>${s.d||0}</td><td>${s.a||0}</td>`
-          + `<td>${(s.dmg||0).toLocaleString()}</td><td>${(s.taken||0).toLocaleString()}</td>`
-          + `<td>${(s.heal||0).toLocaleString()}</td><td>${s.ult||0}</td></tr>`; }).join("")
+        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}${p.pid===acePid?" 👑":""}${p.bot?" 🤖":""}${p.check===false?" ⚠️":""}</td>`
+          + `<td>${esc(p.hero||"?")}${p.level?" Lv"+N(p.level):""}</td>`
+          + `<td>${N(s.k)}</td><td>${N(s.d)}</td>`
+          + `<td>${N(s.dmg).toLocaleString()}</td><td>${N(s.taken).toLocaleString()}</td>`
+          + `<td>${N(s.heal).toLocaleString()}</td><td>${N(s.ult)}</td></tr>`; }).join("")
     + `</table></div></div>`);
   // ── 경기 흐름 (점수 계단 그래프) ──
   if(r.score && r.score.length >= 2){
@@ -6698,29 +6775,95 @@ function rptRender(r){
     H.push(`<div class="rptcard"><h3>${RPL("s_flow")}</h3><div class="rnote">${RPL("flow_note")}</div>`
       + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh}">${sv}</svg></div>`);
   }
-  // ── 플레이 스타일 ──
+  // ── ⚔️ 교전 일지 — "누가 먼저 걸었고, 몇대몇으로 시작해, 어느 쪽이 이겼나" ──
+  if(r.fights && r.fights.length && r.fights.some(f=>f.opener!==undefined)){
+    const fl = r.fights.map(f=>{
+      const l1=N(f.lost&&f.lost["1"]), l2=N(f.lost&&f.lost["2"]);
+      let open="";
+      if(f.opener!=null && P[f.opener]){
+        open = RPL("fs_line")
+          .replace("{opener}", `<b class="${tcls(f.opener)}">${nm(f.opener)}</b>`)
+          .replace("{n1}", f.nums?N(f.nums[0]):"?").replace("{n2}", f.nums?N(f.nums[1]):"?");
+      }
+      const res = RPL("fs_lost").replace("{l1}",l1).replace("{l2}",l2);
+      const wT = N(f.win); const win = (wT===1||wT===2) ? RPL("fs_win").replace("{team}",wT) : RPL("fs_draw");
+      return `<div class="rptev"${f.opener!=null?` data-pid="${N(f.opener)}"`:""}><span class="tm">${rptMMSS(f.a)}</span>`
+        + `<span>⚔️ ${open}${open?" · ":""}${res} <b>${win}</b></span></div>`;
+    }).join("");
+    H.push(`<div class="rptcard"><h3>${RPL("fs_head")}</h3>${fl}</div>`);
+  }
+  // ── 플레이 스타일 (쉬운 말로 — "4/4·+0.10" 같은 암호를 없앰, 2026-08-09) ──
   const SC = RPL("scols");
-  H.push(`<div class="rptcard"><h3>${RPL("s_style")}</h3><div class="rnote">${RPL("style_note")} · ${RPL("ultv")}</div>`
+  H.push(`<div class="rptcard"><h3>${RPL("s_style")}</h3><div class="rnote">${RPL("style_note")}</div>`
     + `<div class="rptwrap"><table class="rpttbl"><tr>${SC.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>`
     + rows.map(p => { const st=p.style||{}; const u=p.ultv||[0,0,0];
-        return `<tr><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}</td>`
-          + `<td>${st.part?st.part[0]+"/"+st.part[1]:"–"}</td>`
-          + `<td>${st.front!=null?(st.front>0?"+":"")+st.front.toFixed(2):"–"}</td>`
-          + `<td>${st.dist!=null?st.dist+"m":"–"}</td><td>${st.first||0}</td>`
-          + `<td>${p.alive!=null?Math.round(p.alive*100)+"%":"–"}</td>`
-          + `<td>${u[0]} → +${u[1]}/-${u[2]}</td></tr>`; }).join("")
+        let pos="–";
+        if(st.front!=null) pos = st.front>=0.05?RPL("sty_front"):(st.front<=-0.05?RPL("sty_back"):RPL("sty_mid"));
+        const part = st.part?RPL("part_fmt").replace("{n}",N(st.part[1])).replace("{p}",N(st.part[0])):"–";
+        const ult = u[0]?RPL("ult_perf").replace("{n}",N(u[0])).replace("{got}",N(u[1])):RPL("ult_none");
+        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}</td>`
+          + `<td>${pos}</td><td>${part}</td>`
+          + `<td>${p.alive!=null?Math.round(N(p.alive)*100)+"%":"–"}</td>`
+          + `<td>${ult}</td></tr>`; }).join("")
     + `</table></div></div>`);
-  // ── 사망 심화 ──
+  // ── 💀 사망 심화 — 죽음마다 "그때 상황"을 문장+칩으로 (지도 번호와 연동) ──
   if(r.deaths && r.deaths.length){
     H.push(`<div class="rptcard"><h3>${RPL("s_death")}</h3><div class="rnote">${RPL("death_note")}</div>`
-      + r.deaths.map(ev => {
-          const srcs=(ev.dmg||[]).slice(0,3).map(x=>`${nm(x[0])}(${x[1]})`).join(" + ");
-          return `<div class="rptev"><span class="tm">${rptSec(ev.s)}</span><span>💀 <b class="${tcls(ev.tgt)}">${nm(ev.tgt)}</b>`
-            + ` — ${ev.burst}s ← ${srcs||"?"}${ev.solo?" · 🚶":""}</span></div>`; }).join("")
+      + r.deaths.map((ev,ix) => {
+          const i = N(ev.i) || (ix+1);
+          const srcs=(ev.dmg||[]).slice(0,3).map(x=>`${nm(x[0])} <span class="rptdm">${N(x[1])}</span>`).join(" · ");
+          const dur = (ev.burst<=3 ? RPL("d_melt") : RPL("d_fought")).replace("{burst}", N(ev.burst));
+          const chips=[];
+          if(ev.solo) chips.push(RPL("chip_solo"));
+          if(ev.hp0!=null && ev.hp0<0.55) chips.push(RPL("chip_lowhp").replace("{hp}",Math.round(N(ev.hp0)*100)));
+          if(ev.nums && ev.nums[0]<ev.nums[1]) chips.push(RPL("chip_outnum").replace("{a}",N(ev.nums[0])).replace("{e}",N(ev.nums[1])));
+          if(ev.burst<=3 && ev.hp0!=null && ev.hp0>=0.8) chips.push(RPL("chip_full"));
+          const chipH = chips.map(c=>` <span class="rptchip">${c}</span>`).join("");
+          return `<div class="rptev" data-pid="${N(ev.tgt)}"><span class="tm"><b>#${i}</b> ${rptSec(ev.s)}</span>`
+            + `<span>💀 <b class="${tcls(ev.tgt)}">${nm(ev.tgt)}</b> — ${dur} · ${RPL("d_from")} ${srcs||"?"}${chipH}</span></div>`;
+        }).join("")
       + `</div>`);
   }
-  // ── 지도 (히트맵 + 사망 위치) ──
-  if(r.heat && r.spots){
+  // ── 🗺 지도 — **공식 맵 렌더** 위에 사망 번호·팀 장악을 그린다 (2026-08-09) ──
+  //    보정값(RPT_MAPCAL)이 있는 맵은 실제 맵 위에 정확히, 없으면 예전 추상 지도로 폴백.
+  const deathNum = sp => {                          // 지도 번호 = 사망 심화의 # (tgt+시각으로 짝지음)
+    const dl=r.deaths||[];
+    const m=dl.find(dv=>dv.tgt===sp.tgt && Math.abs((dv.s||0)-(sp.s||0))<=2);
+    return m ? (m.i || dl.indexOf(m)+1) : null;
+  };
+  const cal = RPT_MAPCAL[r.map];
+  if(cal && (r.spots||r.heat)){
+    const S=1200;
+    const uv=(x,z)=>{ let u=(x-cal.x0)/(cal.x1-cal.x0), w=(z-cal.z0)/(cal.z1-cal.z0);
+      if(cal.swap){ const t=u; u=w; w=t; } if(cal.fx)u=1-u; if(cal.fy)w=1-w; return [u*S, w*S]; };
+    let sv=`<image href="${esc(cal.img)}" x="0" y="0" width="${S}" height="${S}"/>`;
+    if(r.heat && r.heat.cells){                     // 팀 장악 색 — 공식 맵이 보이게 아주 옅게
+      const b=r.heat.bounds, n=r.heat.n;
+      const cx=(b[1]-b[0])/n, cz=(b[3]-b[2])/n;
+      let peak=1; r.heat.cells.forEach(c=>{ peak=Math.max(peak,c[2],c[3]); });
+      r.heat.cells.forEach(c=>{
+        const wx=b[0]+(c[0]+0.5)*cx, wz=b[2]+(c[1]+0.5)*cz;
+        const q1=uv(wx-cx/2, wz-cz/2), q2=uv(wx+cx/2, wz+cz/2);
+        const rx=Math.min(q1[0],q2[0]), ry=Math.min(q1[1],q2[1]);
+        const rw=Math.abs(q2[0]-q1[0]), rh=Math.abs(q2[1]-q1[1]);
+        [[c[2],"77,171,247"],[c[3],"255,107,107"]].forEach(([cnt,col])=>{
+          if(!cnt) return;
+          const op=Math.min(.28, Math.sqrt(cnt/peak)*.28);
+          sv+=`<rect x="${rx.toFixed(0)}" y="${ry.toFixed(0)}" width="${rw.toFixed(0)}" height="${rh.toFixed(0)}" fill="rgba(${col},${op.toFixed(2)})"/>`;
+        });
+      });
+    }
+    (r.spots||[]).forEach((sp,i)=>{
+      const q=uv(sp.x,sp.z);
+      const num=N(deathNum(sp))||i+1;
+      const col=(P[sp.tgt]&&P[sp.tgt].team===1)?"#4dabf7":"#ff6b6b";
+      sv+=`<circle cx="${q[0].toFixed(0)}" cy="${q[1].toFixed(0)}" r="21" fill="${col}" fill-opacity=".88" stroke="#fff" stroke-width="3.5"/>`
+        +`<text x="${q[0].toFixed(0)}" y="${(q[1]+8).toFixed(0)}" text-anchor="middle" font-size="23" font-weight="700" fill="#fff">${num}</text>`;
+    });
+    H.push(`<div class="rptcard"><h3>${RPL("s_map")}</h3><div class="rnote">${RPL("map_note")}</div>`
+      + `<svg class="rptsvg" viewBox="0 0 ${S} ${S}">${sv}</svg></div>`);
+  }
+  else if(r.heat && r.spots){                       // 폴백: 보정 없는 맵(신규 맵 등)
     const b=r.heat.bounds, n=r.heat.n;
     const spanX=Math.max(1e-6,b[1]-b[0]), spanZ=Math.max(1e-6,b[3]-b[2]);
     const W=560; let Hh=W*spanZ/spanX; Hh=Math.max(180,Math.min(560,Hh));
@@ -6740,9 +6883,10 @@ function rptRender(r){
       if(pts) sv+=`<polyline points="${pts}" fill="none" stroke="rgba(120,130,150,.25)" stroke-width="1"/>`;
     });
     (r.spots||[]).forEach((sp,i)=>{
+      const num=N(deathNum(sp))||i+1;
       const col=(P[sp.tgt]&&P[sp.tgt].team===1)?"#4dabf7":"#ff6b6b";
       sv+=`<circle cx="${sx(sp.x).toFixed(0)}" cy="${sy(sp.z).toFixed(0)}" r="9" fill="${col}" fill-opacity=".78"/>`
-        +`<text x="${sx(sp.x).toFixed(0)}" y="${(sy(sp.z)+4).toFixed(0)}" text-anchor="middle" font-size="11" fill="#fff">${i+1}</text>`;
+        +`<text x="${sx(sp.x).toFixed(0)}" y="${(sy(sp.z)+4).toFixed(0)}" text-anchor="middle" font-size="11" fill="#fff">${num}</text>`;
     });
     H.push(`<div class="rptcard"><h3>${RPL("s_map")}</h3><div class="rnote">${RPL("map_note")}</div>`
       + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh.toFixed(0)}">${sv}</svg></div>`);
@@ -6750,9 +6894,19 @@ function rptRender(r){
   // ── 꼬리: 프레임·버전 + 삭제 요청 ──
   const admBtn = IS_ADMIN ? ` <button class="rptDelAdm" style="margin-left:8px;background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer">${RPL("adm_del")}</button>` : "";
   H.push(`<div class="rnote" style="font-size:10.5px;color:var(--sub);opacity:.85">`
-    + `frames ${r.frames?r.frames.join("/"):"?"} · game v${esc(r.gamever||"?")} · ${esc(r.date||"")}</div>`
+    + `frames ${r.frames?N(r.frames[0])+"/"+N(r.frames[1]):"?"} · game v${esc(r.gamever||"?")} · ${esc(r.date||"")}</div>`
     + `<div style="margin:8px 0 20px"><button class="rptDelBtn" style="background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer">${RPL("del_btn")}</button>${admBtn}</div>`);
   out.innerHTML = H.join("");
+  /* 🔦 "이거 나야" — 아무 데서나 자기 이름 줄을 누르면 리포트 전체에서 그 선수만 강조.
+     유저는 결국 '내가 뭘 잘못했나'를 찾으러 온다(2026-08-09 MAMMON 요청). */
+  out.querySelectorAll("[data-pid]").forEach(el => {
+    el.addEventListener("click", () => {
+      const pid = N(el.getAttribute("data-pid"));
+      const wasOn = el.classList.contains("rptMe");
+      out.querySelectorAll(".rptMe").forEach(x => x.classList.remove("rptMe"));
+      if(!wasOn) out.querySelectorAll(`[data-pid="${pid}"]`).forEach(x => x.classList.add("rptMe"));
+    });
+  });
   const del = out.querySelector(".rptDelBtn");
   if(del) del.addEventListener("click", async () => {
     if(!confirm(RPL("del_ask"))) return;
@@ -6774,12 +6928,13 @@ document.getElementById("rptGoBtn").addEventListener("click", () => rptGo());
 document.getElementById("rptCode").addEventListener("keydown", e => {
   if(e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); rptGo(); }
 });
-/* 공유 링크(?tab=replay&m=코드)로 들어오면 자동 실행 */
+/* 공유 링크(?tab=replay&m=코드)로 들어오면 자동 실행
+   ⚠️ location.search를 직접 읽으면 안 된다 — 부팅 때 rsUrlSync가 이미 m을 지웠다.
+   클래식 부트가 붙잡아 둔 window.__rptDeepM 을 쓴다. */
 (function(){
   try{
-    const q = new URLSearchParams(location.search);
-    const m = (q.get("m")||"").toUpperCase();
-    if(m && q.get("tab")==="replay") setTimeout(()=>rptGo(m), 400);
+    const m = (window.__rptDeepM || "").toUpperCase();
+    if(m) setTimeout(()=>rptGo(m), 400);
   }catch(e){}
 })();
 
