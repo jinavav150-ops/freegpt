@@ -722,6 +722,22 @@
   .vbtns button.sel-D{background:rgba(255,93,93,.16);border-color:var(--bad);color:var(--bad)}
   .vbtns .vcancel{width:30px;font-size:12px;color:var(--bad);opacity:.85}
   .vbtns .vcancel:disabled{opacity:.22}
+  /* 📱 티어 투표 줄이 좁은 화면에서 가로로 넘치던 것 수정 (2026-08-07)
+     한 줄 = 아이콘40 + 이름56 + 버튼(36×5+30+간격25=235) + 간격20 + 안여백22 = 373px 인데
+     375px 기기의 본문 폭은 343px 이라 20px 이 밖으로 삐져나가 페이지가 가로로 밀렸다.
+     ⚠️ 버튼 폭·이름 폭·간격을 좁은 화면에서만 줄인다(넓은 화면 모양은 그대로). */
+  @media (max-width:420px){
+    .vrow{gap:7px;padding:8px 8px}
+    .vrow .vnm{width:48px}
+    .vbtns{gap:4px}
+    .vbtns button{width:32px}
+    .vbtns .vcancel{width:28px}
+  }
+  @media (max-width:359px){
+    .vrow .vnm{width:42px}
+    .vbtns button{width:28px}
+    .vbtns .vcancel{width:24px}
+  }
   /* ── 댓글판 ── */
   .cmtcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:11px}
   .cmtrow1{display:flex;gap:8px;margin-bottom:8px}
@@ -925,6 +941,26 @@
   .hourbars .hb{flex:1;background:var(--ricochet);opacity:.75;border-radius:3px 3px 0 0;min-height:2px}
   .hourlbl{display:flex;gap:2px;margin-top:3px}
   .hourlbl span{flex:1;font-size:8px;color:var(--sub);text-align:center}
+  /* ── 🔍 경기 분석 리포트 (tab-replay) ── */
+  .rptbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .rptbar input{flex:1;min-width:160px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--fg);font-size:14px;letter-spacing:.12em;text-transform:uppercase}
+  .rptbar button{padding:11px 18px;border-radius:10px;border:0;background:var(--ricochet);color:#1b1205;
+    font-weight:800;font-size:13.5px;cursor:pointer}
+  .rptbar button:disabled{opacity:.5;cursor:default}
+  .rptstat{font-size:12.5px;color:var(--sub);margin:6px 0;min-height:18px}
+  .rptcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0}
+  .rptcard h3{margin:0 0 8px;font-size:14px}
+  .rptcard .rnote{font-size:11px;color:var(--sub);opacity:.9;margin:4px 0 8px}
+  .rpttbl{width:100%;border-collapse:collapse;font-size:12px}
+  .rpttbl th,.rpttbl td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  .rpttbl th:first-child,.rpttbl td:first-child{text-align:left}
+  .rpttbl th{color:var(--sub);font-weight:600;font-size:11px}
+  .rptwrap{overflow-x:auto}
+  .rptt1{color:#4dabf7}.rptt2{color:#ff6b6b}
+  .rptev{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px}
+  .rptev .tm{color:var(--sub);font-variant-numeric:tabular-nums;min-width:44px;flex-shrink:0}
+  .rptsvg{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
 </style>
 </head>
 <body>
@@ -1063,6 +1099,19 @@
     <div id="creList"></div>
     <div id="creAdmin" style="display:none"></div>
     <div class="bdnote" id="creNote" style="margin-top:10px"></div>
+  </section>
+
+  <!-- 🔍 경기 분석 탭 (문구는 전부 rptStatic()이 4개 언어로 렌더 — data-ko 쓰지 말 것)
+       매치 코드 → 분석 서버(Render, config/analyzeApi) → 리포트. 결과는 replayrpt/<코드>에 캐시(규칙 v26). -->
+  <section id="tab-replay" class="tab">
+    <div id="rptHead"></div>
+    <div class="rptbar">
+      <input id="rptCode" maxlength="12" autocomplete="off" spellcheck="false">
+      <button id="rptGoBtn"></button>
+    </div>
+    <div class="rptstat" id="rptStat"></div>
+    <div id="rptOut"></div>
+    <div class="bdnote" id="rptNote"></div>
   </section>
 
   <!-- 🛠 영웅 빌드 탭 (내용은 renderBuilds가 4개 언어로 렌더) -->
@@ -2724,6 +2773,11 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-08-08",
+    ko:"🔍 <b>경기 분석</b> 탭이 생겼어요! 공략 메뉴에서 <b>매치 코드만 넣으면</b> 그 경기를 통째로 분석해 드립니다 — <b>🎓 코칭 코멘트(왜 졌는지·뭘 고치면 되는지를 문장으로)</b>, 명단·전적, 점수 흐름 그래프, 플레이 스타일(교전 참여·앞라인 성향), 죽기 전 10초 분석, 사망 위치·맵 장악 지도까지. 한 번 분석된 경기는 저장돼서 다음 사람은 바로 볼 수 있어요. (리플레이는 40일이 지나면 게임 서버에서 지워져 분석할 수 없어요)",
+    en:"🔍 New <b>Match Report</b> tab! Under Strategy, <b>just enter a match code</b> and get a full breakdown — <b>🎓 coaching comments (why you lost & what to fix, in plain words)</b>, roster & stats, score-flow graph, playstyle (fight participation, front-line tendency), last-10-seconds death analysis, and a deaths/map-control map. Analyzed matches are saved so the next viewer sees them instantly. (Replays are deleted from the game server after ~40 days.)",
+    ja:"🔍 <b>試合分析</b>タブが登場！攻略メニューで<b>マッチコードを入れるだけ</b>で試合を丸ごと分析します — <b>🎓 コーチングコメント（なぜ負けたか・何を直すべきかを文章で）</b>、メンバー・戦績、スコア推移グラフ、プレイスタイル（交戦参加・前線傾向）、死亡前10秒の分析、デス位置とマップ支配図まで。一度分析した試合は保存され、次の人はすぐ見られます。（リプレイは約40日で削除されます）",
+    zh:"🔍 新增<b>對局分析</b>分頁！在攻略選單<b>輸入對局代碼</b>即可獲得完整分析 — <b>🎓 教練點評（為什麼輸・該改什麼，用句子告訴你）</b>、名單與戰績、比分走勢圖、遊玩風格（交戰參與・前排傾向）、死亡前10秒分析、死亡位置與地圖控制圖。分析過的對局會被保存，之後的人可以立即查看。（回放約40天後會從遊戲伺服器刪除）" },
   { date:"2026-08-04",
     ko:"⚙️ 게임 <b>v2.1.4 경제 패치</b>를 반영했어요 — 영웅 강화 비용이 올라서 <b>강화 비용 표를 새 수치로 전부 교체</b>했습니다(만렙까지 <b>30만 → 48만 코인</b>). 젬 팩 +25%, 특전 가격 200→300 젬 같은 변경도 공지의 게임 패치 카드에 정리해 뒀어요.",
     en:"⚙️ Updated for the game's <b>v2.1.4 economy patch</b> — hero upgrade costs went up, so the <b>cost table is fully rebuilt with the new numbers</b> (max level: <b>300,000 → 480,000 coins</b>). Gem packs +25%, perk price 200→300 gems and the rest are summarised on the patch card in Notices.",
@@ -3310,6 +3364,8 @@ function applyHeader(){
   if(v==="board"){ setHead(BL("head"), BL("desc")); return; }
   if(v==="issues"){ setHead(ISL("head"), ISL("sub")); return; }
   if(v.indexOf("comm:")===0){ const h=GOCOMM_HEAD[v.slice(5)]; if(h) setHead(T(h[0]),T(h[1])); return; }
+  /* 🔍 경기 분석 — 사전은 모듈 쪽(RPT_L)에 있어 window 브리지로 (§클래식↔모듈 스코프 함정) */
+  if(v==="replay"){ if(window.rsReplayHead){ const h=window.rsReplayHead(); setHead(h[0],h[1]); } return; }
   const info=TAB_INFO[v]; if(info) setHead(v==="info"?SL("info"):T(info.title),T(info.desc));
 }
 /* ══════ 통합 라우팅 (상단 5개 대분류 → 서브탭 → 실제 뷰) ══════
@@ -3317,7 +3373,7 @@ function applyHeader(){
 const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, board:{g:"talk", view:"board"},
-  pick:{g:"guide", view:"pick"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, creators:{g:"guide", view:"creators"},
+  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, creators:{g:"guide", view:"creators"},
   dex:{g:"codex", view:"dex"}, info:{g:"codex", view:"info"}, codes:{g:"codex", view:"codes"}, issues:{g:"codex", view:"issues"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
@@ -3330,7 +3386,7 @@ const CODES_ENABLED = true;   /* 2026-07-25 복구: 구글 검토 통과 후 안
 const NAV_GROUPS = {
   notice:{ subs:["notice"], solo:true },
   talk:{ subs:["chat","board"] },
-  guide:{ subs:["pick","builds","tier","tips","creators"] },
+  guide:{ subs:["pick","replay","builds","tier","tips","creators"] },
   codex:{ subs:["dex","info","codes","issues"] },
   feedback:{ subs:["fb"], solo:true },
   stats:{ subs:["stats"], solo:true }
@@ -3348,6 +3404,7 @@ const SUB_LABEL = {
   chat:{ko:"채팅",en:"Chat",ja:"チャット",zh:"聊天",fr:"Chat",de:"Chat",es:"Chat",pt:"Chat",ru:"Чат"},
   board:{ko:"자유게시판",en:"Board",ja:"掲示板",zh:"留言板",fr:"Forum",de:"Forum",es:"Foro",pt:"Fórum",ru:"Форум"},
   pick:{ko:"카운터픽",en:"Counters",ja:"カウンター",zh:"克制",fr:"Counters",de:"Counter",es:"Counters",pt:"Counters",ru:"Контрпики"},
+  replay:{ko:"경기 분석",en:"Match Report",ja:"試合分析",zh:"對局分析",fr:"Analyse",de:"Analyse",es:"Análisis",pt:"Análise",ru:"Разбор матча"},
   dex:{ko:"도감",en:"Codex",ja:"図鑑",zh:"圖鑑",fr:"Codex",de:"Kodex",es:"Códice",pt:"Códex",ru:"Кодекс"},
   builds:{ko:"빌드",en:"Builds",ja:"ビルド",zh:"打法",fr:"Builds",de:"Builds",es:"Builds",pt:"Builds",ru:"Билды"},
   tier:{ko:"티어표",en:"Tier List",ja:"ティア表",zh:"梯度表",fr:"Tier list",de:"Tierlist",es:"Tier list",pt:"Tier list",ru:"Тир-лист"},
@@ -3360,6 +3417,7 @@ const SUB_LABEL = {
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計",fr:"Stats",de:"Statistik",es:"Estadísticas",pt:"Estatísticas",ru:"Статистика"}
 };
 const SUB_ICON = {
+  replay:'<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.5" y1="15.5" x2="20.5" y2="20.5"/><line x1="7.8" y1="13" x2="7.8" y2="10.8"/><line x1="10.5" y1="13" x2="10.5" y2="7.8"/><line x1="13.2" y1="13" x2="13.2" y2="9.5"/></svg>',
   chat:'<svg viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.5 7.2L4 20l1.3-4.3A8 8 0 1 1 20 11.5z"/><circle cx="8.5" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="12" r="1" fill="currentColor" stroke="none"/></svg>',
   board:'<svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>',
   pick:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="1.5" x2="12" y2="5.5"/><line x1="12" y1="18.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="5.5" y2="12"/><line x1="18.5" y1="12" x2="22.5" y2="12"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/></svg>',
@@ -3798,7 +3856,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.04-a";
+const SITE_VERSION = "2026.08.08-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3819,6 +3877,7 @@ function rsUrlSync(){
     const sub = curSubKey();
     if(sub && sub !== "pick") parts.push("tab=" + sub);
     if(sub === "pick" && enemies.length) parts.push("enemy=" + enemies.join(","));
+    if(sub === "replay" && window.rsReplayCode && window.rsReplayCode()) parts.push("m=" + window.rsReplayCode());
     const q = parts.join("&");
     history.replaceState(null, "", q ? "?" + q : location.pathname);
   }catch(e){}
@@ -6367,8 +6426,365 @@ function rsPresenceInit(){
   }catch(e){}
 }
 
+/* ════════ 🔍 경기 분석 리포트 (2026-08-08) ════════
+   매치 코드 → 분석 서버(Render 무료, 주소는 config/analyzeApi) → 리포트 JSON → 여기서 그림.
+   결과는 replayrpt/<코드> 에 캐시(규칙 v26) — 같은 코드는 두 번째부터 서버 없이 즉시 뜬다.
+   ⚠️ 닉네임 전부 표시 + 삭제 요청 접수(replaydel) 방침 — 2026-08-08 MAMMON 결정.
+   ⚠️ 무료 서버는 15분 놀면 잠들어서 첫 요청이 1분쯤 걸릴 수 있다(상태줄로 안내). */
+const RPT_API_FALLBACK = "https://rico-match-analyze.onrender.com";   // config/analyzeApi가 비어 있을 때
+const RPT_L = {
+  head:{ko:"경기 분석",en:"Match Report",ja:"試合分析",zh:"對局分析"},
+  sub:{ko:"매치 코드만 넣으면 몇 초에 무슨 일이 있었는지 분석해 드려요",en:"Enter a match code to get a full breakdown",ja:"マッチコードを入れると試合を丸ごと分析します",zh:"輸入對局代碼即可獲得完整分析"},
+  ph:{ko:"매치 코드 (예: BYDPH6ZM)",en:"Match code (e.g. BYDPH6ZM)",ja:"マッチコード (例: BYDPH6ZM)",zh:"對局代碼 (例: BYDPH6ZM)"},
+  go:{ko:"분석",en:"Analyze",ja:"分析",zh:"分析"},
+  note:{ko:"매치 코드는 게임의 경기 기록 화면에서 복사할 수 있어요. 리플레이는 40일이 지나면 게임 서버에서 지워져 분석할 수 없습니다. 리포트에는 참가자 6명의 닉네임이 표시돼요 — 본인 닉네임을 가리고 싶으면 리포트 아래 [삭제 요청]을 눌러주세요.",
+        en:"Copy the match code from the game's match history. Replays are deleted from the game server after ~40 days. Reports show all 6 nicknames — use [Removal request] below a report to ask for yours to be hidden.",
+        ja:"マッチコードはゲームの対戦履歴からコピーできます。リプレイは約40日で削除されます。レポートには6人のニックネームが表示されます — 非表示を希望する場合はレポート下の[削除リクエスト]を押してください。",
+        zh:"對局代碼可在遊戲的對戰紀錄中複製。回放約40天後會被刪除。報告會顯示6名玩家暱稱 — 如不希望顯示，請按報告下方的[刪除請求]。"},
+  wait_cache:{ko:"저장된 리포트 확인 중…",en:"Checking saved reports…",ja:"保存済みレポートを確認中…",zh:"正在檢查已保存的報告…"},
+  wait_server:{ko:"분석 서버에 요청했어요 — 서버가 자고 있었으면 깨우는 데 1분쯤 걸려요 ⏳",en:"Asked the analysis server — if it was asleep, waking it can take ~1 min ⏳",ja:"分析サーバーに依頼しました — 起動に1分ほどかかることがあります ⏳",zh:"已請求分析伺服器 — 喚醒可能需要約1分鐘 ⏳"},
+  wait_run:{ko:"분석 중… {s}초 경과 (무료 서버라 몇 분 걸릴 수 있어요. 창을 닫지 말고 기다려 주세요)",
+    en:"Analyzing… {s}s elapsed (the free server is slow — this can take a few minutes)",
+    ja:"分析中… {s}秒経過（無料サーバーのため数分かかることがあります）",
+    zh:"分析中…已 {s} 秒（免費伺服器較慢，可能需要幾分鐘）"},
+  wait_queue:{ko:"다른 경기를 먼저 분석하고 있어요 — 순서를 기다리는 중…",en:"Another match is being analyzed first — waiting in line…",ja:"他の試合を先に分析中 — 順番待ちです…",zh:"正在分析其他對局 — 排隊等待中…"},
+  err_slow:{ko:"분석이 너무 오래 걸려 중단했어요. 잠시 뒤 다시 시도해 주세요.",en:"Analysis is taking too long. Please try again shortly.",ja:"分析に時間がかかりすぎたため中断しました。",zh:"分析耗時過長已中止，請稍後再試。"},
+  done_new:{ko:"분석 완료! 이 리포트는 저장돼서 다음 사람은 바로 봐요.",en:"Done! This report is now saved for instant viewing.",ja:"完了！このレポートは保存され、次からは即表示されます。",zh:"完成！報告已保存，之後可即時查看。"},
+  done_cache:{ko:"저장된 리포트를 불러왔어요 (분석 시각 기준 스냅샷).",en:"Loaded a saved report (snapshot at analysis time).",ja:"保存済みレポートを読み込みました。",zh:"已載入保存的報告。"},
+  err_net:{ko:"서버에 연결하지 못했어요. 잠시 뒤 다시 시도해 주세요.",en:"Could not reach the analysis server. Please try again shortly.",ja:"サーバーに接続できませんでした。しばらくして再試行してください。",zh:"無法連接伺服器，請稍後再試。"},
+  err_save:{ko:"⚠️ 리포트 공유 저장은 실패했어요(표시는 정상) — 규칙 v26 게시 필요.",en:"⚠️ Could not save the report for sharing (display is fine) — rules v26 needed.",ja:"⚠️ レポートの共有保存に失敗（表示は正常）",zh:"⚠️ 無法保存報告以供共享（顯示正常）"},
+  s_sum:{ko:"요약",en:"Summary",ja:"概要",zh:"摘要"},
+  s_roster:{ko:"명단 · 전적",en:"Roster & Stats",ja:"メンバー・戦績",zh:"名單・戰績"},
+  s_flow:{ko:"경기 흐름",en:"Match Flow",ja:"試合の流れ",zh:"比賽走勢"},
+  s_style:{ko:"플레이 스타일",en:"Playstyle",ja:"プレイスタイル",zh:"遊玩風格"},
+  s_death:{ko:"사망 심화",en:"Death Analysis",ja:"デス分析",zh:"死亡分析"},
+  s_map:{ko:"사망 위치 · 맵 장악",en:"Deaths & Map Control",ja:"デス位置・マップ支配",zh:"死亡位置・地圖控制"},
+  flow_note:{ko:"⚡ = 리드가 뒤집힌 순간",en:"⚡ = lead change",ja:"⚡ = リード逆転",zh:"⚡ = 領先易主"},
+  style_note:{ko:"참여 = 교전 중 피해/회복 기록 있음 · 전방 +면 팀보다 앞에 서는 성향 · 첫진입 = 교전을 먼저 연 횟수",en:"Part. = active in fight · Front + = plays ahead of team · First = opened fights",ja:"参加=交戦で行動あり · 前方+=味方より前に出る傾向 · 先陣=交戦を開いた回数",zh:"參與=交戰中有行動 · 前排+=比隊伍更靠前 · 先手=先開戰次數"},
+  death_note:{ko:"죽기 전 10초의 피해 내역 · 🚶 = 사망 순간 근처에 아군 없음(반복되면 포지셔닝 신호)",en:"Damage in the 10s before each death · 🚶 = no ally nearby (a positioning red flag if repeated)",ja:"死亡前10秒の被ダメージ · 🚶 = 近くに味方なし",zh:"死亡前10秒的傷害 · 🚶 = 附近沒有隊友"},
+  map_note:{ko:"색 번짐 = 그 팀이 머문 지역(파랑 1팀·빨강 2팀) · 원 = 죽은 자리(번호는 순서)",en:"Shading = where each team spent time (blue T1 · red T2) · circles = deaths (numbered)",ja:"色 = 各チームの滞在エリア · 丸 = デス位置",zh:"色塊 = 隊伍活動區域 · 圓圈 = 死亡位置"},
+  chk_ok:{ko:"게임이 보낸 전적과 전원 일치 — 숫자를 믿어도 됩니다",en:"All players match the game's own stats — numbers are verified",ja:"ゲーム送信の戦績と全員一致 — 数値は検証済み",zh:"與遊戲官方戰績全部一致 — 數據已驗證"},
+  chk_warn:{ko:"게임 전적과 일부 불일치 — 해당 선수 숫자는 참고만",en:"Some players differ from game stats — treat those numbers as approximate",ja:"一部が不一致 — 該当選手の数値は参考程度に",zh:"部分與官方戰績不符 — 該玩家數據僅供參考"},
+  botwarn:{ko:"⚠️ 봇/연습 경기예요 — 사람 실력으로 읽지 마세요",en:"⚠️ Bot/practice match — don't read as human skill",ja:"⚠️ BOT/練習試合です",zh:"⚠️ 機器人/練習賽"},
+  win:{ko:"팀 승리",en:" wins",ja:"チーム勝利",zh:"隊獲勝"},
+  draw:{ko:"무승부/판정불가",en:"Draw / undecided",ja:"引き分け/判定不可",zh:"平局/無法判定"},
+  del_btn:{ko:"🙈 삭제 요청 (내 닉네임을 가리고 싶어요)",en:"🙈 Removal request (hide my nickname)",ja:"🙈 削除リクエスト",zh:"🙈 刪除請求"},
+  del_ask:{ko:"이 리포트에 대한 삭제 요청을 운영자에게 보낼까요? 확인 후 리포트가 내려가거나 닉네임이 가려집니다.",en:"Send a removal request to the operator? The report will be taken down or anonymized after review.",ja:"運営に削除リクエストを送りますか？",zh:"要向管理員發送刪除請求嗎？"},
+  del_sent:{ko:"삭제 요청을 보냈어요. 확인 후 처리됩니다 🙏",en:"Request sent. It will be handled after review 🙏",ja:"送信しました 🙏",zh:"已發送 🙏"},
+  del_fail:{ko:"요청 전송 실패 — 잠시 뒤 다시 시도해 주세요.",en:"Failed to send — try again shortly.",ja:"送信失敗 — 再試行してください。",zh:"發送失敗 — 請稍後再試。"},
+  adm_del:{ko:"🗑 리포트 삭제(관리자)",en:"🗑 Delete report (admin)",ja:"🗑 削除(管理者)",zh:"🗑 刪除(管理員)"},
+  s_coach:{ko:"코칭 코멘트",en:"Coaching Comments",ja:"コーチングコメント",zh:"教練點評"},
+  coach_note:{ko:"경기 데이터로 자동 판정한 코멘트예요 — 상황 맥락(핑·역할 분담)까지는 모르니 참고용으로 봐주세요.",en:"Auto-generated from match data — it can't know context (ping, role swaps), so treat as guidance.",ja:"試合データから自動判定したコメントです — 状況の文脈までは分かりません。",zh:"由對局數據自動判定 — 無法得知情境脈絡，僅供參考。"},
+  cols:{ko:["선수","영웅","처치","죽음","어시","딜","받은딜","회복","궁"],en:["Player","Hero","K","D","A","Dmg","Taken","Heal","Ult"],ja:["プレイヤー","ヒーロー","撃破","デス","アシスト","与ダメ","被ダメ","回復","ULT"],zh:["玩家","英雄","擊殺","死亡","助攻","輸出","承傷","治療","大招"]},
+  scols:{ko:["선수","교전참여","전방","이동","첫진입","생존율","궁 값어치"],en:["Player","Part.","Front","Dist","First","Alive","Ult value"],ja:["プレイヤー","参加","前方","移動","先陣","生存","ULT価値"],zh:["玩家","參與","前排","移動","先手","存活","大招價值"]},
+  ultv:{ko:"궁 뒤 8초: 잡음/잃음",en:"8s after ult: got/lost",ja:"ULT後8秒: 撃破/損失",zh:"大招後8秒: 擊殺/損失"}
+};
+const RPL = k => { const o=RPT_L[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
+/* 🎓 코칭 문장 템플릿 — 서버는 판정(키+숫자)만 보내고 문장은 여기서 만든다.
+   {name}{n}{of}{team}… 자리는 rptCoachLine()이 채움. 모르는 키는 조용히 건너뜀(서버가 더 새것일 때). */
+const RPT_COACH = {
+  t_fights:{ko:"{team}팀 패인: 교전 {of}번 중 {lost}번을 졌어요 — 싸움 자체에서 밀렸습니다. 인원이 갖춰졌을 때만 싸우고, 불리하면 빠지는 판단이 필요해요.",
+    en:"Team {team} lost the fights: {lost} of {of} — take fights only with numbers, and disengage when behind.",
+    ja:"{team}チームの敗因: 交戦{of}回中{lost}回で負け — 人数が揃った時だけ戦い、不利なら引く判断を。",
+    zh:"{team}隊敗因：{of} 次交戰輸了 {lost} 次 — 人數齊時再開戰，劣勢時要撤退。"},
+  t_objective:{ko:"{team}팀 패인: 교전은 {of}번 중 {won}번 이기고도 졌어요 — 싸움을 이긴 뒤 목표(점수)를 챙기지 않은 게 원인입니다.",
+    en:"Team {team} won {won} of {of} fights but lost the game — convert won fights into the objective.",
+    ja:"{team}チームは交戦{of}回中{won}回勝ちながら敗北 — 勝った後に目標(スコア)を取ることが大事です。",
+    zh:"{team}隊贏了 {of} 次交戰中的 {won} 次卻輸掉比賽 — 打贏後要去拿目標（分數）。"},
+  t_decisive:{ko:"승부처: {mm}:{ss} 교전(사망 {deaths}명)에서 리드가 {team}팀으로 넘어갔어요 — 이 순간을 돌려보세요.",
+    en:"Turning point: the {mm}:{ss} fight ({deaths} deaths) flipped the lead to team {team} — review this moment.",
+    ja:"勝負所: {mm}:{ss} の交戦(デス{deaths}人)でリードが{team}チームへ — この瞬間を見直しましょう。",
+    zh:"勝負關鍵：{mm}:{ss} 的交戰（{deaths} 人陣亡）讓{team}隊反超 — 回顧這一刻。"},
+  t_close:{ko:"{team}팀, 종이 한 장 차이였어요 — 아래 고칠 점 하나만 고쳐도 결과가 바뀌는 점수차입니다.",
+    en:"Team {team}, it was razor-thin — fixing just one thing below could flip this result.",
+    ja:"{team}チーム、紙一重でした — 下の改善点を一つ直すだけで結果が変わる点差です。",
+    zh:"{team}隊只差一點點 — 修正下面任何一項就可能翻盤。"},
+  p_solo:{ko:"{name}: 죽음 {of}번 중 {n}번이 근처에 아군이 없는 상태였어요 — 팀과 붙어 다니면 절반은 살았을 싸움입니다.",
+    en:"{name}: {n} of {of} deaths happened with no ally nearby — stay with your team.",
+    ja:"{name}: デス{of}回中{n}回は近くに味方なし — チームと一緒に動きましょう。",
+    zh:"{name}：{of} 次死亡中有 {n} 次附近沒有隊友 — 跟緊隊伍。"},
+  p_melt:{ko:"{name}: 3초 안에 녹은 죽음이 {n}번 — 각을 잡기 전에 몸이 먼저 나갔다는 신호예요. 엄폐물을 끼고 진입하세요.",
+    en:"{name}: melted in under 3s {n} times — you're exposed before the angle is set. Use cover on entry.",
+    ja:"{name}: 3秒以内に溶けたデスが{n}回 — 角度を作る前に体が出ています。遮蔽物を使って。",
+    zh:"{name}：{n} 次在 3 秒內被融化 — 進場先找掩體。"},
+  p_lowpart:{ko:"{name}: 교전 {of}번 중 {n}번만 참여 — 팀이 인원 열세로 싸우는 동안 다른 곳에 있었어요. 미니맵에서 팀 위치를 자주 보세요.",
+    en:"{name}: joined only {n} of {of} fights — your team fought outnumbered. Watch the minimap.",
+    ja:"{name}: 交戦{of}回中{n}回のみ参加 — チームが数的不利で戦っていました。ミニマップ確認を。",
+    zh:"{name}：{of} 次交戰只參與 {n} 次 — 隊伍常以少打多。多看小地圖。"},
+  p_firstdie:{ko:"{name}: 교전이 시작되자마자 첫 사망이 된 게 {n}번 — 진입이 팀보다 반 박자 빠릅니다. 팀과 같이 들어가세요.",
+    en:"{name}: first to die as fights opened, {n} times — you engage half a beat early. Enter with your team.",
+    ja:"{name}: 交戦開始直後の最初のデスが{n}回 — 突入が半歩早い。チームと同時に。",
+    zh:"{name}：{n} 次在交戰一開始就先陣亡 — 進場比隊伍快半拍。"},
+  p_overext:{ko:"{name}: 팀보다 앞에 서는 성향(전방 +{front})인데 죽음이 {n}번 — 앞라인을 서려면 빠지는 타이밍도 같이 연습해야 해요.",
+    en:"{name}: plays ahead of the team (front +{front}) with {n} deaths — front-lining needs disengage timing too.",
+    ja:"{name}: チームより前に出る傾向(前方+{front})でデス{n}回 — 引くタイミングも練習を。",
+    zh:"{name}：站位比隊伍靠前（前排 +{front}）且死亡 {n} 次 — 當前排也要練撤退時機。"},
+  p_ultwaste:{ko:"{name}: 궁을 {n}번 썼지만 이어진 처치가 없었어요 — 교전을 여는 용도보다, 이기고 있는 싸움을 굳히는 데 써보세요. (동시성 기준이라 참고용)",
+    en:"{name}: used ult {n} times with no kills following — try committing it to seal fights you're already winning. (correlation, not proof)",
+    ja:"{name}: ULTを{n}回使うも撃破に繋がらず — 勝っている戦いを固める用途に。(参考値)",
+    zh:"{name}：開了 {n} 次大招但沒有接上擊殺 — 試著用來鎖定已佔優的戰鬥。（僅供參考）"},
+  p_goodpart:{ko:"{name}: 교전 {of}번 전부 참여 — 팀과 함께 움직이는 습관이 좋습니다.",
+    en:"{name}: present in all {of} fights — great teamplay habits.",
+    ja:"{name}: 交戦{of}回すべてに参加 — 良いチームプレイ習慣です。",
+    zh:"{name}：{of} 次交戰全數參與 — 團隊意識很好。"},
+  p_ultgood:{ko:"{name}: 궁 {n}번 뒤에 처치 {got}회가 이어졌어요 — 궁 타이밍이 좋습니다.",
+    en:"{name}: {got} kills followed your {n} ults — great ult timing.",
+    ja:"{name}: ULT{n}回の後に撃破{got}回 — 良いタイミングです。",
+    zh:"{name}：{n} 次大招接上 {got} 次擊殺 — 時機掌握得好。"},
+  p_carry:{ko:"{name}: 처치 {k_n} · 팀 최고 딜({dmg}) — 이 경기의 에이스였어요.",
+    en:"{name}: {k_n} kills · top damage ({dmg}) — the ace of this match.",
+    ja:"{name}: 撃破{k_n}・チーム最高ダメージ({dmg}) — この試合のエースでした。",
+    zh:"{name}：{k_n} 次擊殺・全隊最高輸出（{dmg}）— 本場的王牌。"}
+};
+const RPT_SEV_IC = { team:"🏁", bad:"🔴", info:"💡", good:"🟢" };
+function rptCoachLine(c, P){
+  const o = RPT_COACH[c.k]; if(!o) return null;          // 모르는 키 = 서버가 더 새것 → 건너뜀
+  let t = o[LANG] !== undefined ? o[LANG] : (o.en !== undefined ? o.en : o.ko);
+  const vals = Object.assign({}, c);
+  if(c.pid !== undefined && P[c.pid]) vals.name = P[c.pid].name;
+  if(c.s !== undefined){
+    const v = Math.max(0, Math.round(c.s));
+    vals.mm = String(Math.floor(v/60)).padStart(2,"0"); vals.ss = String(v%60).padStart(2,"0");
+  }
+  if(vals.dmg !== undefined) vals.dmg = Number(vals.dmg).toLocaleString();
+  return t.replace(/\{(\w+)\}/g, (_, k) => esc(String(vals[k] !== undefined ? vals[k] : "?")));
+}
+let rptCur = null;   // 지금 화면의 리포트 (URL 공유용)
+window.rsReplayHead = () => [RPL("head"), RPL("sub")];
+window.rsReplayCode = () => (rptCur && rptCur.code) || "";
+
+function rptStatic(){
+  const hd=document.getElementById("rptHead");
+  if(hd) hd.innerHTML = "";   // 제목은 페이지 헤더(applyHeader)가 담당 — 중복 표기 안 함
+  const inp=document.getElementById("rptCode"); if(inp) inp.placeholder = RPL("ph");
+  const btn=document.getElementById("rptGoBtn"); if(btn) btn.textContent = RPL("go");
+  const nt=document.getElementById("rptNote"); if(nt) nt.textContent = RPL("note");
+  if(rptCur) rptRender(rptCur);   // 언어가 바뀌면 리포트도 그 언어로 다시
+}
+
+/* ⏱ Firebase 조회에 시간 제한 — 규칙 미게시·오프라인·인앱브라우저에서 `get()`이
+   영영 안 끝나 [분석] 버튼이 먹통이 되는 일이 실제로 있었다(2026-08-08).
+   경기 분석은 Firebase 없이도 (서버만으로) 되어야 하므로, 막히면 그냥 건너뛴다. */
+const rptRace = (p, ms) => Promise.race([p, new Promise(r => setTimeout(() => r(null), ms))]);
+
+let rptApiCache = null;
+async function rptApi(){
+  if(rptApiCache) return rptApiCache;
+  try{
+    const s = await rptRace(FB.get(FB.ref(FB.db, "config/analyzeApi")), 4000);
+    const v = s && s.val();
+    if(typeof v === "string" && v.indexOf("https://") === 0) rptApiCache = v.replace(/\/+$/,"");
+  }catch(e){}
+  return rptApiCache || (rptApiCache = RPT_API_FALLBACK);
+}
+
+const rptStat = m => { const el=document.getElementById("rptStat"); if(el) el.textContent = m||""; };
+const rptSec = s => { const v=Math.max(0,Math.round(s)); return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0"); };
+
+async function rptGo(codeArg){
+  const inp = document.getElementById("rptCode");
+  const code = String(codeArg || (inp&&inp.value) || "").trim().toUpperCase();
+  if(!/^[A-Z0-9]{6,12}$/.test(code)){ rptStat(RPL("ph")); return; }
+  if(inp) inp.value = code;
+  const btn = document.getElementById("rptGoBtn"); if(btn) btn.disabled = true;
+  const out = document.getElementById("rptOut");
+  try{
+    rptStat(RPL("wait_cache"));
+    try{
+      const snap = await rptRace(FB.get(FB.ref(FB.db, "replayrpt/"+code)), 5000);
+      const saved = snap && snap.val();
+      if(saved && saved.j){
+        rptCur = JSON.parse(saved.j);
+        rptRender(rptCur); rptStat(RPL("done_cache")); rptUrl(code);
+        return;
+      }
+    }catch(e){}   // 캐시 읽기 실패는 치명 아님 — 서버로 진행
+    rptStat(RPL("wait_server"));
+    const base = await rptApi();
+    /* 🕒 폴링 — 서버는 즉시 상태만 주고 뒤에서 분석한다(무료 서버 CPU가 느려 오래 붙잡으면
+       Render가 요청을 끊어버린다. 2026-08-08 실측). 다 될 때까지 몇 초마다 다시 물어본다. */
+    const deadline = Date.now() + 15*60*1000;
+    let body = null;
+    while(true){
+      const ctl = new AbortController();
+      const timer = setTimeout(()=>ctl.abort(), 60000);
+      try{ body = await (await fetch(base + "/analyze/" + code, {signal: ctl.signal})).json(); }
+      finally{ clearTimeout(timer); }
+      if(body && body.error){
+        const msg = (body.message && (body.message[LANG==="ko"?"ko":"en"] || body.message.en)) || body.error;
+        rptStat("❌ " + msg);
+        if(out) out.innerHTML = "";
+        return;
+      }
+      /* status가 없으면 옛 서버(동기 방식) — 그때는 이 응답이 곧 리포트다 */
+      if(!body || !body.status || body.status === "done") break;
+      if(Date.now() > deadline){ rptStat("❌ " + RPL("err_slow")); return; }
+      const s = body.elapsed || 0;
+      rptStat(body.queued ? RPL("wait_queue") : RPL("wait_run").replace("{s}", s));
+      await new Promise(r => setTimeout(r, s < 30 ? 3000 : 6000));
+    }
+    rptCur = body;
+    rptRender(rptCur); rptStat(RPL("done_new")); rptUrl(code);
+    // 다음 사람을 위해 저장 (실패해도 표시는 이미 됨 — 규칙 v26 미게시면 여기서 걸린다)
+    try{
+      await rptRace(FB.authReady, 5000);
+      const done = await rptRace(FB.set(FB.ref(FB.db, "replayrpt/"+code),
+        { j: JSON.stringify(body), ts: FB.serverTimestamp(), by: MY_UID || "" }).then(()=>true), 8000);
+      if(!done) rptStat(RPL("done_new") + "  " + RPL("err_save"));
+    }catch(e){ rptStat(RPL("done_new") + "  " + RPL("err_save")); }
+  }catch(e){
+    rptStat("❌ " + RPL("err_net"));
+  }finally{
+    if(btn) btn.disabled = false;
+  }
+}
+
+function rptUrl(code){
+  /* replaceState — pushState면 뒤로가기가 탭 순회로 변질(§5-B). rsUrlSync와 같은 방식으로 직접 조립 */
+  try{ history.replaceState(null, "", "?tab=replay&m=" + code); }catch(e){}
+}
+
+function rptRender(r){
+  const out = document.getElementById("rptOut"); if(!out || !r) return;
+  const P = {}; (r.players||[]).forEach(p => P[p.pid] = p);
+  const nm = pid => { const p=P[pid]; return p ? esc(p.name) : "P"+pid; };
+  const tcls = pid => (P[pid]&&P[pid].team===1) ? "rptt1" : "rptt2";
+  const H = [];
+  // ── 요약 ──
+  const hasBot = (r.players||[]).some(p=>p.bot);
+  const meta = [r.mode, r.map, (r.mods&&r.mods.length?r.mods.join("+"):null),
+                r.rating?("⌀"+r.rating):null, r.date].filter(Boolean).map(esc).join(" · ");
+  const wtxt = r.winner ? (LANG==="ko"?`${r.winner}${RPL("win")}`:(LANG==="en"?`Team ${r.winner}${RPL("win")}`:`${r.winner}${RPL("win")}`)) : RPL("draw");
+  const chkAll = r.check_ok && r.check_ok[0]===r.check_ok[1];
+  H.push(`<div class="rptcard"><h3>${esc(r.code)} — ${esc(wtxt)} <small style="color:var(--sub);font-weight:400">(${esc(r.why||"")})</small></h3>`
+    + `<div class="rnote">${meta}</div>`
+    + (hasBot?`<div class="rnote">${RPL("botwarn")}</div>`:"")
+    + `<div class="rnote">${chkAll?"✅ "+RPL("chk_ok"):"⚠️ "+RPL("chk_warn")} (${r.check_ok?r.check_ok.join("/"):"?"})</div></div>`);
+  // ── 🎓 코칭 코멘트 (제일 위 — 유저가 제일 궁금한 "왜 졌나·뭘 고치나") ──
+  if(r.coach && r.coach.length){
+    const lines = r.coach.map(c => {
+      const t = rptCoachLine(c, P);
+      return t ? `<div class="rptev"><span>${RPT_SEV_IC[c.sev]||"·"} ${t}</span></div>` : "";
+    }).filter(Boolean);
+    if(lines.length){
+      H.push(`<div class="rptcard"><h3>🎓 ${RPL("s_coach")}</h3>`
+        + `<div class="rnote">${RPL("coach_note")}</div>` + lines.join("") + `</div>`);
+    }
+  }
+  // ── 명단 · 전적 ──
+  const C = RPL("cols");
+  const rows = (r.players||[]).slice().sort((a,b)=>(a.team-b.team)||((b.stats&&b.stats.dmg)||0)-((a.stats&&a.stats.dmg)||0));
+  H.push(`<div class="rptcard"><h3>${RPL("s_roster")}</h3><div class="rptwrap"><table class="rpttbl">`
+    + `<tr>${C.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>`
+    + rows.map(p => { const s=p.stats||{};
+        return `<tr><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}${p.bot?" 🤖":""}${p.check===false?" ⚠️":""}</td>`
+          + `<td>${esc(p.hero||"?")}${p.level?" Lv"+p.level:""}</td>`
+          + `<td>${s.k||0}</td><td>${s.d||0}</td><td>${s.a||0}</td>`
+          + `<td>${(s.dmg||0).toLocaleString()}</td><td>${(s.taken||0).toLocaleString()}</td>`
+          + `<td>${(s.heal||0).toLocaleString()}</td><td>${s.ult||0}</td></tr>`; }).join("")
+    + `</table></div></div>`);
+  // ── 경기 흐름 (점수 계단 그래프) ──
+  if(r.score && r.score.length >= 2){
+    const t1 = r.score[r.score.length-1][0] || 1;
+    const mx = Math.max(1, ...r.score.map(s=>Math.max(s[1],s[2])));
+    const W=600, Hh=120, px=s=>15+(s/t1)*(W-30), py=v=>Hh-18-(v/mx)*(Hh-36);
+    let sv = "";
+    [[1,"#4dabf7"],[2,"#ff6b6b"]].forEach(([ti,col])=>{
+      let last=0; const pts=[];
+      r.score.forEach(s=>{ const v=s[ti]; pts.push(`${px(s[0]).toFixed(0)},${py(last).toFixed(0)}`); pts.push(`${px(s[0]).toFixed(0)},${py(v).toFixed(0)}`); last=v; });
+      sv += `<polyline points="${pts.join(" ")}" fill="none" stroke="${col}" stroke-width="2"/>`;
+    });
+    (r.flips||[]).forEach(f=>{ sv += `<text x="${px(f[0]).toFixed(0)}" y="14" text-anchor="middle" font-size="12">⚡</text>`; });
+    H.push(`<div class="rptcard"><h3>${RPL("s_flow")}</h3><div class="rnote">${RPL("flow_note")}</div>`
+      + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh}">${sv}</svg></div>`);
+  }
+  // ── 플레이 스타일 ──
+  const SC = RPL("scols");
+  H.push(`<div class="rptcard"><h3>${RPL("s_style")}</h3><div class="rnote">${RPL("style_note")} · ${RPL("ultv")}</div>`
+    + `<div class="rptwrap"><table class="rpttbl"><tr>${SC.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>`
+    + rows.map(p => { const st=p.style||{}; const u=p.ultv||[0,0,0];
+        return `<tr><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}</td>`
+          + `<td>${st.part?st.part[0]+"/"+st.part[1]:"–"}</td>`
+          + `<td>${st.front!=null?(st.front>0?"+":"")+st.front.toFixed(2):"–"}</td>`
+          + `<td>${st.dist!=null?st.dist+"m":"–"}</td><td>${st.first||0}</td>`
+          + `<td>${p.alive!=null?Math.round(p.alive*100)+"%":"–"}</td>`
+          + `<td>${u[0]} → +${u[1]}/-${u[2]}</td></tr>`; }).join("")
+    + `</table></div></div>`);
+  // ── 사망 심화 ──
+  if(r.deaths && r.deaths.length){
+    H.push(`<div class="rptcard"><h3>${RPL("s_death")}</h3><div class="rnote">${RPL("death_note")}</div>`
+      + r.deaths.map(ev => {
+          const srcs=(ev.dmg||[]).slice(0,3).map(x=>`${nm(x[0])}(${x[1]})`).join(" + ");
+          return `<div class="rptev"><span class="tm">${rptSec(ev.s)}</span><span>💀 <b class="${tcls(ev.tgt)}">${nm(ev.tgt)}</b>`
+            + ` — ${ev.burst}s ← ${srcs||"?"}${ev.solo?" · 🚶":""}</span></div>`; }).join("")
+      + `</div>`);
+  }
+  // ── 지도 (히트맵 + 사망 위치) ──
+  if(r.heat && r.spots){
+    const b=r.heat.bounds, n=r.heat.n;
+    const spanX=Math.max(1e-6,b[1]-b[0]), spanZ=Math.max(1e-6,b[3]-b[2]);
+    const W=560; let Hh=W*spanZ/spanX; Hh=Math.max(180,Math.min(560,Hh));
+    const sx=x=>20+(x-b[0])/spanX*(W-40), sy=z=>20+(z-b[2])/spanZ*(Hh-40);
+    const cw=(W-40)/n, ch=(Hh-40)/n;
+    let peak=1; (r.heat.cells||[]).forEach(c=>{ peak=Math.max(peak,c[2],c[3]); });
+    let sv="";
+    (r.heat.cells||[]).forEach(c=>{
+      [[c[2],"77,171,247"],[c[3],"255,107,107"]].forEach(([cnt,col])=>{
+        if(!cnt) return;
+        const op=Math.min(.42, Math.sqrt(cnt/peak)*.42);
+        sv+=`<rect x="${(20+c[0]*cw).toFixed(0)}" y="${(20+c[1]*ch).toFixed(0)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="rgba(${col},${op.toFixed(2)})"/>`;
+      });
+    });
+    (r.traces||[]).forEach(tr=>{
+      const pts=(tr.pts||[]).map(p=>`${sx(p[0]).toFixed(0)},${sy(p[1]).toFixed(0)}`).join(" ");
+      if(pts) sv+=`<polyline points="${pts}" fill="none" stroke="rgba(120,130,150,.25)" stroke-width="1"/>`;
+    });
+    (r.spots||[]).forEach((sp,i)=>{
+      const col=(P[sp.tgt]&&P[sp.tgt].team===1)?"#4dabf7":"#ff6b6b";
+      sv+=`<circle cx="${sx(sp.x).toFixed(0)}" cy="${sy(sp.z).toFixed(0)}" r="9" fill="${col}" fill-opacity=".78"/>`
+        +`<text x="${sx(sp.x).toFixed(0)}" y="${(sy(sp.z)+4).toFixed(0)}" text-anchor="middle" font-size="11" fill="#fff">${i+1}</text>`;
+    });
+    H.push(`<div class="rptcard"><h3>${RPL("s_map")}</h3><div class="rnote">${RPL("map_note")}</div>`
+      + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh.toFixed(0)}">${sv}</svg></div>`);
+  }
+  // ── 꼬리: 프레임·버전 + 삭제 요청 ──
+  const admBtn = IS_ADMIN ? ` <button class="rptDelAdm" style="margin-left:8px;background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer">${RPL("adm_del")}</button>` : "";
+  H.push(`<div class="rnote" style="font-size:10.5px;color:var(--sub);opacity:.85">`
+    + `frames ${r.frames?r.frames.join("/"):"?"} · game v${esc(r.gamever||"?")} · ${esc(r.date||"")}</div>`
+    + `<div style="margin:8px 0 20px"><button class="rptDelBtn" style="background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer">${RPL("del_btn")}</button>${admBtn}</div>`);
+  out.innerHTML = H.join("");
+  const del = out.querySelector(".rptDelBtn");
+  if(del) del.addEventListener("click", async () => {
+    if(!confirm(RPL("del_ask"))) return;
+    try{
+      await FB.authReady;
+      await FB.push(FB.ref(FB.db, "replaydel"), { code: r.code, by: MY_UID||"", ts: FB.serverTimestamp() });
+      toast(RPL("del_sent"));
+    }catch(e){ toast(RPL("del_fail")); }
+  });
+  const adm = out.querySelector(".rptDelAdm");
+  if(adm) adm.addEventListener("click", async () => {
+    if(!confirm("리포트를 삭제할까요? (관리자)")) return;
+    try{ await FB.remove(FB.ref(FB.db, "replayrpt/"+r.code)); toast("삭제됨"); out.innerHTML=""; rptCur=null; }
+    catch(e){ toast("삭제 실패"); }
+  });
+}
+
+document.getElementById("rptGoBtn").addEventListener("click", () => rptGo());
+document.getElementById("rptCode").addEventListener("keydown", e => {
+  if(e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); rptGo(); }
+});
+/* 공유 링크(?tab=replay&m=코드)로 들어오면 자동 실행 */
+(function(){
+  try{
+    const q = new URLSearchParams(location.search);
+    const m = (q.get("m")||"").toUpperCase();
+    if(m && q.get("tab")==="replay") setTimeout(()=>rptGo(m), 400);
+  }catch(e){}
+})();
+
 /* ══════ 초기화 & 실시간 구독 ══════ */
-renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter(); renderCmts(); renderChat(); bdStatic(); renderBd(); gStatic(); renderGreets();
+renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter(); renderCmts(); renderChat(); bdStatic(); renderBd(); gStatic(); renderGreets(); rptStatic();
 // 통합 프로필 바 + 닉네임 모달
 renderProfile();
 document.getElementById("pfEditBtn").addEventListener("click", openNickModal);
@@ -6388,7 +6804,7 @@ trTog.addEventListener("change", () => {
 document.addEventListener("rs-lang-changed", () => {
   renderProfile(); renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter();
   for(const k in bdTrCache) delete bdTrCache[k];   // 번역은 언어별이라 언어 전환 시 초기화 (게시판+방명록 공유)
-  bdStatic(); renderBd(); gStatic(); renderGreets();
+  bdStatic(); renderBd(); gStatic(); renderGreets(); rptStatic();
   const fbv = document.getElementById("commv-fb"); if(fbv && getComputedStyle(fbv).display !== "none") renderMyFb();
   renderCmts(); renderChat(); renderStats(statsCache); renderMembers();
   rsNewSync();   // 🔔 언어가 바뀌면 배너 문구도 다시
