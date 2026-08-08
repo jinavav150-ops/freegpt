@@ -2802,6 +2802,16 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-08-09",
+    ko:"🎯 경기 분석 정확도 개선 — <b>스킬 효과</b>를 스킬마다 맞게 설명해요(기절·표식·속박 등 종류별로 다른 문장). <b>교전 일지</b>가 부활 상황까지 설명하고, <b>사망 지도</b>와 맵 장악 히트맵도 더 정확해졌습니다.",
+    en:"🎯 Match Report accuracy pass — <b>skill effects</b> are now described per skill (stun, mark, bind, etc. each get their own sentence). The <b>fight log</b> now explains revivals, and the <b>death map</b> and control heatmap are more accurate too.",
+    ja:"🎯 試合分析の精度を改善 — <b>スキル効果</b>をスキルごとに正しい文で説明します（気絶・マーク・拘束などで文章を分けました）。<b>交戦ログ</b>が復活状況まで説明し、<b>デスマップ</b>とマップ支配ヒートマップもより正確になりました。",
+    zh:"🎯 對局分析精確度提升 — <b>技能效果</b>依技能種類分別描述（暈眩・標記・束縛等各自有對應句子）。<b>交戰紀錄</b>現在會說明復活狀況，<b>死亡地圖</b>與地圖控制熱區圖也更精確了。",
+    fr:"🎯 Précision du rapport de match améliorée — les <b>effets de compétence</b> sont maintenant décrits selon leur type (étourdissement, marque, entrave, chacun sa phrase). Le <b>journal des combats</b> explique désormais les résurrections, et la <b>carte des morts</b> ainsi que la heatmap de contrôle sont plus précises.",
+    de:"🎯 Genauigkeit des Spielberichts verbessert — <b>Fähigkeiteneffekte</b> werden jetzt je nach Art beschrieben (Betäubung, Markierung, Fesselung – jeweils eigener Satz). Das <b>Kampfprotokoll</b> erklärt jetzt Wiederbelebungen, und die <b>Todeskarte</b> sowie die Kontroll-Heatmap sind ebenfalls genauer.",
+    es:"🎯 Mejor precisión en el Informe de partida — los <b>efectos de habilidad</b> ahora se describen según su tipo (aturdimiento, marca, atadura, cada uno con su frase). El <b>registro de combates</b> ahora explica las revividas, y el <b>mapa de muertes</b> y el mapa de calor de control también son más precisos.",
+    pt:"🎯 Maior precisão no Relatório de partida — os <b>efeitos de habilidade</b> agora são descritos por tipo (atordoamento, marca, prisão, cada um com sua frase). O <b>registro de combates</b> agora explica as revividas, e o <b>mapa de mortes</b> e o mapa de calor de controle também ficaram mais precisos.",
+    ru:"🎯 Точность Разбора матча улучшена — <b>эффекты навыков</b> теперь описываются по типу (оглушение, метка, сковывание — у каждого своя фраза). <b>Журнал стычек</b> теперь объясняет воскрешения, а <b>карта смертей</b> и тепловая карта контроля тоже стали точнее." },
   { date:"2026-08-08",
     ko:"🔍 <b>경기 분석</b> 탭이 생겼어요! 공략 메뉴에서 <b>매치 코드만 넣으면</b> 그 경기를 통째로 분석해 드립니다 — <b>🎓 코칭 코멘트(왜 졌는지·뭘 고치면 되는지를 문장으로)</b>, 명단·전적, 점수 흐름 그래프, 플레이 스타일(교전 참여·앞라인 성향), 죽기 전 10초 분석, 사망 위치·맵 장악 지도까지. 한 번 분석된 경기는 저장돼서 다음 사람은 바로 볼 수 있어요. (리플레이는 40일이 지나면 게임 서버에서 지워져 분석할 수 없어요)",
     en:"🔍 New <b>Match Report</b> tab! Under Strategy, <b>just enter a match code</b> and get a full breakdown — <b>🎓 coaching comments (why you lost & what to fix, in plain words)</b>, roster & stats, score-flow graph, playstyle (fight participation, front-line tendency), last-10-seconds death analysis, and a deaths/map-control map. Analyzed matches are saved so the next viewer sees them instantly. (Replays are deleted from the game server after ~40 days.)",
@@ -3885,7 +3895,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.09-b";
+const SITE_VERSION = "2026.08.09-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6516,12 +6526,21 @@ const RPT_L = {
   fs_line:{ko:"{opener} 쪽이 먼저 걸었어요 · {n1}대{n2}로 시작",en:"{opener} engaged first · started {n1}v{n2}",ja:"{opener}側が先に仕掛けた · {n1}対{n2}で開始",zh:"{opener}方先開戰 · 以{n1}對{n2}開始"},
   fs_res:{ko:"{w}팀이 {got}명을 잡고 {lost}명을 잃었어요",en:"Team {w} got {got} and lost {lost}",ja:"{w}チームが{got}人倒し{lost}人失いました",zh:"{w}隊擊倒{got}人、損失{lost}人"},
   fs_res0:{ko:"{w}팀이 {got}명을 잡고 아무도 잃지 않았어요",en:"Team {w} got {got} without losing anyone",ja:"{w}チームが{got}人倒し、誰も失いませんでした",zh:"{w}隊擊倒{got}人且無人陣亡"},
+  /* 🔁 부활이 섞인 교전 — "명"(서로 다른 사람)이 아니라 "번"(횟수)이다. 부활 0번이면 위 fs_res/fs_res0 을 쓴다. */
+  fs_res_rev:{ko:"{w}팀이 {got}번 잡고 {lost}번 잃었어요",en:"Team {w} got {got} takedowns and lost {lost}",ja:"{w}チームが{got}回倒し{lost}回失いました",zh:"{w}隊擊倒{got}次、損失{lost}次"},
+  fs_res0_rev:{ko:"{w}팀이 {got}번 잡고 아무도 잃지 않았어요",en:"Team {w} got {got} takedowns without losing anyone",ja:"{w}チームが{got}回倒し、誰も失いませんでした",zh:"{w}隊擊倒{got}次且無人陣亡"},
   fs_trade:{ko:"양 팀이 {l1}대{l2}로 주고받았어요",en:"Both teams traded {l1} for {l2}",ja:"両チームが{l1}対{l2}で打ち合いました",zh:"雙方以{l1}比{l2}互有損傷"},
   fs_win:{ko:"→ {team}팀 우세",en:"→ Team {team} won it",ja:"→ {team}チーム優勢",zh:"→ {team}隊佔優"},
   fs_sweep:{ko:"→ {team}팀 완승",en:"→ clean sweep for Team {team}",ja:"→ {team}チーム完勝",zh:"→ {team}隊完勝"},
   fs_draw:{ko:"→ 무승부",en:"→ even",ja:"→ 引き分け",zh:"→ 平手"},
-  fs_long:{ko:"부활이 섞인 긴 공방",en:"long back-and-forth (respawns included)",ja:"復活を挟んだ長い攻防",zh:"夾雜重生的長期拉鋸"},
+  fs_long:{ko:"부활 {n}번 섞인 공방",en:"{n} respawn(s) mixed in",ja:"復活{n}回を挟んだ攻防",zh:"夾雜{n}次重生的拉鋸"},
   fs_dur:{ko:"{d}초",en:"{d}s",ja:"{d}秒",zh:"{d}秒"},
+  /* 🔁 부활 안내 — "3명뿐인데 4명을 잡았다"는 혼란 방지(2026-08-09 14차, MAMMON 제보).
+     f.revives(팀별 부활 횟수)가 있을 때만 결과 문장 끝에 덧붙는다. 옛 리포트(필드 없음)는
+     빈 리스트가 되어 이 문구가 아예 안 붙고 예전 문장 그대로 나온다. */
+  fs_rev_item:{ko:"{team}팀 {n}명",en:"{n} from Team {team}",ja:"{team}チーム{n}人",zh:"{team}隊{n}人"},
+  fs_rev_note:{ko:" (부활 포함: {list})",en:" (includes revives: {list})",ja:" (復活を含む: {list})",zh:"（包含重生：{list}）"},
+  fs_wait:{ko:" ({n}명 부활 대기)",en:" ({n} respawning)",ja:" ({n}人復活待ち)",zh:"（{n}人重生中）"},
   map_note:{ko:"공식 맵 위에 표시했어요. 원 번호 = 위 '사망 심화'의 # 번호 · 파랑 1팀 · 빨강 2팀 · 옅은 색 = 각 팀이 자주 머문 지역",
     en:"Drawn on the official map render. Circle numbers = the # in Death Analysis above · blue T1 · red T2 · tint = where each team spent time",
     ja:"公式マップ上に表示。丸の番号=上の「デス分析」の# · 青1チーム · 赤2チーム · 薄い色=滞在エリア",
@@ -6568,14 +6587,32 @@ const RPT_L = {
     ja:"(参加者の要請により削除された試合のため保存しません)",
     zh:"(應參與者要求下架，未保存)"},
   s_scene:{ko:"명장면",en:"Highlights",ja:"名場面",zh:"精彩片段"},
-  scene_note:{ko:"상대를 묶거나 기절시킨 뒤 팀이 몰아친 장면과, 아군끼리 궁을 겹친 장면이에요. 스킬 이름은 게임 공식 표기입니다. (인과가 아니라 같은 시간대에 일어난 일이라 참고용)",
-    en:"Moments where a target was locked down and the team focused it, plus stacked ults. Skill names are the game's official ones. (correlation, not proof)",
-    ja:"相手を捕まえた直後にチームが集中攻撃した場面と、味方同士でULTを重ねた場面です。(参考値)",
-    zh:"控住對手後全隊集火的片段，以及隊友疊加大招的片段。（僅供參考）"},
+  scene_note:{ko:"상대를 묶거나, 기절시키거나, 끌어당기거나, 받는 피해를 늘려놓은 뒤 팀이 몰아친 장면과, 아군끼리 궁을 겹친 장면이에요. 스킬 이름은 게임 공식 표기입니다. (인과가 아니라 같은 시간대에 일어난 일이라 참고용)",
+    en:"Moments where a target was stunned, bound, pulled in, or marked for extra damage — then the team focused it — plus stacked ults. Skill names are the game's official ones. (correlation, not proof)",
+    ja:"相手を拘束・気絶・引き寄せ・被ダメージ増加させた直後にチームが集中攻撃した場面と、味方同士でULTを重ねた場面です。(参考値)",
+    zh:"控住、擊暈、拉近或增加受傷後全隊集火的片段，以及隊友疊加大招的片段。（僅供參考）"},
   sc_setup:{ko:"‘{skill}’{jo} 잡아두고 {n}명이 몰아쳐 {kills}명 처치",
     en:"{skill} locked them down · {n} teammates focused → {kills} killed",
     ja:"「{skill}」で捕まえ{n}人で集中 → {kills}人撃破",
     zh:"用「{skill}」控住，{n} 人集火 → 擊殺 {kills} 人"},
+  /* 🎯 효과 종류별(2026-08-09 13차, MAMMON 제보 — 스킬마다 효과가 다른데 전부
+     "잡아두고"로 뭉뚱그리던 버그 수정). kind 없는 옛 리포트는 위 sc_setup 으로 폴백. */
+  sc_setup_stun:{ko:"‘{skill}’{jo} 기절시키고 {n}명이 몰아쳐 {kills}명 처치",
+    en:"{skill} stunned them · {n} teammates focused → {kills} killed",
+    ja:"「{skill}」で気絶させ{n}人で集中 → {kills}人撃破",
+    zh:"用「{skill}」擊暈，{n} 人集火 → 擊殺 {kills} 人"},
+  sc_setup_bind:{ko:"‘{skill}’{jo} 묶고 {n}명이 몰아쳐 {kills}명 처치",
+    en:"{skill} bound them · {n} teammates focused → {kills} killed",
+    ja:"「{skill}」で拘束し{n}人で集中 → {kills}人撃破",
+    zh:"用「{skill}」束縛，{n} 人集火 → 擊殺 {kills} 人"},
+  sc_setup_pull:{ko:"‘{skill}’{jo} 끌어당기고 {n}명이 몰아쳐 {kills}명 처치",
+    en:"{skill} pulled them in · {n} teammates focused → {kills} killed",
+    ja:"「{skill}」で引き寄せ{n}人で集中 → {kills}人撃破",
+    zh:"用「{skill}」拉近，{n} 人集火 → 擊殺 {kills} 人"},
+  sc_setup_mark:{ko:"‘{skill}’{jo} 받는 피해를 늘려놓고 {n}명이 몰아쳐 {kills}명 처치",
+    en:"{skill} marked them for extra damage · {n} teammates focused → {kills} killed",
+    ja:"「{skill}」で被ダメージ増加のマークを付け{n}人で集中 → {kills}人撃破",
+    zh:"用「{skill}」增加受傷標記，{n} 人集火 → 擊殺 {kills} 人"},
   sc_ult:{ko:"궁 연계 {skills} → 처치 {got}",
     en:"Ult combo {skills} → {got} kills",
     ja:"ULT連携 {skills} → 撃破{got}",
@@ -6658,6 +6695,23 @@ const RPT_COACH = {
     en:"{name}: locked the target down with {skill}, then {n} teammates focused it down — great opening.",
     ja:"{name}: 「{skill}」で相手を捕まえ、{n}人で集中攻撃して撃破 — 良い仕掛けでした。",
     zh:"{name}：用「{skill}」控住對手後 {n} 人集火擊殺 — 開場很好。"},
+  /* 🎯 효과 종류별(2026-08-09 13차, MAMMON 제보) — kind 없는 옛 리포트는 위 p_setupkill 로 폴백. */
+  p_setupkill_stun:{ko:"{name}: ‘{skill}’{jo} 상대를 기절시킨 뒤 {n}명이 몰아쳐 처치했어요 — 좋은 시작이었습니다.",
+    en:"{name}: stunned the target with {skill}, then {n} teammates focused it down — great opening.",
+    ja:"{name}: 「{skill}」で相手を気絶させ、{n}人で集中攻撃して撃破 — 良い仕掛けでした。",
+    zh:"{name}：用「{skill}」擊暈對手後 {n} 人集火擊殺 — 開場很好。"},
+  p_setupkill_bind:{ko:"{name}: ‘{skill}’{jo} 상대를 묶어둔 뒤 {n}명이 몰아쳐 처치했어요 — 좋은 시작이었습니다.",
+    en:"{name}: bound the target with {skill}, then {n} teammates focused it down — great opening.",
+    ja:"{name}: 「{skill}」で相手を拘束し、{n}人で集中攻撃して撃破 — 良い仕掛けでした。",
+    zh:"{name}：用「{skill}」束縛對手後 {n} 人集火擊殺 — 開場很好。"},
+  p_setupkill_pull:{ko:"{name}: ‘{skill}’{jo} 상대를 끌어당긴 뒤 {n}명이 몰아쳐 처치했어요 — 좋은 시작이었습니다.",
+    en:"{name}: pulled the target in with {skill}, then {n} teammates focused it down — great opening.",
+    ja:"{name}: 「{skill}」で相手を引き寄せ、{n}人で集中攻撃して撃破 — 良い仕掛けでした。",
+    zh:"{name}：用「{skill}」拉近對手後 {n} 人集火擊殺 — 開場很好。"},
+  p_setupkill_mark:{ko:"{name}: ‘{skill}’{jo} 상대가 받는 피해를 늘려놓은 뒤 {n}명이 몰아쳐 처치했어요 — 좋은 시작이었습니다.",
+    en:"{name}: marked the target for extra damage with {skill}, then {n} teammates focused it down — great opening.",
+    ja:"{name}: 「{skill}」で被ダメージ増加のマークを付け、{n}人で集中攻撃して撃破 — 良い仕掛けでした。",
+    zh:"{name}：用「{skill}」增加對手受傷後 {n} 人集火擊殺 — 開場很好。"},
   p_ultcombo:{ko:"{name}: 아군과 궁을 겹쳐 넣어({skills}) 처치 {got}회로 이어졌어요 — 좋은 연계입니다.",
     en:"{name}: stacked ults with a teammate ({skills}) and {got} kills followed — great combo.",
     ja:"{name}: 味方とULTを重ねて({skills})撃破{got}回に繋がりました — 良い連携です。",
@@ -6689,7 +6743,10 @@ function rptFill(tpl, map){
   return String(tpl).replace(/\{(\w+)\}/g, (_, k) => map[k] !== undefined ? String(map[k]) : "");
 }
 function rptCoachLine(c, P, nameOf){
-  const o = RPT_COACH[c.k]; if(!o) return null;          // 모르는 키 = 서버가 더 새것 → 건너뜀
+  // 효과 종류별(stun/bind/pull/mark) 문장이 있으면 그걸 먼저 쓴다. c.kind 가 없거나
+  // (옛 리포트) 종류별 키가 아직 없으면 기존 c.k 문장(중립)으로 조용히 떨어진다.
+  let o = (c.kind && RPT_COACH[c.k + "_" + c.kind]) || RPT_COACH[c.k];
+  if(!o) return null;          // 모르는 키 = 서버가 더 새것 → 건너뜀
   let t = o[LANG] !== undefined ? o[LANG] : (o.en !== undefined ? o.en : o.ko);
   const vals = Object.assign({}, c);
   /* 이름은 렌더러가 넘겨 주는 함수로 — 투명 닉네임이 여럿일 때 영웅으로 구분해 준다.
@@ -6719,13 +6776,22 @@ function rptCoachLine(c, P, nameOf){
   }
   return line;
 }
-/* 🗺 공식 맵 렌더 보정값 (2026-08-09 실측 — 리플레이 18경기의 이동·스폰·사망을 렌더에 겹쳐 맞춤)
+/* 🗺 공식 맵 렌더 보정값
+   ⚠️ 4개 맵(퍼시피카·항구·하늘공원·용광로)은 **사람이 눈대중으로 맞춘 값**이다. "실측"이 아니다.
+      2026-08-09 재검증에서 선수 좌표만으로 그림에 겹쳐 봤을 때 육안상 잘 맞아 그대로 두었다.
+   ✅ 균열 관측소만 **측정해서 고친 값**이다(2026-08-09). 맵 이미지의 밝기로 "밟을 수 없는 허공"
+      마스크를 만들고, 허공에 찍히는 선수 좌표 비율이 최소가 되도록 맞췄다: 3.53% → 1.34%.
+      사망 번호 #40·#41·#59·#60 이 허공에서 땅으로 돌아왔다. #64(협곡 최극단)는 아직 허공에 남는다.
+   🪤 좌표를 다시 잴 일이 있으면 **반드시 선수(hero_entity) 좌표만** 써라. d["pos"] 에는 차량·터렛·
+      소품이 다 들어 있어서, 그걸 섞어 재면 없는 문제를 쫓다가 보정을 더 망친다(실제로 한 번 그랬다).
+   🪤 항구의 사망 #41·#42·#43 은 건물 옥상에 찍히는데 **어떤 보정값으로도 안 바뀐다** —
+      축척 문제가 아니다. 게임에서 옥상에 올라갈 수 있는 것일 수도 있다(미확인).
    변환: u=(x-x0)/(x1-x0), w=(z-z0)/(z1-z0) → swap이면 u↔w → fx/fy면 반전 → 이미지(1200×1200) 좌표 */
 const RPT_MAPCAL = {
   "퍼시피카":     {img:"mapfull/pacifica.jpg", swap:0, fx:0, fy:1, x0:-55,   x1:52,   z0:-45,   z1:55},
   "항구":         {img:"mapfull/harbor.jpg",   swap:0, fx:0, fy:1, x0:-69.3, x1:61.1, z0:-84.1, z1:48.3},
   "하늘공원":     {img:"mapfull/skypark.jpg",  swap:1, fx:0, fy:1, x0:-47,   x1:49,   z0:-60,   z1:54},
-  "균열 관측소":  {img:"mapfull/rift.jpg",     swap:0, fx:0, fy:1, x0:-53.8, x1:74.2, z0:-46.5, z1:50.5},
+  "균열 관측소":  {img:"mapfull/rift.jpg",     swap:0, fx:0, fy:1, x0:-57.14, x1:58.00, z0:-36.72, z1:40.05},
   "용광로":       {img:"mapfull/forge.jpg",    swap:0, fx:0, fy:1, x0:-35.3, x1:40,   z0:-51.8, z1:59.2}
 };
 let rptCur = null;   // 지금 화면의 리포트 (URL 공유용)
@@ -6987,7 +7053,10 @@ function rptRender(r){
         const i18 = x.skill_i18n;
         const sk = (i18 && typeof i18==="object" && (i18[LANG]||i18.en||i18.ko))
                    || (typeof x.skill==="string" ? x.skill : "?");
-        txt = rptFill(RPL("sc_setup"), {skill: esc(sk), jo: LANG==="ko" ? rptJosaRo(sk) : "",
+        /* 효과 종류(stun/bind/pull/mark)별 문장 — 옛 리포트엔 setup_kind 가 없으므로
+           그때는 RPT_L에 그 키가 없어 기존 sc_setup(중립 "잡아두고")으로 폴백한다. */
+        const scKey = (x.setup_kind && RPT_L["sc_setup_" + x.setup_kind]) ? "sc_setup_" + x.setup_kind : "sc_setup";
+        txt = rptFill(RPL(scKey), {skill: esc(sk), jo: LANG==="ko" ? rptJosaRo(sk) : "",
                                         n: N(x.n), tgt: nm(x.tgt),
                                         kills: Math.max(1, N(x.kills))});
       }else{
@@ -7005,11 +7074,20 @@ function rptRender(r){
   }
   // ── ⚔️ 교전 일지 — "누가 먼저 걸었고, 몇대몇으로 시작해, 어느 쪽이 이겼나" ──
   //    "1팀 0명↓"이 안 읽힌다는 피드백(2026-08-09 요청 ③) → 이긴 팀 관점의 문장으로.
-  //    30초 넘는 구간은 한 번의 싸움이 아니라 부활이 섞인 공방이다 — 정직하게 칩으로 표시.
+  //    🔁 2026-08-09 14차(MAMMON 제보) — "3명뿐인데 4명을 잡았다"는 부활이 섞였기 때문이다.
+  //    `fights()`가 6초 넘게 조용해야 끊다 보니 계속 치고받는 공방은 하나로 묶이고, 그 안에서
+  //    죽은 사람이 부활해 또 죽는다. 30초 같은 임의 기준 대신 **실측 부활 횟수**(f.revives)로
+  //    판단한다. 옛 리포트(f.revives 없음)는 아래 로직이 전부 "부활 0"으로 떨어져
+  //    예전 문장이 그대로 나온다(하위 호환).
+  const rosterCnt = {1:0,2:0};                        // 팀별 전체 인원 — "N명 부활 대기" 계산용
+  (r.players||[]).forEach(p=>{ if(p.team===1||p.team===2) rosterCnt[p.team]++; });
   if(r.fights && r.fights.length && r.fights.some(f=>f.opener!==undefined)){
     const fl = r.fights.map(f=>{
       const l1=N(f.lost&&f.lost["1"]), l2=N(f.lost&&f.lost["2"]);
       const durS = Math.max(1, Math.round(N(f.b)-N(f.a)));
+      const revTeam = (f.revives && typeof f.revives==="object") ? f.revives : null;
+      const revOf = t => revTeam ? N(revTeam[String(t)]) : 0;
+      const rev1 = revOf(1), rev2 = revOf(2), revSum = rev1 + rev2;
       let open="";
       if(f.opener!=null && P[f.opener]){
         /* 🪤 닉네임이 값으로 들어가므로 함수형 치환 — $& · $' 같은 패턴이 들어간 닉네임이
@@ -7017,17 +7095,28 @@ function rptRender(r){
         open = rptFill(RPL("fs_line"), {
           opener: `<b class="${tcls(f.opener)}">${nm(f.opener)}</b>`,
           n1: f.nums?N(f.nums[0]):"?", n2: f.nums?N(f.nums[1]):"?"});
+        // 시작 인원이 팀 전원이 아니면(예: nums=[3,2]) 왜 모자란지 밝힌다 — 부활 대기 중.
+        if(f.nums){
+          const miss = Math.max(0, rosterCnt[1]-N(f.nums[0])) + Math.max(0, rosterCnt[2]-N(f.nums[1]));
+          if(miss>0) open += rptFill(RPL("fs_wait"), {n: miss});
+        }
       }
+      // 부활한 선수가 있으면 결과 문장 끝에 "(부활 포함: N팀 n명)" 을 덧붙인다 — 사실을 숨기지 않는다.
+      const revList = [1,2].filter(t=>revOf(t)>0).map(t=>rptFill(RPL("fs_rev_item"), {team:t, n:revOf(t)}));
+      const revNote = revList.length ? rptFill(RPL("fs_rev_note"), {list: revList.join(" · ")}) : "";
       const wT = N(f.win);
       let res;
       if(wT===1||wT===2){
         const got = wT===1?l2:l1, lost = wT===1?l1:l2;   // 이긴 팀이 잡은/잃은 수
-        res = rptFill(lost===0?RPL("fs_res0"):RPL("fs_res"), {w:wT, got:got, lost:lost})
+        const resKey = (lost===0 ? "fs_res0" : "fs_res") + (revSum>0 ? "_rev" : "");
+        res = rptFill(RPL(resKey), {w:wT, got:got, lost:lost}) + revNote
             + " <b>" + rptFill(lost===0?RPL("fs_sweep"):RPL("fs_win"), {team:wT}) + "</b>";
       }else{
-        res = rptFill(RPL("fs_trade"), {l1:l1, l2:l2}) + " <b>" + RPL("fs_draw") + "</b>";
+        res = rptFill(RPL("fs_trade"), {l1:l1, l2:l2}) + revNote + " <b>" + RPL("fs_draw") + "</b>";
       }
-      const longChip = durS>=30 ? ` <span class="rptchip">${RPL("fs_long")}</span>` : "";
+      // 🪤 예전엔 30초 이상이면 무조건 "긴 공방" 칩 — 근거 없는 임계값이었다.
+      //    지금은 **실제로 부활이 있었는지**(실측)로만 판단한다.
+      const longChip = revSum>0 ? ` <span class="rptchip">${rptFill(RPL("fs_long"), {n:revSum})}</span>` : "";
       return `<div class="rptev"${f.opener!=null?` data-pid="${N(f.opener)}"`:""}><span class="tm" style="min-width:92px">${rptMMSS(f.a)}~${rptMMSS(f.b)} · ${RPL("fs_dur").replace("{d}",durS)}</span>`
         + `<span>⚔️ ${open}${open?" · ":""}${res}${longChip}</span></div>`;
     }).join("");
