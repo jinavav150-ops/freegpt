@@ -964,6 +964,25 @@
   .rptchip{display:inline-block;background:rgba(255,107,107,.13);border:1px solid rgba(255,107,107,.35);
     color:#ffb3b3;border-radius:20px;padding:0 7px;font-size:10.5px;margin-left:4px;white-space:nowrap}
   .rptdm{color:var(--sub);font-size:11px}
+  /* 🏆 결과 카드 — 게임 결과 화면풍 (2026-08-09 요청 ⑤) */
+  .rpband{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 10px}
+  .rpband b{font-size:21px;letter-spacing:.05em}
+  .rps1{color:#4dabf7;font-weight:800;font-size:17px}
+  .rps2{color:#ff6b6b;font-weight:800;font-size:17px}
+  .rpteams{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .rpteam{display:flex;gap:6px;justify-content:center}
+  .rpvs{color:var(--sub);font-weight:800;font-size:11.5px;padding:0 2px}
+  .rphc{width:92px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 4px 7px;text-align:center}
+  .rphc img{width:56px;height:56px;border-radius:8px;object-fit:cover;display:block;margin:0 auto 4px}
+  .rphno{width:56px;height:56px;border-radius:8px;background:var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:20px;color:var(--sub)}
+  .rphcw{border-color:rgba(255,193,77,.55);box-shadow:0 0 10px rgba(255,193,77,.14)}
+  .rphn{font-size:11px;font-weight:700;max-width:84px;margin:0 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rphl{font-size:10px;color:var(--sub);margin:1px 0 3px}
+  .rphs{display:flex;justify-content:center;gap:3px;font-size:10px;white-space:nowrap}
+  /* 🗺 지도 사망 마커 클릭 (2026-08-09 요청 ④) */
+  .rptspot{cursor:pointer}
+  .rptspot.sel circle{stroke:#ffd166;stroke-width:5}
+  .rptmapcap{font-size:12px;padding:8px 2px 2px;color:var(--sub)}
   [data-pid]{cursor:pointer}
   .rptMe{background:rgba(255,193,77,.10);outline:1px solid rgba(255,193,77,.45);border-radius:6px}
   tr.rptMe td{background:rgba(255,193,77,.10)}
@@ -3862,7 +3881,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.08-f";
+const SITE_VERSION = "2026.08.09-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6491,9 +6510,14 @@ const RPT_L = {
   chip_full:{ko:"만피에서 당함",en:"from full HP",ja:"満タンから",zh:"滿血被擊殺"},
   fs_head:{ko:"교전 일지",en:"Fight Log",ja:"交戦ログ",zh:"交戰紀錄"},
   fs_line:{ko:"{opener} 쪽이 먼저 걸었어요 · {n1}대{n2}로 시작",en:"{opener} engaged first · started {n1}v{n2}",ja:"{opener}側が先に仕掛けた · {n1}対{n2}で開始",zh:"{opener}方先開戰 · 以{n1}對{n2}開始"},
-  fs_lost:{ko:"1팀 {l1}명↓ · 2팀 {l2}명↓",en:"T1 -{l1} · T2 -{l2}",ja:"1チーム{l1}人↓ · 2チーム{l2}人↓",zh:"1隊倒{l1}人 · 2隊倒{l2}人"},
+  fs_res:{ko:"{w}팀이 {got}명을 잡고 {lost}명을 잃었어요",en:"Team {w} got {got} and lost {lost}",ja:"{w}チームが{got}人倒し{lost}人失いました",zh:"{w}隊擊倒{got}人、損失{lost}人"},
+  fs_res0:{ko:"{w}팀이 {got}명을 잡고 아무도 잃지 않았어요",en:"Team {w} got {got} without losing anyone",ja:"{w}チームが{got}人倒し、誰も失いませんでした",zh:"{w}隊擊倒{got}人且無人陣亡"},
+  fs_trade:{ko:"양 팀이 {l1}대{l2}로 주고받았어요",en:"Both teams traded {l1} for {l2}",ja:"両チームが{l1}対{l2}で打ち合いました",zh:"雙方以{l1}比{l2}互有損傷"},
   fs_win:{ko:"→ {team}팀 우세",en:"→ Team {team} won it",ja:"→ {team}チーム優勢",zh:"→ {team}隊佔優"},
+  fs_sweep:{ko:"→ {team}팀 완승",en:"→ clean sweep for Team {team}",ja:"→ {team}チーム完勝",zh:"→ {team}隊完勝"},
   fs_draw:{ko:"→ 무승부",en:"→ even",ja:"→ 引き分け",zh:"→ 平手"},
+  fs_long:{ko:"부활이 섞인 긴 공방",en:"long back-and-forth (respawns included)",ja:"復活を挟んだ長い攻防",zh:"夾雜重生的長期拉鋸"},
+  fs_dur:{ko:"{d}초",en:"{d}s",ja:"{d}秒",zh:"{d}秒"},
   map_note:{ko:"공식 맵 위에 표시했어요. 원 번호 = 위 '사망 심화'의 # 번호 · 파랑 1팀 · 빨강 2팀 · 옅은 색 = 각 팀이 자주 머문 지역",
     en:"Drawn on the official map render. Circle numbers = the # in Death Analysis above · blue T1 · red T2 · tint = where each team spent time",
     ja:"公式マップ上に表示。丸の番号=上の「デス分析」の# · 青1チーム · 赤2チーム · 薄い色=滞在エリア",
@@ -6511,10 +6535,21 @@ const RPT_L = {
   s_coach:{ko:"코칭 코멘트",en:"Coaching Comments",ja:"コーチングコメント",zh:"教練點評"},
   coach_note:{ko:"경기 데이터로 자동 판정한 코멘트예요 — 상황 맥락(핑·역할 분담)까지는 모르니 참고용으로 봐주세요.",en:"Auto-generated from match data — it can't know context (ping, role swaps), so treat as guidance.",ja:"試合データから自動判定したコメントです — 状況の文脈までは分かりません。",zh:"由對局數據自動判定 — 無法得知情境脈絡，僅供參考。"},
   /* 어시스트 열은 뺐다(2026-08-09) — 이 게임은 어시를 기록하지 않는다(로그 kind6 = 18경기에서 0회,
-     PlayerStats에도 없음, 게임 결과 화면도 처치·죽음·딜 3개만). 처치가 기여자 전원에게 가는 방식. */
-  cols:{ko:["선수","영웅","처치","죽음","딜","받은딜","회복","궁"],en:["Player","Hero","K","D","Dmg","Taken","Heal","Ult"],ja:["プレイヤー","ヒーロー","撃破","デス","与ダメ","被ダメ","回復","ULT"],zh:["玩家","英雄","擊殺","死亡","輸出","承傷","治療","大招"]},
+     PlayerStats에도 없음, 게임 결과 화면도 처치·죽음·딜 3개만). 처치가 기여자 전원에게 가는 방식.
+     회복 열도 뺐다(2026-08-09 MAMMON) — 아군끼리 주고받은 힐 두 칸(준/받은)으로 대체, 자가 회복 제외. */
+  cols:{ko:["선수","영웅","처치","죽음","딜","받은딜","준 힐","받은 힐","궁"],en:["Player","Hero","K","D","Dmg","Taken","Heal out","Heal in","Ult"],ja:["プレイヤー","ヒーロー","撃破","デス","与ダメ","被ダメ","味方回復","被回復","ULT"],zh:["玩家","英雄","擊殺","死亡","輸出","承傷","給隊友治療","受隊友治療","大招"]},
   scols:{ko:["선수","싸움 위치","교전 참여","생존 시간","궁 성과"],en:["Player","Position","Fights joined","Alive","Ult results"],ja:["プレイヤー","戦い方","交戦参加","生存","ULT成果"],zh:["玩家","站位","參與交戰","存活","大招成果"]},
-  part_fmt:{ko:"{n}번 중 {p}번",en:"{p} of {n}",ja:"{n}回中{p}回",zh:"{n}次中{p}次"}
+  part_fmt:{ko:"{n}번 중 {p}번",en:"{p} of {n}",ja:"{n}回中{p}回",zh:"{n}次中{p}次"},
+  heal_note:{ko:"준 힐/받은 힐 = 아군끼리 주고받은 회복만 (자기 회복 제외)",en:"Heal out/in = ally healing only (self-heal excluded)",ja:"味方回復/被回復 = 味方間の回復のみ(自己回復は除く)",zh:"給/受隊友治療 = 僅隊友之間的治療(不含自療)"},
+  noname:{ko:"(이름 없음)",en:"(no name)",ja:"(名前なし)",zh:"(無名稱)"},
+  res_win:{ko:"{team}팀 승리",en:"Team {team} wins",ja:"{team}チーム勝利",zh:"{team}隊獲勝"},
+  ace_note:{ko:"👑 = 데이터 기준 이 경기의 에이스 (게임이 정한 MVP와 다를 수 있어요)",en:"👑 = ace by our data (may differ from the game's MVP)",ja:"👑 = データ基準のエース(ゲームのMVPと異なる場合あり)",zh:"👑 = 依數據判定的王牌(可能與遊戲MVP不同)"},
+  t1:{ko:"1팀",en:"Team 1",ja:"1チーム",zh:"1隊"},
+  t2:{ko:"2팀",en:"Team 2",ja:"2チーム",zh:"2隊"},
+  flow_one:{ko:"{t}부터 {team}팀이 앞서 나가 {a}:{b}로 끝났어요",en:"Team {team} led from {t} and finished {a}:{b}",ja:"{t}から{team}チームがリードし{a}:{b}で終了",zh:"{team}隊自{t}起領先，以{a}:{b}結束"},
+  flow_flip:{ko:"리드가 {n}번 뒤집힌 접전 — {t}에 {team}팀이 마지막으로 뒤집어 {a}:{b}로 끝났어요",en:"The lead flipped {n} times — Team {team} took it last at {t}, finishing {a}:{b}",ja:"リードが{n}回入れ替わる接戦 — {t}に{team}チームが最後に逆転し{a}:{b}",zh:"領先易主{n}次 — {team}隊於{t}最後反超，以{a}:{b}結束"},
+  flow_draw:{ko:"끝까지 {a}:{b} — 승부가 갈리지 않았어요",en:"Ended level at {a}:{b}",ja:"最後まで{a}:{b} — 決着つかず",zh:"直到最後{a}:{b} — 未分勝負"},
+  map_tap:{ko:"지도의 번호를 누르면 그 죽음의 설명이 여기에 나와요.",en:"Tap a number on the map to see that death's details here.",ja:"地図の番号をタップすると、そのデスの説明がここに表示されます。",zh:"點擊地圖上的編號，該次死亡的說明會顯示在這裡。"}
 };
 const RPL = k => { const o=RPT_L[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
 /* 🎓 코칭 문장 템플릿 — 서버는 판정(키+숫자)만 보내고 문장은 여기서 만든다.
@@ -6591,12 +6626,17 @@ const RPT_COACH = {
 };
 const RPT_SEV_IC = { team:"🏁", bad:"🔴", info:"💡", good:"🟢" };
 const rptMMSS = s => { const v=Math.max(0,Math.round(s)); return String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0"); };
+/* 보이는 글자가 하나도 없는 닉네임(한글 채움문자 등 — TYW12FB7 실제 사례) → null.
+   ᅟᅠ 한글 채움 · ㅤﾠ 호환 채움 · 폭없는 문자들 · 점자 공백 */
+const rptVisName = p => { if(!p) return null;
+  const vis = String(p.name||"").replace(/[\s\u1160\u115F\u3164\uFFA0\u200B-\u200F\u2060\uFEFF\u00A0\u2800]/g,"");
+  return vis ? String(p.name) : null; };
 function rptCoachLine(c, P){
   const o = RPT_COACH[c.k]; if(!o) return null;          // 모르는 키 = 서버가 더 새것 → 건너뜀
   let t = o[LANG] !== undefined ? o[LANG] : (o.en !== undefined ? o.en : o.ko);
   const vals = Object.assign({}, c);
-  if(c.pid !== undefined && P[c.pid]) vals.name = P[c.pid].name;
-  if(c.by_pid !== undefined) vals.by = (P[c.by_pid] && P[c.by_pid].name) || "?";
+  if(c.pid !== undefined && P[c.pid]) vals.name = rptVisName(P[c.pid]) || RPL("noname");
+  if(c.by_pid !== undefined) vals.by = P[c.by_pid] ? (rptVisName(P[c.by_pid]) || RPL("noname")) : "?";
   if(c.s !== undefined){
     const v = Math.max(0, Math.round(c.s));
     vals.mm = String(Math.floor(v/60)).padStart(2,"0"); vals.ss = String(v%60).padStart(2,"0");
@@ -6722,18 +6762,45 @@ function rptRender(r){
      ①숫자는 Number로 강제(N) ②문자열은 esc() 를 거친다. 하나라도 빠지면 XSS 통로가 된다. */
   const N = v => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
   const P = {}; (r.players||[]).forEach(p => { if(p && p.pid!==undefined) P[N(p.pid)] = p; });
-  const nm = pid => { const p=P[N(pid)]; return p ? esc(p.name) : "P"+N(pid); };
+  /* 이름이 보이지 않는 문자뿐인 닉네임(한글 채움문자 등 — TYW12FB7 실제 사례)은 "(이름 없음)"으로 */
+  const rptName = p => { if(!p) return "?";
+    const v = rptVisName(p); return v ? esc(v) : RPL("noname"); };
+  const nm = pid => { const p=P[N(pid)]; return p ? rptName(p) : "P"+N(pid); };
   const tcls = pid => (P[N(pid)]&&P[N(pid)].team===1) ? "rptt1" : "rptt2";
   const H = [];
-  // ── 요약 ──
   const hasBot = (r.players||[]).some(p=>p.bot);
   const meta = [r.mode, r.map, (r.mods&&r.mods.length?r.mods.join("+"):null),
                 r.rating?("⌀"+r.rating):null, r.date].filter(Boolean).map(esc).join(" · ");
   const wTeam = (N(r.winner)===1||N(r.winner)===2) ? N(r.winner) : 0;
-  const wtxt = wTeam ? (LANG==="ko"?`${wTeam}${RPL("win")}`:(LANG==="en"?`Team ${wTeam}${RPL("win")}`:`${wTeam}${RPL("win")}`)) : RPL("draw");
   const chkAll = r.check_ok && r.check_ok[0]===r.check_ok[1];
-  H.push(`<div class="rptcard"><h3>${esc(r.code)} — ${esc(wtxt)} <small style="color:var(--sub);font-weight:400">(${esc(r.why||"")})</small></h3>`
-    + `<div class="rnote">${meta}</div>`
+  const acePid = ((r.coach||[]).find(c=>c.k==="p_carry")||{}).pid;   // 👑 분석 에이스
+  // ── 🏆 결과 카드 — 게임 결과 화면처럼 승패·점수·명단이 첫눈에 (2026-08-09 요청 ⑤) ──
+  //    랭크 배지·퍽 아이콘·⚡점수·게임 MVP는 리플레이 파일에 없어 못 그린다. 👑 = 우리 분석 에이스.
+  let fa=null, fb=null;
+  const fin = (r.score && r.score.length) ? r.score[r.score.length-1] : null;
+  if(fin){ fa=N(fin[1]); fb=N(fin[2]); }
+  if(fa===null || (fa===0 && fb===0)){   // 옛 리포트(흐름 데이터 없음)는 승패 문자열에서 점수를 읽는다
+    const m=/(\d+)\s*:\s*(\d+)/.exec(String(r.why||"")); if(m){ fa=+m[1]; fb=+m[2]; }
+  }
+  /* 장악(0~100 진행도)만 %를 붙인다 — 점멸의 2:1에 %가 붙으면 안 된다.
+     scorekind는 새 서버가 보내는 값; 없는 옛 리포트는 값 크기로 추정(장악은 항상 100) */
+  const isPct = r.scorekind ? (r.scorekind==="pct")
+              : (/Capturepoint/.test(String(r.why||"")) && Math.max(fa||0, fb||0) >= 20);
+  const scFmt = v => v==null ? "–" : (isPct ? N(v)+"%" : String(N(v)));
+  const heroCard = p => { const s=p.stats||{};
+    const pic = (typeof PIC!=="undefined" && PIC[String(p.hero||"").toLowerCase()]) || null;
+    return `<div class="rphc${p.team===wTeam?" rphcw":""}" data-pid="${N(p.pid)}">`
+      + (pic ? `<img src="${pic}" alt="">` : `<div class="rphno">?</div>`)
+      + `<div class="rphn ${p.team===1?"rptt1":"rptt2"}">${rptName(p)}${p.pid===acePid?" 👑":""}${p.bot?" 🤖":""}</div>`
+      + `<div class="rphl">${esc(p.hero||"?")}${p.level?" Lv"+N(p.level):""}</div>`
+      + `<div class="rphs"><span>⚔️${N(s.k)}</span><span>💀${N(s.d)}</span><span>💥${(N(s.dmg)/1000).toFixed(1)}K</span></div></div>`; };
+  const T1=(r.players||[]).filter(p=>p&&p.team===1), T2=(r.players||[]).filter(p=>p&&p.team===2);
+  const resTitle = wTeam ? RPL("res_win").replace("{team}", wTeam) : RPL("draw");
+  H.push(`<div class="rptcard">`
+    + `<div class="rnote" style="text-align:center">${esc(r.code)} · ${meta}</div>`
+    + `<div class="rpband"><span class="rps1">${scFmt(fa)}</span><b>${esc(resTitle)}</b><span class="rps2">${scFmt(fb)}</span></div>`
+    + `<div class="rpteams"><div class="rpteam">${T1.map(heroCard).join("")}</div><span class="rpvs">VS</span><div class="rpteam">${T2.map(heroCard).join("")}</div></div>`
+    + (acePid!==undefined?`<div class="rnote" style="text-align:center;margin-top:8px">${RPL("ace_note")}</div>`:"")
     + (hasBot?`<div class="rnote">${RPL("botwarn")}</div>`:"")
     + `<div class="rnote">${chkAll?"✅ "+RPL("chk_ok"):"⚠️ "+RPL("chk_warn")} (${r.check_ok?N(r.check_ok[0])+"/"+N(r.check_ok[1]):"?"})</div></div>`);
   // ── 🎓 코칭 코멘트 (제일 위 — 유저가 제일 궁금한 "왜 졌나·뭘 고치나") ──
@@ -6748,47 +6815,87 @@ function rptRender(r){
     }
   }
   // ── 명단 · 전적 (어시 열 없음 — 이 게임은 어시를 기록하지 않는다) ──
-  const acePid = ((r.coach||[]).find(c=>c.k==="p_carry")||{}).pid;   // 👑 에이스 표시
+  //    힐 = 아군끼리 준/받은 두 칸 (자가 회복 제외 — 2026-08-09 MAMMON 결정).
+  //    옛 리포트(healA/healR 없음)는 "–"로 — 총회복(자가 포함)을 준 힐인 척 보여주면 안 된다.
   const C = RPL("cols");
   const rows = (r.players||[]).slice().sort((a,b)=>(a.team-b.team)||((b.stats&&b.stats.dmg)||0)-((a.stats&&a.stats.dmg)||0));
-  H.push(`<div class="rptcard"><h3>${RPL("s_roster")}</h3><div class="rnote">${RPL("style_note")}</div><div class="rptwrap"><table class="rpttbl">`
+  H.push(`<div class="rptcard"><h3>${RPL("s_roster")}</h3><div class="rnote">${RPL("heal_note")} · ${RPL("style_note")}</div><div class="rptwrap"><table class="rpttbl">`
     + `<tr>${C.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>`
     + rows.map(p => { const s=p.stats||{};
-        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}${p.pid===acePid?" 👑":""}${p.bot?" 🤖":""}${p.check===false?" ⚠️":""}</td>`
+        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${rptName(p)}${p.pid===acePid?" 👑":""}${p.bot?" 🤖":""}${p.check===false?" ⚠️":""}</td>`
           + `<td>${esc(p.hero||"?")}${p.level?" Lv"+N(p.level):""}</td>`
           + `<td>${N(s.k)}</td><td>${N(s.d)}</td>`
           + `<td>${N(s.dmg).toLocaleString()}</td><td>${N(s.taken).toLocaleString()}</td>`
-          + `<td>${N(s.heal).toLocaleString()}</td><td>${N(s.ult)}</td></tr>`; }).join("")
+          + `<td>${s.healA!=null?N(s.healA).toLocaleString():"–"}</td>`
+          + `<td>${s.healR!=null?N(s.healR).toLocaleString():"–"}</td>`
+          + `<td>${N(s.ult)}</td></tr>`; }).join("")
     + `</table></div></div>`);
-  // ── 경기 흐름 (점수 계단 그래프) ──
+  // ── 경기 흐름 (점수 계단 그래프 — 눈금·범례·최종 점수·한 줄 요약. 2026-08-09 요청 ②) ──
+  //    "장대기만 있고 무슨 내용인지 모르겠다"는 피드백 → 그래프를 못 읽어도 요약문 하나로 잡히게.
   if(r.score && r.score.length >= 2){
-    const t1 = r.score[r.score.length-1][0] || 1;
-    const mx = Math.max(1, ...r.score.map(s=>Math.max(s[1],s[2])));
-    const W=600, Hh=120, px=s=>15+(s/t1)*(W-30), py=v=>Hh-18-(v/mx)*(Hh-36);
+    const srows = r.score;
+    const tEnd = N(srows[srows.length-1][0]) || 1;
+    const mx = Math.max(1, ...srows.map(s=>Math.max(N(s[1]),N(s[2]))));
+    const W=600, Hh=150, Lp=40, Rp=52, Tp=16, Bp=24;
+    const px=s=>Lp+(N(s)/tEnd)*(W-Lp-Rp), py=v=>Tp+(1-N(v)/mx)*(Hh-Tp-Bp);
     let sv = "";
-    [[1,"#4dabf7"],[2,"#ff6b6b"]].forEach(([ti,col])=>{
-      let last=0; const pts=[];
-      r.score.forEach(s=>{ const v=s[ti]; pts.push(`${px(s[0]).toFixed(0)},${py(last).toFixed(0)}`); pts.push(`${px(s[0]).toFixed(0)},${py(v).toFixed(0)}`); last=v; });
-      sv += `<polyline points="${pts.join(" ")}" fill="none" stroke="${col}" stroke-width="2"/>`;
+    [0, mx/2, mx].forEach(v=>{                       // 세로 눈금 (0·중간·최대)
+      sv += `<line x1="${Lp}" y1="${py(v).toFixed(0)}" x2="${W-Rp}" y2="${py(v).toFixed(0)}" stroke="var(--line)" stroke-width="1"/>`
+          + `<text x="${Lp-5}" y="${(py(v)+4).toFixed(0)}" text-anchor="end" font-size="10" fill="var(--sub)">${Math.round(v)}</text>`;
     });
-    (r.flips||[]).forEach(f=>{ sv += `<text x="${px(f[0]).toFixed(0)}" y="14" text-anchor="middle" font-size="12">⚡</text>`; });
-    H.push(`<div class="rptcard"><h3>${RPL("s_flow")}</h3><div class="rnote">${RPL("flow_note")}</div>`
-      + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh}">${sv}</svg></div>`);
+    [0, tEnd/2, tEnd].forEach(s=>{                   // 가로 눈금 (시각 mm:ss)
+      sv += `<text x="${px(s).toFixed(0)}" y="${Hh-8}" text-anchor="middle" font-size="10" fill="var(--sub)">${rptMMSS(s)}</text>`;
+    });
+    const finRow = srows[srows.length-1];
+    [[1,"#4dabf7"],[2,"#ff6b6b"]].forEach(([ti,col])=>{
+      let last=0; const pts=[`${px(0).toFixed(0)},${py(0).toFixed(0)}`];
+      srows.forEach(s=>{ const v=N(s[ti]); pts.push(`${px(s[0]).toFixed(0)},${py(last).toFixed(0)}`); pts.push(`${px(s[0]).toFixed(0)},${py(v).toFixed(0)}`); last=v; });
+      sv += `<polyline points="${pts.join(" ")}" fill="none" stroke="${col}" stroke-width="2"/>`
+          + `<text x="${W-Rp+5}" y="${(py(N(finRow[ti]))+4).toFixed(0)}" font-size="11" font-weight="700" fill="${col}">${scFmt(N(finRow[ti]))}</text>`;
+    });
+    (r.flips||[]).forEach(f=>{ sv += `<text x="${px(f[0]).toFixed(0)}" y="13" text-anchor="middle" font-size="12">⚡</text>`; });
+    let fsum = "";                                   // 📈 한 줄 요약
+    if(fa!=null && fb!=null && fa!==fb){
+      if((r.flips||[]).length){
+        const lf = r.flips[r.flips.length-1];
+        fsum = RPL("flow_flip").replace("{n}",(r.flips||[]).length).replace("{t}",rptMMSS(lf[0]))
+                 .replace("{team}",N(lf[1])===2?2:1).replace("{a}",scFmt(fa)).replace("{b}",scFmt(fb));
+      }else{
+        const lead = srows.find(s=>N(s[1])!==N(s[2]));
+        fsum = RPL("flow_one").replace("{team}", fa>fb?1:2).replace("{t}",rptMMSS(lead?lead[0]:0))
+                 .replace("{a}",scFmt(fa)).replace("{b}",scFmt(fb));
+      }
+    }else if(fa!=null && fa===fb){ fsum = RPL("flow_draw").replace("{a}",scFmt(fa)).replace("{b}",scFmt(fb)); }
+    H.push(`<div class="rptcard"><h3>${RPL("s_flow")}</h3>`
+      + `<div class="rnote"><span class="rptt1">■ ${RPL("t1")}</span> · <span class="rptt2">■ ${RPL("t2")}</span> · ${RPL("flow_note")}</div>`
+      + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh}">${sv}</svg>`
+      + (fsum?`<div class="rnote" style="font-size:12px;color:var(--fg);margin-top:6px">📈 ${fsum}</div>`:"") + `</div>`);
   }
   // ── ⚔️ 교전 일지 — "누가 먼저 걸었고, 몇대몇으로 시작해, 어느 쪽이 이겼나" ──
+  //    "1팀 0명↓"이 안 읽힌다는 피드백(2026-08-09 요청 ③) → 이긴 팀 관점의 문장으로.
+  //    30초 넘는 구간은 한 번의 싸움이 아니라 부활이 섞인 공방이다 — 정직하게 칩으로 표시.
   if(r.fights && r.fights.length && r.fights.some(f=>f.opener!==undefined)){
     const fl = r.fights.map(f=>{
       const l1=N(f.lost&&f.lost["1"]), l2=N(f.lost&&f.lost["2"]);
+      const durS = Math.max(1, Math.round(N(f.b)-N(f.a)));
       let open="";
       if(f.opener!=null && P[f.opener]){
         open = RPL("fs_line")
           .replace("{opener}", `<b class="${tcls(f.opener)}">${nm(f.opener)}</b>`)
           .replace("{n1}", f.nums?N(f.nums[0]):"?").replace("{n2}", f.nums?N(f.nums[1]):"?");
       }
-      const res = RPL("fs_lost").replace("{l1}",l1).replace("{l2}",l2);
-      const wT = N(f.win); const win = (wT===1||wT===2) ? RPL("fs_win").replace("{team}",wT) : RPL("fs_draw");
-      return `<div class="rptev"${f.opener!=null?` data-pid="${N(f.opener)}"`:""}><span class="tm">${rptMMSS(f.a)}</span>`
-        + `<span>⚔️ ${open}${open?" · ":""}${res} <b>${win}</b></span></div>`;
+      const wT = N(f.win);
+      let res;
+      if(wT===1||wT===2){
+        const got = wT===1?l2:l1, lost = wT===1?l1:l2;   // 이긴 팀이 잡은/잃은 수
+        res = (lost===0?RPL("fs_res0"):RPL("fs_res")).replace(/\{w\}/g,wT).replace("{got}",got).replace("{lost}",lost)
+            + " <b>" + (lost===0?RPL("fs_sweep"):RPL("fs_win")).replace("{team}",wT) + "</b>";
+      }else{
+        res = RPL("fs_trade").replace("{l1}",l1).replace("{l2}",l2) + " <b>" + RPL("fs_draw") + "</b>";
+      }
+      const longChip = durS>=30 ? ` <span class="rptchip">${RPL("fs_long")}</span>` : "";
+      return `<div class="rptev"${f.opener!=null?` data-pid="${N(f.opener)}"`:""}><span class="tm" style="min-width:92px">${rptMMSS(f.a)}~${rptMMSS(f.b)} · ${RPL("fs_dur").replace("{d}",durS)}</span>`
+        + `<span>⚔️ ${open}${open?" · ":""}${res}${longChip}</span></div>`;
     }).join("");
     H.push(`<div class="rptcard"><h3>${RPL("fs_head")}</h3>${fl}</div>`);
   }
@@ -6801,27 +6908,29 @@ function rptRender(r){
         if(st.front!=null) pos = st.front>=0.05?RPL("sty_front"):(st.front<=-0.05?RPL("sty_back"):RPL("sty_mid"));
         const part = st.part?RPL("part_fmt").replace("{n}",N(st.part[1])).replace("{p}",N(st.part[0])):"–";
         const ult = u[0]?RPL("ult_perf").replace("{n}",N(u[0])).replace("{got}",N(u[1])):RPL("ult_none");
-        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${esc(p.name)}</td>`
+        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${rptName(p)}</td>`
           + `<td>${pos}</td><td>${part}</td>`
           + `<td>${p.alive!=null?Math.round(N(p.alive)*100)+"%":"–"}</td>`
           + `<td>${ult}</td></tr>`; }).join("")
     + `</table></div></div>`);
   // ── 💀 사망 심화 — 죽음마다 "그때 상황"을 문장+칩으로 (지도 번호와 연동) ──
+  //    문장 빌더는 함수로 분리 — 지도 캡션(요청 ④)이 같은 문장을 재사용한다.
+  const rptDeathLine = (ev, ix) => {
+    const i = N(ev.i) || (ix+1);
+    const srcs=(ev.dmg||[]).slice(0,3).map(x=>`${nm(x[0])} <span class="rptdm">${N(x[1])}</span>`).join(" · ");
+    const dur = (ev.burst<=3 ? RPL("d_melt") : RPL("d_fought")).replace("{burst}", N(ev.burst));
+    const chips=[];
+    if(ev.solo) chips.push(RPL("chip_solo"));
+    if(ev.hp0!=null && ev.hp0<0.55) chips.push(RPL("chip_lowhp").replace("{hp}",Math.round(N(ev.hp0)*100)));
+    if(ev.nums && ev.nums[0]<ev.nums[1]) chips.push(RPL("chip_outnum").replace("{a}",N(ev.nums[0])).replace("{e}",N(ev.nums[1])));
+    if(ev.burst<=3 && ev.hp0!=null && ev.hp0>=0.8) chips.push(RPL("chip_full"));
+    const chipH = chips.map(c=>` <span class="rptchip">${c}</span>`).join("");
+    return `<span class="tm"><b>#${i}</b> ${rptSec(ev.s)}</span>`
+      + `<span>💀 <b class="${tcls(ev.tgt)}">${nm(ev.tgt)}</b> — ${dur} · ${RPL("d_from")} ${srcs||"?"}${chipH}</span>`;
+  };
   if(r.deaths && r.deaths.length){
     H.push(`<div class="rptcard"><h3>${RPL("s_death")}</h3><div class="rnote">${RPL("death_note")}</div>`
-      + r.deaths.map((ev,ix) => {
-          const i = N(ev.i) || (ix+1);
-          const srcs=(ev.dmg||[]).slice(0,3).map(x=>`${nm(x[0])} <span class="rptdm">${N(x[1])}</span>`).join(" · ");
-          const dur = (ev.burst<=3 ? RPL("d_melt") : RPL("d_fought")).replace("{burst}", N(ev.burst));
-          const chips=[];
-          if(ev.solo) chips.push(RPL("chip_solo"));
-          if(ev.hp0!=null && ev.hp0<0.55) chips.push(RPL("chip_lowhp").replace("{hp}",Math.round(N(ev.hp0)*100)));
-          if(ev.nums && ev.nums[0]<ev.nums[1]) chips.push(RPL("chip_outnum").replace("{a}",N(ev.nums[0])).replace("{e}",N(ev.nums[1])));
-          if(ev.burst<=3 && ev.hp0!=null && ev.hp0>=0.8) chips.push(RPL("chip_full"));
-          const chipH = chips.map(c=>` <span class="rptchip">${c}</span>`).join("");
-          return `<div class="rptev" data-pid="${N(ev.tgt)}"><span class="tm"><b>#${i}</b> ${rptSec(ev.s)}</span>`
-            + `<span>💀 <b class="${tcls(ev.tgt)}">${nm(ev.tgt)}</b> — ${dur} · ${RPL("d_from")} ${srcs||"?"}${chipH}</span></div>`;
-        }).join("")
+      + r.deaths.map((ev,ix) => `<div class="rptev" data-pid="${N(ev.tgt)}">${rptDeathLine(ev,ix)}</div>`).join("")
       + `</div>`);
   }
   // ── 🗺 지도 — **공식 맵 렌더** 위에 사망 번호·팀 장악을 그린다 (2026-08-09) ──
@@ -6854,14 +6963,14 @@ function rptRender(r){
       });
     }
     (r.spots||[]).forEach((sp,i)=>{
-      const q=uv(sp.x,sp.z);
+      const q=uv(N(sp.x),N(sp.z));            // 좌표도 숫자 강제 — 조작 리포트가 NaN을 못 만들게
       const num=N(deathNum(sp))||i+1;
       const col=(P[sp.tgt]&&P[sp.tgt].team===1)?"#4dabf7":"#ff6b6b";
-      sv+=`<circle cx="${q[0].toFixed(0)}" cy="${q[1].toFixed(0)}" r="21" fill="${col}" fill-opacity=".88" stroke="#fff" stroke-width="3.5"/>`
-        +`<text x="${q[0].toFixed(0)}" y="${(q[1]+8).toFixed(0)}" text-anchor="middle" font-size="23" font-weight="700" fill="#fff">${num}</text>`;
+      sv+=`<g class="rptspot" data-di="${i}"><circle cx="${q[0].toFixed(0)}" cy="${q[1].toFixed(0)}" r="21" fill="${col}" fill-opacity=".88" stroke="#fff" stroke-width="3.5"/>`
+        +`<text x="${q[0].toFixed(0)}" y="${(q[1]+8).toFixed(0)}" text-anchor="middle" font-size="23" font-weight="700" fill="#fff">${num}</text></g>`;
     });
     H.push(`<div class="rptcard"><h3>${RPL("s_map")}</h3><div class="rnote">${RPL("map_note")}</div>`
-      + `<svg class="rptsvg" viewBox="0 0 ${S} ${S}">${sv}</svg></div>`);
+      + `<svg class="rptsvg" viewBox="0 0 ${S} ${S}">${sv}</svg><div class="rptmapcap" id="rptMapCap">${RPL("map_tap")}</div></div>`);
   }
   else if(r.heat && r.spots){                       // 폴백: 보정 없는 맵(신규 맵 등)
     const b=r.heat.bounds, n=r.heat.n;
@@ -6885,11 +6994,11 @@ function rptRender(r){
     (r.spots||[]).forEach((sp,i)=>{
       const num=N(deathNum(sp))||i+1;
       const col=(P[sp.tgt]&&P[sp.tgt].team===1)?"#4dabf7":"#ff6b6b";
-      sv+=`<circle cx="${sx(sp.x).toFixed(0)}" cy="${sy(sp.z).toFixed(0)}" r="9" fill="${col}" fill-opacity=".78"/>`
-        +`<text x="${sx(sp.x).toFixed(0)}" y="${(sy(sp.z)+4).toFixed(0)}" text-anchor="middle" font-size="11" fill="#fff">${num}</text>`;
+      sv+=`<g class="rptspot" data-di="${i}"><circle cx="${sx(N(sp.x)).toFixed(0)}" cy="${sy(N(sp.z)).toFixed(0)}" r="9" fill="${col}" fill-opacity=".78"/>`
+        +`<text x="${sx(N(sp.x)).toFixed(0)}" y="${(sy(N(sp.z))+4).toFixed(0)}" text-anchor="middle" font-size="11" fill="#fff">${num}</text></g>`;
     });
     H.push(`<div class="rptcard"><h3>${RPL("s_map")}</h3><div class="rnote">${RPL("map_note")}</div>`
-      + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh.toFixed(0)}">${sv}</svg></div>`);
+      + `<svg class="rptsvg" viewBox="0 0 ${W} ${Hh.toFixed(0)}">${sv}</svg><div class="rptmapcap" id="rptMapCap">${RPL("map_tap")}</div></div>`);
   }
   // ── 꼬리: 프레임·버전 + 삭제 요청 ──
   const admBtn = IS_ADMIN ? ` <button class="rptDelAdm" style="margin-left:8px;background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer">${RPL("adm_del")}</button>` : "";
@@ -6905,6 +7014,24 @@ function rptRender(r){
       const wasOn = el.classList.contains("rptMe");
       out.querySelectorAll(".rptMe").forEach(x => x.classList.remove("rptMe"));
       if(!wasOn) out.querySelectorAll(`[data-pid="${pid}"]`).forEach(x => x.classList.add("rptMe"));
+    });
+  });
+  /* 🗺 지도 번호 클릭 → 그 죽음의 설명을 지도 아래 캡션에 (2026-08-09 요청 ④).
+     모바일에선 툴팁이 안 먹으니 고정 캡션 영역이 정답. 다시 누르면 해제. */
+  const mapCap = out.querySelector("#rptMapCap");
+  if(mapCap) out.querySelectorAll(".rptspot").forEach(g => {
+    g.addEventListener("click", ev => {
+      ev.stopPropagation();
+      const sp = (r.spots||[])[N(g.getAttribute("data-di"))]; if(!sp) return;
+      const wasOn = g.classList.contains("sel");
+      out.querySelectorAll(".rptspot.sel").forEach(x => x.classList.remove("sel"));
+      if(wasOn){ mapCap.innerHTML = RPL("map_tap"); return; }
+      g.classList.add("sel");
+      const dl = r.deaths||[];
+      const evd = dl.find(dv => dv.tgt===sp.tgt && Math.abs((N(dv.s)||0)-(N(sp.s)||0))<=2);
+      mapCap.innerHTML = evd
+        ? `<div class="rptev" style="border-bottom:0">${rptDeathLine(evd, dl.indexOf(evd))}</div>`
+        : `💀 <b class="${tcls(sp.tgt)}">${nm(sp.tgt)}</b> · ${rptSec(sp.s)}`;
     });
   });
   const del = out.querySelector(".rptDelBtn");
