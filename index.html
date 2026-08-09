@@ -2802,6 +2802,16 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-08-10",
+    ko:"💾 경기 저장이 이제 진짜로 돼요 — 분석한 경기가 저장돼서 다음에 보는 사람은 기다림 없이 바로 떠요. ✨ 명장면도 같은 장면이 반복되던 걸 정리해서 한눈에 보기 편해졌어요.",
+    en:"💾 Match saving now actually works — analyzed matches are saved, so the next viewer sees them instantly with no wait. ✨ Highlights are also cleaner — repeated identical plays are now merged into one line.",
+    ja:"💾 試合の保存が本当に機能するようになりました — 分析した試合が保存され、次に見る人は待たずにすぐ表示されます。✨ ハイライトも同じ場面の繰り返しがまとめられ、見やすくなりました。",
+    zh:"💾 對局保存現在真的能用了 — 分析過的對局會被保存，之後查看的人不用等待立即顯示。✨ 精彩畫面也整理過了，相同場景的重複會合併成一行，更清楚。",
+    fr:"💾 L'enregistrement des matchs fonctionne enfin — les matchs analysés sont sauvegardés, donc le prochain visiteur les voit instantanément, sans attente. ✨ Les temps forts sont aussi plus clairs : les scènes identiques répétées sont désormais regroupées en une seule ligne.",
+    de:"💾 Das Speichern von Matches funktioniert jetzt wirklich — analysierte Matches werden gespeichert, sodass der nächste Betrachter sie sofort ohne Wartezeit sieht. ✨ Auch die Highlights sind jetzt übersichtlicher: wiederholte, identische Szenen werden zu einer Zeile zusammengefasst.",
+    es:"💾 El guardado de partidas ahora sí funciona — las partidas analizadas se guardan, así que el siguiente en verlas las ve al instante, sin esperar. ✨ Los momentos destacados también son más claros: las escenas idénticas repetidas ahora se agrupan en una sola línea.",
+    pt:"💾 O salvamento de partidas agora realmente funciona — partidas analisadas são salvas, então o próximo a ver vê na hora, sem espera. ✨ Os melhores momentos também ficaram mais claros: cenas idênticas repetidas agora são agrupadas em uma linha.",
+    ru:"💾 Сохранение матчей теперь действительно работает — проанализированные матчи сохраняются, и следующий зритель видит их мгновенно, без ожидания. ✨ Лучшие моменты тоже стали чище: повторяющиеся одинаковые сцены объединяются в одну строку." },
   { date:"2026-08-09",
     ko:"🎯 경기 분석 정확도 개선 — <b>스킬 효과</b>를 스킬마다 맞게 설명해요(기절·표식·속박 등 종류별로 다른 문장). <b>교전 일지</b>가 부활 상황까지 설명하고, <b>사망 지도</b>와 맵 장악 히트맵도 더 정확해졌습니다.",
     en:"🎯 Match Report accuracy pass — <b>skill effects</b> are now described per skill (stun, mark, bind, etc. each get their own sentence). The <b>fight log</b> now explains revivals, and the <b>death map</b> and control heatmap are more accurate too.",
@@ -3895,7 +3905,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.09-c";
+const SITE_VERSION = "2026.08.09-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6616,7 +6626,41 @@ const RPT_L = {
   sc_ult:{ko:"궁 연계 {skills} → 처치 {got}",
     en:"Ult combo {skills} → {got} kills",
     ja:"ULT連携 {skills} → 撃破{got}",
-    zh:"大招連攜 {skills} → 擊殺 {got}"}
+    zh:"大招連攜 {skills} → 擊殺 {got}"},
+  /* 🔁 2026-08-09 15차(MAMMON 실측 R4A7SZ4A) — 쿨 짧은 기본기(세진 '전도파')를 쓸 때마다
+     명장면이 잡혀 "5개 중 5개가 전부 같은 줄"이 됐다. 서버(scene_list())가 같은 선수+같은
+     스킬을 경기 전체에 걸쳐 하나로 묶어 count·times 로 보내면, 아래 _multi 문장으로
+     "N번 반복 (예시 시각 · 외 M회)"를 보여준다. count 가 없거나 1이면(옛 리포트 포함)
+     위 sc_setup·sc_ult 문장이 그대로 쓰인다 — 하위 호환. */
+  scene_more:{ko:"외 {n}회", en:"+{n} more", ja:"他{n}回", zh:"另{n}次"},
+  sc_setup_multi:{ko:"‘{skill}’{jo} 반복해 잡아두며 총 {kills}번의 처치로 이어졌어요 ({ex})",
+    en:"{skill} kept locking them down — {kills} kills over the match ({ex})",
+    ja:"「{skill}」で繰り返し捕まえ、合計{kills}回の撃破につながりました（{ex}）",
+    zh:"反覆用「{skill}」控住，全場共造成 {kills} 次擊殺（{ex}）"},
+  sc_setup_stun_multi:{ko:"‘{skill}’{jo} 반복해 기절시키며 총 {kills}번의 처치로 이어졌어요 ({ex})",
+    en:"{skill} kept stunning them — {kills} kills over the match ({ex})",
+    ja:"「{skill}」で繰り返し気絶させ、合計{kills}回の撃破につながりました（{ex}）",
+    zh:"反覆用「{skill}」擊暈，全場共造成 {kills} 次擊殺（{ex}）"},
+  sc_setup_bind_multi:{ko:"‘{skill}’{jo} 반복해 묶으며 총 {kills}번의 처치로 이어졌어요 ({ex})",
+    en:"{skill} kept binding them — {kills} kills over the match ({ex})",
+    ja:"「{skill}」で繰り返し拘束し、合計{kills}回の撃破につながりました（{ex}）",
+    zh:"反覆用「{skill}」束縛，全場共造成 {kills} 次擊殺（{ex}）"},
+  sc_setup_pull_multi:{ko:"‘{skill}’{jo} 반복해 끌어당기며 총 {kills}번의 처치로 이어졌어요 ({ex})",
+    en:"{skill} kept pulling them in — {kills} kills over the match ({ex})",
+    ja:"「{skill}」で繰り返し引き寄せ、合計{kills}回の撃破につながりました（{ex}）",
+    zh:"反覆用「{skill}」拉近，全場共造成 {kills} 次擊殺（{ex}）"},
+  sc_setup_mark_multi:{ko:"‘{skill}’{jo} 판을 깔아 총 {kills}번의 처치로 이어졌어요 ({ex})",
+    en:"{skill} kept marking them for extra damage — {kills} kills over the match ({ex})",
+    ja:"「{skill}」で繰り返し被ダメージ増加マークを付け、合計{kills}回の撃破につながりました（{ex}）",
+    zh:"反覆用「{skill}」增加受傷標記，全場共造成 {kills} 次擊殺（{ex}）"},
+  sc_ult_multi:{ko:"궁 연계 {skills}를 {count}번 반복해 처치 {got}회로 이어졌어요 ({ex})",
+    en:"Ult combo {skills} repeated {count}× → {got} kills ({ex})",
+    ja:"ULT連携 {skills} を{count}回繰り返し → 撃破{got}（{ex}）",
+    zh:"大招連攜 {skills} 重複 {count} 次 → 擊殺 {got}（{ex}）"},
+  scene_cut:{ko:"이 경기의 다른 장면 {n}개는 생략했어요(중요한 것만 남김)",
+    en:"{n} more moments from this match were left out (kept the most notable ones)",
+    ja:"この試合の他の場面{n}件は省略しました(重要なものだけ表示)",
+    zh:"本場另外 {n} 個片段已省略(僅保留重點)"}
 };
 const RPL = k => { const o=RPT_L[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
 /* 🎓 코칭 문장 템플릿 — 서버는 판정(키+숫자)만 보내고 문장은 여기서 만든다.
@@ -7045,10 +7089,19 @@ function rptRender(r){
   }
   // ── ✨ 명장면 — 판 깔고 점사 / 궁 연계 (2026-08-09 12차) ──
   //    스킬 이름은 서버가 게임 공식 번역으로 넣어 준다. 옛 리포트엔 scenes 가 없다 → 통째로 생략.
+  //    🔁 15차(MAMMON 실측) — 서버가 같은 선수+같은 스킬 반복을 count/times 로 묶어 보낸다.
+  //       count>1 이면 "N번 반복(예시 시각 · 외 M회)" 문장, 없거나 1이면 옛 문장 그대로(하위 호환).
+  const sceneEx = times => {
+    const t = (Array.isArray(times) ? times : []).map(N).sort((a,b)=>a-b);
+    const shown = t.slice(0, 2).map(rptMMSS);
+    const rest = t.length - shown.length;
+    return rest > 0 ? shown.join(", ") + " " + RPL("scene_more").replace("{n}", rest) : shown.join(", ");
+  };
   const scenes = (Array.isArray(r.scenes) ? r.scenes : []).filter(x => x && typeof x === "object");
   if(scenes.length){
     const sl = scenes.slice().sort((a,b)=>N(a.s)-N(b.s)).map(x=>{
       let txt;
+      const multi = N(x.count) > 1;
       if(x.kind === "setup"){
         const i18 = x.skill_i18n;
         const sk = (i18 && typeof i18==="object" && (i18[LANG]||i18.en||i18.ko))
@@ -7056,21 +7109,28 @@ function rptRender(r){
         /* 효과 종류(stun/bind/pull/mark)별 문장 — 옛 리포트엔 setup_kind 가 없으므로
            그때는 RPT_L에 그 키가 없어 기존 sc_setup(중립 "잡아두고")으로 폴백한다. */
         const scKey = (x.setup_kind && RPT_L["sc_setup_" + x.setup_kind]) ? "sc_setup_" + x.setup_kind : "sc_setup";
-        txt = rptFill(RPL(scKey), {skill: esc(sk), jo: LANG==="ko" ? rptJosaRo(sk) : "",
+        const useKey = multi && RPT_L[scKey + "_multi"] ? scKey + "_multi" : scKey;
+        txt = rptFill(RPL(useKey), {skill: esc(sk), jo: LANG==="ko" ? rptJosaRo(sk) : "",
                                         n: N(x.n), tgt: nm(x.tgt),
-                                        kills: Math.max(1, N(x.kills))});
+                                        kills: Math.max(1, N(x.kills)), ex: sceneEx(x.times)});
       }else{
         const src = (Array.isArray(x.skills_i18n) && x.skills_i18n.length) ? x.skills_i18n : (x.skills||[]);
         const sks = src.map(y => (y && typeof y==="object") ? (y[LANG]||y.en||y.ko)
                                  : (typeof y==="string" ? y : null))
                        .filter(Boolean).map(esc).join(" + ") || "?";
-        txt = rptFill(RPL("sc_ult"), {skills: sks, got: N(x.got)});
+        const useKey = multi && RPT_L["sc_ult_multi"] ? "sc_ult_multi" : "sc_ult";
+        txt = rptFill(RPL(useKey), {skills: sks, got: N(x.got), count: N(x.count), ex: sceneEx(x.times)});
       }
       return `<div class="rptev" data-pid="${N(x.pid)}"><span class="tm">${rptMMSS(x.s)}</span>`
         + `<span>✨ <b class="${tcls(x.pid)}">${nm(x.pid)}</b> — ${txt}</span></div>`;
     }).join("");
+    // 🔁 우선순위 컷으로 빠진 장면 — 조용히 버리지 않고 "N개 생략" 을 밝힌다.
+    //    옛 리포트엔 scenes_more 가 없다 → N(undefined)=0 → 아무것도 안 뜬다(하위 호환).
+    const moreCnt = N(r.scenes_more) || 0;
+    const moreNote = moreCnt > 0
+      ? `<div class="rnote" style="margin-top:6px">${RPL("scene_cut").replace("{n}", moreCnt)}</div>` : "";
     H.push(`<div class="rptcard"><h3>✨ ${RPL("s_scene")}</h3>`
-      + `<div class="rnote">${RPL("scene_note")}</div>${sl}</div>`);
+      + `<div class="rnote">${RPL("scene_note")}</div>${sl}${moreNote}</div>`);
   }
   // ── ⚔️ 교전 일지 — "누가 먼저 걸었고, 몇대몇으로 시작해, 어느 쪽이 이겼나" ──
   //    "1팀 0명↓"이 안 읽힌다는 피드백(2026-08-09 요청 ③) → 이긴 팀 관점의 문장으로.
@@ -7123,19 +7183,33 @@ function rptRender(r){
     H.push(`<div class="rptcard"><h3>${RPL("fs_head")}</h3>${fl}</div>`);
   }
   // ── 플레이 스타일 (쉬운 말로 — "4/4·+0.10" 같은 암호를 없앰, 2026-08-09) ──
+  //    🔇 2026-08-09 15차(MAMMON 실측 R4A7SZ4A) — 6명 전원이 "⚖️ 팀과 함께 · 3번 중 3번"으로
+  //    똑같이 나온 적이 있다. **값이 전원 같은 열은 아무것도 알려주지 않는 소음**이다.
+  //    열마다 전원 같은 값인지 검사해 다르면 남기고 같으면 뺀다. 뺄 게 없어 남는 열이
+  //    0개면(전부 같음) 표 전체를 안 그린다(제목·설명문도 같이). 선수 이름 열은 항상 남긴다.
   const SC = RPL("scols");
-  H.push(`<div class="rptcard"><h3>${RPL("s_style")}</h3><div class="rnote">${RPL("style_note")}</div>`
-    + `<div class="rptwrap"><table class="rpttbl"><tr>${SC.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>`
-    + rows.map(p => { const st=p.style||{}; const u=p.ultv||[0,0,0];
-        let pos="–";
-        if(st.front!=null) pos = st.front>=0.05?RPL("sty_front"):(st.front<=-0.05?RPL("sty_back"):RPL("sty_mid"));
-        const part = st.part?RPL("part_fmt").replace("{n}",N(st.part[1])).replace("{p}",N(st.part[0])):"–";
-        const ult = u[0]?RPL("ult_perf").replace("{n}",N(u[0])).replace("{got}",N(u[1])):RPL("ult_none");
-        return `<tr class="rptrow" data-pid="${N(p.pid)}"><td class="${p.team===1?'rptt1':'rptt2'}">${rptName(p)}</td>`
-          + `<td>${pos}</td><td>${part}</td>`
-          + `<td>${p.alive!=null?Math.round(N(p.alive)*100)+"%":"–"}</td>`
-          + `<td>${ult}</td></tr>`; }).join("")
-    + `</table></div></div>`);
+  const styleRows = rows.map(p => {
+    const st = p.style || {}; const u = p.ultv || [0, 0, 0];
+    let pos = "–";
+    if(st.front != null) pos = st.front >= 0.05 ? RPL("sty_front") : (st.front <= -0.05 ? RPL("sty_back") : RPL("sty_mid"));
+    const part = st.part ? RPL("part_fmt").replace("{n}", N(st.part[1])).replace("{p}", N(st.part[0])) : "–";
+    const alive = p.alive != null ? Math.round(N(p.alive) * 100) + "%" : "–";
+    const ult = u[0] ? RPL("ult_perf").replace("{n}", N(u[0])).replace("{got}", N(u[1])) : RPL("ult_none");
+    return {p, cells: [pos, part, alive, ult]};
+  });
+  const styleColN = SC.length - 1;   // 선수 이름 열 제외한 데이터 열 개수
+  const styleColKeep = Array.from({length: styleColN}, (_, i) =>
+    styleRows.length <= 1 || styleRows.some(r => r.cells[i] !== styleRows[0].cells[i]));
+  if(styleColKeep.some(Boolean)){
+    const headCells = [SC[0]].concat(SC.slice(1).filter((_, i) => styleColKeep[i]));
+    const bodyRows = styleRows.map(r => {
+      const kept = r.cells.filter((_, i) => styleColKeep[i]);
+      return `<tr class="rptrow" data-pid="${N(r.p.pid)}"><td class="${r.p.team===1?'rptt1':'rptt2'}">${rptName(r.p)}</td>`
+        + kept.map(c => `<td>${c}</td>`).join("") + `</tr>`;
+    }).join("");
+    H.push(`<div class="rptcard"><h3>${RPL("s_style")}</h3><div class="rnote">${RPL("style_note")}</div>`
+      + `<div class="rptwrap"><table class="rpttbl"><tr>${headCells.map(c=>`<th>${esc(c)}</th>`).join("")}</tr>${bodyRows}</table></div></div>`);
+  }
   // ── 💀 사망 심화 — 죽음마다 "그때 상황"을 문장+칩으로 (지도 번호와 연동) ──
   //    문장 빌더는 함수로 분리 — 지도 캡션(요청 ④)이 같은 문장을 재사용한다.
   const rptDeathLine = (ev, ix) => {
