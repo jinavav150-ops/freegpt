@@ -960,6 +960,9 @@
   .rptt1{color:#4dabf7}.rptt2{color:#ff6b6b}
   .rptev{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--line);font-size:12px}
   .rptev .tm{color:var(--sub);font-variant-numeric:tabular-nums;min-width:44px;flex-shrink:0}
+  /* 🧩 왜 졌나 — 고리 한 줄씩. 문장이 길어 줄바꿈이 잦으니 행간을 넉넉히. */
+  .rwl{margin-top:3px;line-height:1.55;word-break:keep-all}
+  .rwside{font-size:11px;color:var(--sub);font-weight:400;margin-left:6px}
   .rptsvg{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
   .rptchip{display:inline-block;background:rgba(255,107,107,.13);border:1px solid rgba(255,107,107,.35);
     color:#ffb3b3;border-radius:20px;padding:0 7px;font-size:10.5px;margin-left:4px;white-space:nowrap}
@@ -2803,6 +2806,16 @@ const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 —
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-08-10",
+    ko:"🧩 경기 분석에 <b>‘왜 졌나’</b>가 생겼어요 — 이제 “혼자 죽었다” 같은 결과만이 아니라, <b>그렇게 되도록 만든 앞 상황</b>까지 이어서 말해 드립니다. 상대 궁이 몇 초째 차 있었는지, 그때 우리가 평소보다 얼마나 뭉쳐 있었는지, 정비 없이 다시 들어갔는지 — 판이 갈린 순간 1~2개를 문장으로 풀어 줘요. 픽 자체가 불리했으면 그것도 맨 앞에 알려 드립니다.",
+    en:"🧩 Match Report now answers <b>“Why the loss”</b> — instead of just the outcome (“you died alone”), it traces back to <b>what set it up</b>: how long the enemy had been sitting on an ult, how tightly you were bunched compared to your usual spacing, whether you re-engaged with no time to regroup. One or two decisive moments, written out. If the draft itself was against you, that's called out first.",
+    ja:"🧩 試合分析に<b>「なぜ負けたか」</b>が加わりました — 「単独で倒された」といった結果だけでなく、<b>そうなる原因</b>までさかのぼって説明します。相手のULTが何秒たまっていたか、その時どれだけ固まっていたか、立て直さずに再突入したか — 勝敗を分けた場面を1〜2個、文章で示します。ピック自体が不利だった場合は最初に伝えます。",
+    zh:"🧩 對局分析新增<b>「為何落敗」</b> — 不再只講結果（「你落單被擊倒」），而是回溯<b>促成它的前因</b>：對手大招蓄滿了幾秒、當時你們比平時擠得多近、是否沒有重整就再度進場。用文字說明 1～2 個決定勝負的瞬間。若是選角本身就吃虧，也會先告訴你。",
+    fr:"🧩 L'analyse de match répond maintenant à <b>« Pourquoi cette défaite »</b> — au lieu du seul résultat, elle remonte à ce qui l'a provoqué : depuis combien de temps l'adversaire gardait son ultime, à quel point vous étiez regroupés par rapport à votre écart habituel, si vous êtes repartis au combat sans temps de récupération. Un ou deux moments décisifs, expliqués.",
+    de:"🧩 Die Matchanalyse beantwortet jetzt <b>„Warum die Niederlage“</b> — statt nur das Ergebnis zu nennen, geht sie zurück zu den Ursachen: wie lange der Gegner seine Ultimate schon bereithielt, wie eng ihr im Vergleich zu eurem üblichen Abstand zusammenstandet, ob ihr ohne Zeit zum Sammeln erneut angegriffen habt. Ein bis zwei entscheidende Momente, ausformuliert.",
+    es:"🧩 El análisis de partida ahora responde <b>«Por qué se perdió»</b> — en lugar de solo el resultado, se remonta a lo que lo provocó: cuánto tiempo llevaba el rival con su definitiva lista, qué tan agrupados estaban frente a su separación habitual, si volvieron a entrar sin tiempo para reagruparse. Uno o dos momentos decisivos, explicados.",
+    pt:"🧩 A análise de partida agora responde <b>“Por que a derrota”</b> — em vez de apenas o resultado, ela volta ao que a causou: há quanto tempo o adversário segurava a ultimate, o quão agrupados vocês estavam em relação ao espaçamento habitual, se voltaram ao combate sem tempo de se reorganizar. Um ou dois momentos decisivos, explicados.",
+    ru:"🧩 В разборе матча появился раздел <b>«Почему проиграли»</b> — теперь это не только итог, но и то, <b>что к нему привело</b>: сколько секунд у соперника был готов ультимейт, насколько плотно вы стояли по сравнению с обычной дистанцией, входили ли вы в бой снова без передышки. Один-два решающих момента, разобранных словами." },
+  { date:"2026-08-10",
     ko:"💾 경기 저장이 이제 진짜로 돼요 — 분석한 경기가 저장돼서 다음에 보는 사람은 기다림 없이 바로 떠요. ✨ 명장면도 같은 장면이 반복되던 걸 정리해서 한눈에 보기 편해졌어요.",
     en:"💾 Match saving now actually works — analyzed matches are saved, so the next viewer sees them instantly with no wait. ✨ Highlights are also cleaner — repeated identical plays are now merged into one line.",
     ja:"💾 試合の保存が本当に機能するようになりました — 分析した試合が保存され、次に見る人は待たずにすぐ表示されます。✨ ハイライトも同じ場面の繰り返しがまとめられ、見やすくなりました。",
@@ -3905,7 +3918,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.09-d";
+const SITE_VERSION = "2026.08.10-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6772,6 +6785,117 @@ const rptMMSS = s => { const v=Math.max(0,Math.round(s)); return String(Math.flo
 const rptVisName = p => { if(!p) return null;
   const vis = String(p.name||"").replace(/[\s\u1160\u115F\u3164\uFFA0\u200B-\u200F\u2060\uFEFF\u00A0\u2800]/g,"");
   return vis ? String(p.name) : null; };
+/* ═══ 🧩 왜 졌나 — 인과 사슬 (2026-08-10) ═══════════════════════════════
+   MAMMON(2026-08-09): "많이 맞아서 데미지가 많은 건 당연하다. **어떻게 이기는지,
+   왜 졌는지**가 궁금하다." → 지금까지 리포트는 사슬의 마지막 칸("혼자 죽었다")만
+   말했다. 값어치는 앞 칸(상대 궁이 차 있었다 · 뭉쳐 있었다 · 인원 열세)에 있다.
+
+   서버(`why_lost()`)가 고리(link) 목록만 보내고, 문장은 여기서 언어별로 만든다.
+   🪤 고리 문장에 "그래서·그런데" 같은 **접속어를 넣지 말 것** — 앞 고리가 없는
+      장면에서 문장이 어긋난다. 각 고리는 홀로 서는 한 문장이어야 한다. */
+const RPT_WHY = {
+  s_why:{ko:"왜 졌나",en:"Why the loss",ja:"なぜ負けたか",zh:"為何落敗"},
+  why_note:{ko:"판이 갈린 순간을, 그렇게 되도록 만든 앞 상황까지 거슬러 이어 붙였어요. 숫자는 주장이 아니라 근거예요 — ‘39초’는 정보가 아니라 ‘충분히 볼 시간이 있었다’는 뜻입니다.",
+    en:"The moments that decided the match, traced back to what set them up. The numbers are evidence, not the point — “39s” means there was time to see it coming.",
+    ja:"勝敗が決まった場面を、そうなる原因までさかのぼって並べました。数字は主張ではなく根拠です — 「39秒」は情報ではなく「見る時間は十分あった」という意味です。",
+    zh:"把決定勝負的瞬間，連同促成它的前因一起串起來。數字是佐證而非重點 —「39 秒」的意思是「有足夠時間察覺」。"},
+  why_side:{ko:"{team}팀 관점",en:"From Team {team}’s side",ja:"{team}チーム視点",zh:"{team}隊視角"},
+  why_pick:{ko:"픽 — 시작부터 상성이 불리했어요 (상성 점수 {score})",
+    en:"Draft — the matchup was against you from the start (score {score})",
+    ja:"ピック — 最初から相性で不利でした（相性スコア {score}）",
+    zh:"選角 — 一開始就處於克制劣勢（克制分數 {score}）"},
+  ultheld:{ko:"상대 {who}의 궁이 이미 {hold}초째 차 있었고, 그 궁이 여기서 터졌어요.",
+    en:"{who} had been holding an ult for {hold}s — and it landed right here.",
+    ja:"相手 {who} のULTはすでに{hold}秒たまっていて、ここで使われました。",
+    zh:"對手 {who} 的大招已蓄滿 {hold} 秒，就在這裡放了出來。"},
+  ultheld_n:{ko:"상대 궁 {n}개가 이미 {hold}초째 차 있는 상태로 들어갔고, 그게 여기서 터졌어요.",
+    en:"You went in while {n} enemy ults had been up for {hold}s — and they landed here.",
+    ja:"相手のULT{n}個が{hold}秒たまった状態で突入し、ここで使われました。",
+    zh:"在對手 {n} 個大招已蓄滿 {hold} 秒的情況下進場，然後就被放了出來。"},
+  outnum:{ko:"{a}대{e} — 인원이 갖춰지기 전에 싸움이 시작됐어요.",
+    en:"{a}v{e} — the fight started before your side was whole.",
+    ja:"{a}対{e} — 人数が揃う前に戦闘が始まりました。",
+    zh:"{a} 對 {e} — 人數還沒到齊就開打了。"},
+  grouped:{ko:"그 직전 {n}명이 {r}유닛 안에 뭉쳐 있었어요 — 이 경기에서 평소 간격은 {base}유닛이었습니다.",
+    en:"Just before it, {n} of you were within {r} units — your usual spacing this match was {base}.",
+    ja:"その直前、{n}人が{r}ユニット以内に固まっていました（この試合の普段の間隔は{base}）。",
+    zh:"就在那之前，{n} 人擠在 {r} 單位內 — 這場你們平時的間距是 {base}。"},
+  restart:{ko:"직전 교전에서 밀린 지 {gap}초 만에 다시 들어갔어요 — 정비할 틈이 없었습니다.",
+    en:"You re-engaged {gap}s after losing the previous fight — no time to regroup.",
+    ja:"直前の交戦で押された{gap}秒後に再突入 — 立て直す時間がありませんでした。",
+    zh:"上一波輸掉後僅 {gap} 秒就再度進場 — 沒有時間重整。"},
+  /* 효과 종류별(stun/bind/pull/mark). kind 가 없으면 중립 'caught' 로 떨어진다. */
+  caught:{ko:"‘{skill}’{jo} {n}명이 한꺼번에 잡혔습니다.",en:"{skill} caught {n} of you at once.",
+    ja:"「{skill}」で{n}人が同時に捕まりました。",zh:"「{skill}」一次控住了 {n} 人。"},
+  caught_stun:{ko:"‘{skill}’{jo} {n}명이 한꺼번에 기절했습니다.",en:"{skill} stunned {n} of you at once.",
+    ja:"「{skill}」で{n}人が同時に気絶しました。",zh:"「{skill}」一次擊暈了 {n} 人。"},
+  caught_bind:{ko:"‘{skill}’{jo} {n}명이 한꺼번에 묶였습니다.",en:"{skill} bound {n} of you at once.",
+    ja:"「{skill}」で{n}人が同時に拘束されました。",zh:"「{skill}」一次束縛了 {n} 人。"},
+  caught_pull:{ko:"‘{skill}’{jo} {n}명이 한꺼번에 끌려갔습니다.",en:"{skill} pulled {n} of you in at once.",
+    ja:"「{skill}」で{n}人が同時に引き寄せられました。",zh:"「{skill}」一次拉走了 {n} 人。"},
+  caught_mark:{ko:"‘{skill}’{jo} {n}명이 한꺼번에 표식이 찍혔습니다.",en:"{skill} marked {n} of you for extra damage at once.",
+    ja:"「{skill}」で{n}人が同時に被ダメージ増加マークを付けられました。",zh:"「{skill}」一次為 {n} 人加上了受傷標記。"},
+  wiped:{ko:"{sec}초 만에 {n}명이 쓰러졌어요.",en:"{n} of you went down in {sec}s.",
+    ja:"{sec}秒で{n}人が倒れました。",zh:"{sec} 秒內 {n} 人倒下。"},
+  wiped_all:{ko:"{sec}초 만에 팀 {n}명 전원이 쓰러졌어요.",en:"The whole team ({n}) went down in {sec}s.",
+    ja:"{sec}秒でチーム{n}人全員が倒れました。",zh:"{sec} 秒內全隊 {n} 人倒下。"},
+  wiped_now:{ko:"거의 동시에 {n}명이 쓰러졌어요.",en:"{n} of you went down almost simultaneously.",
+    ja:"ほぼ同時に{n}人が倒れました。",zh:"幾乎同時 {n} 人倒下。"},
+  wiped_now_all:{ko:"거의 동시에 팀 {n}명 전원이 쓰러졌어요.",en:"The whole team ({n}) went down almost simultaneously.",
+    ja:"ほぼ同時にチーム{n}人全員が倒れました。",zh:"幾乎同時全隊 {n} 人倒下。"},
+  again:{ko:"(그중 {again}번은 부활한 뒤 다시 당한 것입니다.)",en:"({again} of those were after respawning.)",
+    ja:"（うち{again}回は復活後に再び倒されたものです。）",zh:"（其中 {again} 次是重生後再次被擊倒。）"},
+  flip:{ko:"리드가 여기서 {team}팀으로 넘어갔습니다 — 이 장면이 판을 갈랐어요.",
+    en:"The lead flipped to Team {team} right here — this is the moment that decided it.",
+    ja:"ここでリードが{team}チームに移りました — この場面が勝敗を分けました。",
+    zh:"領先在此易主到 {team} 隊 — 這一幕決定了勝負。"}
+};
+const RWY = k => { const o=RPT_WHY[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
+
+/* 고리 → 문장 템플릿 키. ⚠️ 서버(`match_report.why_key()`)와 **같은 규칙**이어야 한다. */
+function rptWhyKey(l){
+  if(l.k === "ultheld") return (l.n > 1) ? "ultheld_n" : "ultheld";
+  if(l.k === "caught" && l.kind && RPT_WHY["caught_" + l.kind]) return "caught_" + l.kind;
+  if(l.k === "wiped") return ((l.sec < 0.5) ? "wiped_now" : "wiped") + (l.all ? "_all" : "");
+  return l.k;
+}
+function rptWhyLine(l, P, nameOf){
+  const t = RWY(rptWhyKey(l));
+  if(!t || !RPT_WHY[rptWhyKey(l)]) return null;      // 모르는 키 = 서버가 더 새것 → 건너뜀
+  const vals = Object.assign({}, l);
+  if(Array.isArray(l.who)) vals.who = l.who.map(p => P[p] ? nameOf(P[p]) : "?").join(", ");
+  if(l.skill_i18n && typeof l.skill_i18n === "object")
+    vals.skill = l.skill_i18n[LANG] || l.skill_i18n.en || l.skill_i18n.ko || vals.skill;
+  if(vals.skill !== undefined) vals.jo = (LANG==="ko") ? rptJosaRo(vals.skill) : "";
+  let s = esc(rptFill(t, vals));
+  if(l.again) s += " " + esc(rptFill(RWY("again"), vals));
+  return s;
+}
+
+/* 🎲 픽 상성 — **사이트가 직접 계산한다**(서버가 안 보낸다).
+   상성표(MATCHUPS)의 주인은 이 파일이고 관리자 UI로 고칠 수 있으며 설명문에 9개 언어
+   번역이 붙어 있다. 서버로 복사하면 고칠 때마다 두 곳이 어긋난다.
+   🪤 MATCHUPS·T 는 **클래식 스코프**다 — 모듈에서 쓰려면 존재 검사를 같이 넣을 것(§스코프 함정).
+   실측(리플레이 18개): 진 팀의 상성 점수 분포는 [-5,-4,-2,0,0,0,0,1,1,1,1,1,4,4,4,5,6,6]
+   — **대개 픽이 패인이 아니었다.** 그래서 정말 기울었을 때(≤ -2, 18경기 중 3경기)만 낸다. */
+function rptPickRead(r, loser){
+  const M = (typeof MATCHUPS !== "undefined" && MATCHUPS) || null;
+  if(!M || !loser) return null;
+  const tr = s => (typeof T === "function") ? T(s) : s;
+  const mine = [], them = [];
+  (r.players||[]).forEach(p => { if(p && p.hero) (p.team===loser?mine:them).push(p.hero); });
+  if(!mine.length || !them.length) return null;
+  let score = 0; const bad = [];
+  mine.forEach(a => them.forEach(b => {
+    const adv = M[a+">"+b], dis = M[b+">"+a];
+    if(adv) score += adv[0];
+    if(dis){ score -= dis[0]; bad.push({me:a, foe:b, w:dis[0], why:dis[1]}); }
+  }));
+  if(score > -2 || !bad.length) return null;
+  bad.sort((x,y)=>y.w-x.w);
+  return {score, bad: bad.slice(0,3)};
+}
+
 /* 한국어 조사 '으로/로' — 스킬 이름이 데이터에서 오므로 받침을 보고 골라야 한다.
    받침이 없거나 'ㄹ'이면 '로', 아니면 '으로'. 한글이 아니면 '로'. */
 function rptJosaRo(word){
@@ -7018,7 +7142,36 @@ function rptRender(r){
     + (acePid!==undefined?`<div class="rnote" style="text-align:center;margin-top:8px">${RPL("ace_note")}</div>`:"")
     + (hasBot?`<div class="rnote">${RPL("botwarn")}</div>`:"")
     + `<div class="rnote">${chkAll?"✅ "+RPL("chk_ok"):"⚠️ "+RPL("chk_warn")} (${r.check_ok?N(r.check_ok[0])+"/"+N(r.check_ok[1]):"?"})</div></div>`);
-  // ── 🎓 코칭 코멘트 (제일 위 — 유저가 제일 궁금한 "왜 졌나·뭘 고치나") ──
+  // ── 🧩 왜 졌나 (제일 위 — 유저가 제일 궁금한 것. 코칭 코멘트보다 먼저) ──
+  //    옛 리포트에는 r.why 가 없다 → 절이 통째로 안 그려진다(하위 호환).
+  const why = (r.why && typeof r.why === "object") ? r.why : null;
+  const whyScenes = (why && Array.isArray(why.scenes)) ? why.scenes.filter(s=>s&&Array.isArray(s.links)) : [];
+  if(whyScenes.length){
+    const pick = rptPickRead(r, why.team);
+    const trw = s => (typeof T === "function") ? T(s) : s;
+    /* 영웅 표기 — 사이트의 HEROES(9개 언어 이름)를 쓰고, 없으면 리포트의 hero_disp 로. */
+    const hName = k => { const h = (typeof HEROES!=="undefined" && HEROES[k]) || null;
+      if(h) return trw(h.ko);
+      const p = (r.players||[]).find(q => q && q.hero === k);
+      return (p && p.hero_disp) || k; };
+    const blocks = [];
+    if(pick){
+      blocks.push(`<div class="rptev"><span><b>${esc(rptFill(RWY("why_pick"),{score:(pick.score>0?"+":"")+pick.score}))}</b>`
+        + pick.bad.map(x=>`<div class="rwl">${esc(hName(x.me))} vs ${esc(hName(x.foe))} — ${esc(trw(x.why))}</div>`).join("")
+        + `</span></div>`);
+    }
+    whyScenes.forEach(sc => {
+      const lines = sc.links.map(l => rptWhyLine(l, P, rptNameRaw)).filter(Boolean);
+      if(!lines.length) return;
+      blocks.push(`<div class="rptev"><span><b>${esc(rptMMSS(sc.s))}</b>`
+        + lines.map(x=>`<div class="rwl">${x}</div>`).join("") + `</span></div>`);
+    });
+    if(blocks.length){
+      H.push(`<div class="rptcard"><h3>🧩 ${RWY("s_why")} <span class="rwside">${esc(rptFill(RWY("why_side"),{team:why.team}))}</span></h3>`
+        + `<div class="rnote">${RWY("why_note")}</div>` + blocks.join("") + `</div>`);
+    }
+  }
+  // ── 🎓 코칭 코멘트 ──
   const coachList = (Array.isArray(r.coach) ? r.coach : []).filter(c => c && typeof c === "object");
   if(coachList.length){
     const lines = coachList.map(c => {
