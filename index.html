@@ -962,6 +962,14 @@
   .rptev .tm{color:var(--sub);font-variant-numeric:tabular-nums;min-width:44px;flex-shrink:0}
   /* 🧩 왜 졌나 — 고리 한 줄씩. 문장이 길어 줄바꿈이 잦으니 행간을 넉넉히. */
   .rwl{margin-top:3px;line-height:1.55;word-break:keep-all}
+  /* 🏆 대회 탭 */
+  .trrow{display:flex;gap:10px;align-items:center;padding:4px 0;font-size:13px}
+  .trrow b{min-width:64px;color:var(--sub);font-weight:600;flex-shrink:0}
+  .trchip{display:inline-block;background:rgba(255,193,94,.14);border:1px solid rgba(255,193,94,.4);
+    color:#ffd08a;border-radius:20px;padding:1px 9px;font-size:11.5px}
+  .trin{display:block;width:100%;box-sizing:border-box;margin-top:6px}
+  .trck{display:flex;gap:7px;align-items:center;margin-top:9px;font-size:12.5px;color:var(--sub);cursor:pointer}
+  .trbtns{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
   .rwside{font-size:11px;color:var(--sub);font-weight:400;margin-left:6px}
   .rptsvg{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
   .rptchip{display:inline-block;background:rgba(255,107,107,.13);border:1px solid rgba(255,107,107,.35);
@@ -1126,6 +1134,14 @@
   </section>
 
   <!-- 🎬 크리에이터 탭 (내용은 renderCreators가 9개 언어로 렌더. 목록 비면 서브탭 자체가 숨겨짐) -->
+  <!-- 🏆 대회 탭 — 문구는 TR_L(4개 언어). 내용은 관리자 UI로 넣는다(배포 불필요).
+       tourney/meta(설정) · tourney/teams(신청) · tourney/contact(연락처, 비공개). 규칙 v29 필요. -->
+  <section id="tab-tourney" class="tab">
+    <div id="trHead"></div>
+    <div id="trBody"></div>
+    <div id="trAdmin" style="display:none"></div>
+  </section>
+
   <section id="tab-creators" class="tab">
     <div id="creHead"></div>
     <div id="creList"></div>
@@ -2805,6 +2821,16 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-08-18",
+    ko:"🏆 <b>커뮤니티 컵</b>이 열립니다! 공략 메뉴에 <b>대회</b> 탭이 생겼어요 — 사이트에서 바로 참가 신청할 수 있습니다. 3v3이고 <b>아시아 시간대</b>에 열리지만 <b>지역 제한은 없어요</b>. 팀원이 없어도 신청하면 다른 분들과 묶어드립니다. 개발사에서 <b>상품(꾸미기 칭호 · 젬)</b>도 지원해 주기로 했어요. 연락처는 운영자만 볼 수 있습니다.",
+    en:"🏆 A <b>Community Cup</b> is happening! There's a new <b>Cup</b> tab under Guides — you can enter straight from the site. It's 3v3, held in <b>Asian time zones</b>, but there's <b>no region restriction</b>. No team? Enter anyway and I'll match you with others. The developers are supporting it with <b>prizes (a cosmetic title and gems)</b>. Your contact details are visible only to the organiser.",
+    ja:"🏆 <b>コミュニティカップ</b>を開催します！攻略メニューに<b>大会</b>タブができました — サイトから直接申し込めます。3v3、<b>アジアの時間帯</b>ですが<b>地域制限はありません</b>。チームがなくても申し込めば他の方と組ませます。開発元から<b>賞品（꾸미기称号・ジェム）</b>の支援もあります。連絡先は運営者だけが見られます。",
+    zh:"🏆 <b>社群盃</b>即將開賽！攻略選單新增<b>賽事</b>分頁 — 可直接在網站報名。3v3，於<b>亞洲時區</b>舉行，但<b>沒有地區限制</b>。沒有隊友也能報名，我會幫你配對。開發商也會提供<b>獎品（外觀稱號・寶石）</b>。聯絡方式僅主辦者可見。",
+    fr:"🏆 Une <b>Community Cup</b> arrive ! Un nouvel onglet <b>Tournoi</b> permet de s'inscrire directement depuis le site. 3v3, aux fuseaux horaires asiatiques, sans restriction de région. Pas d'équipe ? Inscris-toi quand même, je te trouverai des coéquipiers. Les développeurs offrent des récompenses (titre cosmétique et gemmes).",
+    de:"🏆 Ein <b>Community Cup</b> kommt! Ein neuer <b>Turnier</b>-Tab erlaubt die Anmeldung direkt auf der Seite. 3v3, in asiatischen Zeitzonen, ohne Regionsbeschränkung. Kein Team? Melde dich trotzdem an, ich bringe dich mit anderen zusammen. Die Entwickler steuern Preise bei (kosmetischer Titel und Gems).",
+    es:"🏆 ¡Llega una <b>Community Cup</b>! Hay una nueva pestaña <b>Torneo</b> para inscribirte desde el sitio. 3v3, en zonas horarias asiáticas, sin restricción de región. ¿Sin equipo? Inscríbete igual y te emparejo. Los desarrolladores aportan premios (título cosmético y gemas).",
+    pt:"🏆 Vem aí uma <b>Community Cup</b>! Há uma nova aba <b>Torneio</b> para se inscrever pelo site. 3v3, em fusos horários asiáticos, sem restrição de região. Sem equipe? Inscreva-se mesmo assim e eu monto uma. Os desenvolvedores vão dar prêmios (título cosmético e gemas).",
+    ru:"🏆 Скоро <b>Community Cup</b>! Появилась вкладка <b>Турнир</b> — заявку можно подать прямо на сайте. 3v3, в азиатских часовых поясах, без ограничений по региону. Нет команды? Подавайте заявку — подберу напарников. Разработчики поддержат призами (косметический титул и самоцветы)." },
   { date:"2026-08-10",
     ko:"🧩 경기 분석에 <b>‘왜 졌나’</b>가 생겼어요 — 이제 “혼자 죽었다” 같은 결과만이 아니라, <b>그렇게 되도록 만든 앞 상황</b>까지 이어서 말해 드립니다. 상대 궁이 몇 초째 차 있었는지, 그때 우리가 평소보다 얼마나 뭉쳐 있었는지, 정비 없이 다시 들어갔는지 — 판이 갈린 순간 1~2개를 문장으로 풀어 줘요. 픽 자체가 불리했으면 그것도 맨 앞에 알려 드립니다.",
     en:"🧩 Match Report now answers <b>“Why the loss”</b> — instead of just the outcome (“you died alone”), it traces back to <b>what set it up</b>: how long the enemy had been sitting on an ult, how tightly you were bunched compared to your usual spacing, whether you re-engaged with no time to regroup. One or two decisive moments, written out. If the draft itself was against you, that's called out first.",
@@ -3435,7 +3461,7 @@ function applyHeader(){
 const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, board:{g:"talk", view:"board"},
-  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, creators:{g:"guide", view:"creators"},
+  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"guide", view:"tourney"}, creators:{g:"guide", view:"creators"},
   dex:{g:"codex", view:"dex"}, info:{g:"codex", view:"info"}, codes:{g:"codex", view:"codes"}, issues:{g:"codex", view:"issues"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
@@ -3448,7 +3474,7 @@ const CODES_ENABLED = true;   /* 2026-07-25 복구: 구글 검토 통과 후 안
 const NAV_GROUPS = {
   notice:{ subs:["notice"], solo:true },
   talk:{ subs:["chat","board"] },
-  guide:{ subs:["pick","replay","builds","tier","tips","creators"] },
+  guide:{ subs:["pick","replay","builds","tier","tips","tourney","creators"] },
   codex:{ subs:["dex","info","codes","issues"] },
   feedback:{ subs:["fb"], solo:true },
   stats:{ subs:["stats"], solo:true }
@@ -3474,6 +3500,7 @@ const SUB_LABEL = {
   info:{ko:"게임 시스템",en:"Game System",ja:"ゲームシステム",zh:"遊戲系統",fr:"Système de jeu",de:"Spielsystem",es:"Sistema de juego",pt:"Sistema do jogo",ru:"Система игры"},
   issues:{ko:"이슈",en:"Issues",ja:"不具合",zh:"問題",fr:"Problèmes",de:"Probleme",es:"Problemas",pt:"Problemas",ru:"Проблемы"},
   codes:{ko:"코드",en:"Codes",ja:"コード",zh:"兌換碼",fr:"Codes",de:"Codes",es:"Códigos",pt:"Códigos",ru:"Коды"},
+  tourney:{ko:"대회",en:"Cup",ja:"大会",zh:"賽事",fr:"Tournoi",de:"Turnier",es:"Torneo",pt:"Torneio",ru:"Турнир"},
   creators:{ko:"크리에이터",en:"Creators",ja:"クリエイター",zh:"創作者",fr:"Créateurs",de:"Creator",es:"Creadores",pt:"Criadores",ru:"Авторы"},
   fb:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋",fr:"Feedback",de:"Feedback",es:"Feedback",pt:"Feedback",ru:"Отзывы"},
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計",fr:"Stats",de:"Statistik",es:"Estadísticas",pt:"Estatísticas",ru:"Статистика"}
@@ -3490,6 +3517,7 @@ const SUB_ICON = {
   info:'<svg viewBox="0 0 24 24"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><line x1="9" y1="4" x2="9" y2="17"/><line x1="15" y1="6.5" x2="15" y2="19.5"/></svg>',
   issues:'<svg viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>',
   codes:'<svg viewBox="0 0 24 24"><rect x="3.5" y="8.5" width="17" height="12" rx="1.5"/><path d="M3.5 12.5h17"/><path d="M12 8.5v12"/><path d="M12 8.5S10.5 4.5 8 4.5a2 2 0 0 0 0 4z"/><path d="M12 8.5s1.5-4 4-4a2 2 0 0 1 0 4z"/></svg>',
+  tourney:'<svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5.5H4.5v1A3.5 3.5 0 0 0 8 10"/><path d="M17 5.5h2.5v1A3.5 3.5 0 0 1 16 10"/><path d="M12 14v3"/><path d="M8.5 20h7"/><path d="M10 17h4l.7 3h-5.4z"/></svg>',
   creators:'<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10.3 9.3l4.6 2.7-4.6 2.7z"/></svg>'
 };
 const SL = s => (SUB_LABEL[s]||{})[LANG] || (SUB_LABEL[s]||{}).ko || s;
@@ -3516,6 +3544,7 @@ function renderSubnav(){
   // 🎬 크리에이터는 명단이 비면 서브탭 자체를 숨김(텅 빈 탭 = 파티 찾기의 실패 원인). 관리자는 채워 넣어야 하니 항상 보임.
   const subs = grp.subs.filter(s =>
     (s!=="creators" || (window.rsCreVisible ? window.rsCreVisible() : false)) &&
+    (s!=="tourney"  || (window.rsTrVisible  ? window.rsTrVisible()  : false)) &&
     (s!=="codes" || CODES_ENABLED));   // 🎁 코드 탭은 CODES_ENABLED=false면 숨김(구글 검토 대응)
   bar.innerHTML = subs.map(s=>{
     return `<button data-sub="${s}" class="${s===cur?'on':''}">${SUB_ICON[s]||''}<span>${SL(s)}</span></button>`;
@@ -3918,7 +3947,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.10-a";
+const SITE_VERSION = "2026.08.18-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5162,6 +5191,276 @@ FB.onValue(FB.ref(FB.db, "creators"), snap => {
     .sort((a,b)=>(a.ts||0)-(b.ts||0));   // 등록순 고정 = 순위 아님
   renderCreators();
 }, () => { creCache = []; renderCreators(); });
+
+/* ══════ 🏆 대회 (커뮤니티 컵) — 2026-08-18 ══════
+   목적: 아시아 시간대 대회를 **팬사이트 안에서** 접수·안내한다. 카카오톡이 주 무대라
+         구조적인 접수를 받을 곳이 여기밖에 없다(디스코드는 아시아 유저 유입이 낮음).
+   구조 (규칙 v29):
+     tourney/meta      = 대회 설정(관리자만 쓰기, 공개 읽기) — on/title/date/tz/state/note
+     tourney/teams/<uid> = 참가 신청. **키가 uid** 라서 "1인 1팀"이 규칙으로 강제된다.
+     tourney/contact/<uid> = 🔒 연락처. **본인과 관리자만 읽는다**(개인정보).
+   🪤 `tourney` 상위에 `.read` 를 걸면 안 된다 — Firebase 는 위에서 허용한 읽기를
+      아래에서 못 막아서 연락처가 통째로 공개된다. 공개할 하위 노드마다 따로 준다.
+   🪤 진행 중인 대회가 없으면(meta.on=false) **서브탭 자체가 숨겨진다**(rsTrVisible).
+      텅 빈 탭을 남기지 않기 위함 — 크리에이터 탭과 같은 방식. */
+const TR_L = {
+  head:{ko:"커뮤니티 컵",en:"Community Cup",ja:"コミュニティカップ",zh:"社群盃"},
+  sub:{ko:"3v3 커뮤니티 대회 — 누구나 참가할 수 있어요",en:"A 3v3 community tournament — everyone is welcome",ja:"3v3 コミュニティ大会 — どなたでも参加できます",zh:"3v3 社群賽事 — 歡迎所有人參加"},
+  /* ⚠️ 참가 자격을 나라로 막지 않는다(2026-08-18 MAMMON 결정) — 아시아 시간대로 열지만
+     유럽 팀이 오고 싶으면 환영. 대신 시간대를 분명히 밝혀 헛걸음을 막는다. */
+  open:{ko:"아시아 시간대에 열리지만 지역 제한은 없어요. 시간만 맞으면 어느 서버든 환영합니다.",
+    en:"Held in Asian time zones, but there is no region restriction — any server is welcome if the time works for you.",
+    ja:"アジアの時間帯に開催しますが地域制限はありません。時間が合えばどのサーバーでも歓迎です。",
+    zh:"於亞洲時區舉行，但沒有地區限制 — 只要時間合適，任何伺服器都歡迎。"},
+  st_signup:{ko:"접수 중",en:"Sign-ups open",ja:"受付中",zh:"報名中"},
+  st_closed:{ko:"접수 마감",en:"Sign-ups closed",ja:"受付終了",zh:"報名截止"},
+  st_live:{ko:"진행 중",en:"In progress",ja:"進行中",zh:"進行中"},
+  st_done:{ko:"종료",en:"Finished",ja:"終了",zh:"已結束"},
+  when:{ko:"일시",en:"When",ja:"日時",zh:"時間"},
+  entered:{ko:"참가 팀",en:"Teams entered",ja:"参加チーム",zh:"參賽隊伍"},
+  solo_n:{ko:"팀원 구하는 사람 {n}명",en:"{n} looking for a team",ja:"チーム募集中 {n}人",zh:"{n} 人正在找隊友"},
+  /* 접수 폼 */
+  f_head:{ko:"참가 신청",en:"Enter the cup",ja:"参加申込",zh:"報名參賽"},
+  f_team:{ko:"팀 이름",en:"Team name",ja:"チーム名",zh:"隊伍名稱"},
+  f_m1:{ko:"게임 닉네임 (본인)",en:"Your in-game nickname",ja:"ゲーム内ニックネーム（本人）",zh:"你的遊戲暱稱"},
+  f_m2:{ko:"팀원 2 닉네임",en:"Teammate 2 nickname",ja:"チームメイト2",zh:"隊友 2 暱稱"},
+  f_m3:{ko:"팀원 3 닉네임",en:"Teammate 3 nickname",ja:"チームメイト3",zh:"隊友 3 暱稱"},
+  f_sub:{ko:"예비 선수 (선택)",en:"Substitute (optional)",ja:"補欠（任意）",zh:"替補（選填）"},
+  f_solo:{ko:"아직 팀원이 없어요 — 다른 신청자와 묶어주세요",en:"I don't have a team yet — please match me with others",ja:"まだチームがありません — 他の方と組ませてください",zh:"我還沒有隊友 — 請幫我配對"},
+  f_kakao:{ko:"카카오톡 아이디",en:"KakaoTalk ID",ja:"カカオトークID",zh:"KakaoTalk ID"},
+  f_disc:{ko:"디스코드 아이디",en:"Discord ID",ja:"Discord ID",zh:"Discord ID"},
+  f_contact_note:{ko:"🔒 연락처는 대회 당일 연락용이며 운영자만 볼 수 있어요. 다른 참가자에게 공개되지 않습니다.",
+    en:"🔒 Contact details are only used to reach you on the day and are visible to the organiser only — never to other entrants.",
+    ja:"🔒 連絡先は当日の連絡用で、運営者だけが見られます。他の参加者には公開されません。",
+    zh:"🔒 聯絡方式僅供賽事當天聯繫，只有主辦者可見，不會公開給其他參賽者。"},
+  f_pub_note:{ko:"공개되는 것: 팀 이름과 게임 닉네임 (대진표에 필요해요)",
+    en:"Shown publicly: team name and in-game nicknames (needed for the bracket)",
+    ja:"公開される情報: チーム名とゲーム内ニックネーム（対戦表に必要）",
+    zh:"公開顯示：隊伍名稱與遊戲暱稱（對戰表需要）"},
+  f_go:{ko:"신청하기",en:"Enter",ja:"申し込む",zh:"報名"},
+  f_edit:{ko:"신청 수정",en:"Update entry",ja:"申込を更新",zh:"更新報名"},
+  f_cancel:{ko:"신청 취소",en:"Withdraw",ja:"申込取消",zh:"取消報名"},
+  f_need_nick:{ko:"먼저 사이트 닉네임을 정해주세요.",en:"Please set your site nickname first.",ja:"先にサイトのニックネームを設定してください。",zh:"請先設定網站暱稱。"},
+  f_need_team:{ko:"팀 이름과 본인 닉네임은 꼭 입력해주세요.",en:"Team name and your nickname are required.",ja:"チーム名と本人のニックネームは必須です。",zh:"隊伍名稱與你的暱稱為必填。"},
+  f_done:{ko:"신청이 접수됐어요! 대진표가 나오면 공지할게요.",en:"You're in! I'll post the bracket once sign-ups close.",ja:"受付完了！対戦表が出たらお知らせします。",zh:"報名成功！對戰表出爐後會公告。"},
+  f_updated:{ko:"신청 내용을 수정했어요.",en:"Entry updated.",ja:"申込内容を更新しました。",zh:"已更新報名內容。"},
+  f_cancelled:{ko:"신청을 취소했어요.",en:"Entry withdrawn.",ja:"申込を取り消しました。",zh:"已取消報名。"},
+  f_cancel_ask:{ko:"신청을 취소할까요?",en:"Withdraw your entry?",ja:"申込を取り消しますか？",zh:"要取消報名嗎？"},
+  f_closed:{ko:"접수가 마감됐어요.",en:"Sign-ups are closed.",ja:"受付は終了しました。",zh:"報名已截止。"},
+  f_fail:{ko:"저장하지 못했어요. 잠시 뒤 다시 시도해주세요.",en:"Could not save. Please try again shortly.",ja:"保存できませんでした。",zh:"儲存失敗，請稍後再試。"},
+  f_need_rules:{ko:"⚠️ 아직 저장이 안 돼요 — Firebase 규칙 v29 게시가 필요합니다.",en:"⚠️ Cannot save yet — Firebase rules v29 need to be published.",ja:"⚠️ まだ保存できません — Firebaseルールv29の公開が必要です。",zh:"⚠️ 尚無法儲存 — 需要發布 Firebase 規則 v29。"},
+  mine:{ko:"내 신청",en:"My entry",ja:"自分の申込",zh:"我的報名"},
+  list:{ko:"신청한 팀",en:"Entries",ja:"申込チーム",zh:"報名隊伍"},
+  none:{ko:"아직 신청한 팀이 없어요. 첫 번째가 되어보세요!",en:"No entries yet — be the first!",ja:"まだ申込がありません。最初の一組になりませんか！",zh:"目前還沒有隊伍報名，來當第一隊吧！"},
+  solo_tag:{ko:"팀원 구함",en:"looking for a team",ja:"チーム募集中",zh:"找隊友"},
+  /* 관리자 */
+  a_head:{ko:"대회 설정 (관리자만 보임)",en:"Cup settings (admin only)",ja:"大会設定（管理者のみ）",zh:"賽事設定（僅管理員）"},
+  a_on:{ko:"대회 탭 켜기 (끄면 메뉴에서 숨겨져요)",en:"Show the cup tab (off = hidden from the menu)",ja:"大会タブを表示（オフでメニューから非表示）",zh:"顯示賽事分頁（關閉則從選單隱藏）"},
+  a_title:{ko:"대회 이름",en:"Cup title",ja:"大会名",zh:"賽事名稱"},
+  a_date:{ko:"일시 (예: 9월 6일 토 오후 8시)",en:"When (e.g. Sat 6 Sep, 8pm)",ja:"日時（例：9月6日(土) 20時）",zh:"時間（例：9月6日(六) 20:00）"},
+  a_tz:{ko:"시간대 표기 (예: KST / UTC+9)",en:"Time zone label (e.g. KST / UTC+9)",ja:"タイムゾーン表記",zh:"時區標示"},
+  a_state:{ko:"상태",en:"State",ja:"状態",zh:"狀態"},
+  a_note:{ko:"안내 문구 (선택)",en:"Notice (optional)",ja:"案内文（任意）",zh:"公告（選填）"},
+  a_save:{ko:"저장",en:"Save",ja:"保存",zh:"儲存"},
+  a_saved:{ko:"저장했어요.",en:"Saved.",ja:"保存しました。",zh:"已儲存。"},
+  a_del:{ko:"삭제",en:"Remove",ja:"削除",zh:"刪除"},
+  a_del_ask:{ko:"이 팀의 신청을 삭제할까요?",en:"Remove this entry?",ja:"この申込を削除しますか？",zh:"要刪除這筆報名嗎？"},
+  a_contact:{ko:"연락처 (관리자만 보임)",en:"Contact (admin only)",ja:"連絡先（管理者のみ）",zh:"聯絡方式（僅管理員）"},
+  a_hint:{ko:"⚠️ 접수를 열기 전에 규칙을 먼저 공지하세요. 규칙 없이 접수하면 분쟁이 납니다.",
+    en:"⚠️ Publish the rules before opening sign-ups. Taking entries without rules causes disputes.",
+    ja:"⚠️ 受付を開く前にルールを公開してください。",
+    zh:"⚠️ 開放報名前請先公布規則。"}
+};
+const TRL = k => { const o=TR_L[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
+const TR_FILL = (t,m) => String(t).replace(/\{(\w+)\}/g,(_,k)=> m[k]!==undefined?String(m[k]):"");
+
+let trMeta = null, trTeams = [], trMyContact = null;
+/* 대회가 켜져 있을 때만 탭을 보여준다. 관리자는 설정하러 들어가야 하니 항상 보인다. */
+window.rsTrVisible = () => !!(trMeta && trMeta.on) || !!IS_ADMIN;
+
+const TR_STATE = s => TRL("st_" + (["signup","closed","live","done"].includes(s) ? s : "signup"));
+const trMine = () => trTeams.find(t => t.uid === MY_UID) || null;
+
+function renderTourney(){
+  const head = document.getElementById("trHead"); if(!head) return;
+  const m = trMeta || {};
+  const state = ["signup","closed","live","done"].includes(m.state) ? m.state : "signup";
+  head.innerHTML =
+      `<div class="rptcard"><h2 style="margin:0 0 4px">🏆 ${esc(m.title || TRL("head"))}</h2>`
+    + `<div class="rnote">${TRL("sub")}</div></div>`
+    + `<div class="rptcard"><div class="trrow"><b>${TRL("a_state")}</b><span class="trchip">${TR_STATE(state)}</span></div>`
+    + (m.date ? `<div class="trrow"><b>${TRL("when")}</b><span>${esc(m.date)}${m.tz?` <span class="rnote" style="display:inline">(${esc(m.tz)})</span>`:""}</span></div>` : "")
+    + `<div class="trrow"><b>${TRL("entered")}</b><span>${trTeams.filter(t=>!t.solo).length}</span></div>`
+    + (trTeams.some(t=>t.solo) ? `<div class="trrow"><b>&nbsp;</b><span class="rnote" style="display:inline">${TR_FILL(TRL("solo_n"),{n:trTeams.filter(t=>t.solo).length})}</span></div>` : "")
+    + `<div class="rnote" style="margin-top:8px">${TRL("open")}</div>`
+    + (m.note ? `<div class="rnote">${esc(m.note)}</div>` : "")
+    + `</div>`;
+
+  const body = document.getElementById("trBody"); if(!body) return;
+  const mine = trMine();
+  const canEnter = state === "signup";
+  const H = [];
+
+  /* ── 접수 폼 ── */
+  H.push(`<div class="rptcard"><h3>${TRL("f_head")}</h3>`);
+  if(!canEnter && !mine){
+    H.push(`<div class="rnote">${TRL("f_closed")}</div>`);
+  }else{
+    const v = mine || {};
+    H.push(`<div class="rnote">${TRL("f_pub_note")}</div>`
+      + `<input class="cmtname trin" id="trTeam" maxlength="24" placeholder="${TRL("f_team")}" value="${esc(v.name||"")}">`
+      + `<input class="cmtname trin" id="trM1" maxlength="20" placeholder="${TRL("f_m1")}" value="${esc(v.m1||"")}">`
+      + `<input class="cmtname trin" id="trM2" maxlength="20" placeholder="${TRL("f_m2")}" value="${esc(v.m2||"")}">`
+      + `<input class="cmtname trin" id="trM3" maxlength="20" placeholder="${TRL("f_m3")}" value="${esc(v.m3||"")}">`
+      + `<input class="cmtname trin" id="trSub" maxlength="20" placeholder="${TRL("f_sub")}" value="${esc(v.sub||"")}">`
+      + `<label class="trck"><input type="checkbox" id="trSolo"${v.solo?" checked":""}> ${TRL("f_solo")}</label>`
+      + `<div class="rnote" style="margin-top:10px">${TRL("f_contact_note")}</div>`
+      + `<input class="cmtname trin" id="trKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}">`
+      + `<input class="cmtname trin" id="trDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}">`
+      + `<div class="trbtns"><button id="trGo" class="cmtbtn">${mine?TRL("f_edit"):TRL("f_go")}</button>`
+      + (mine?`<button id="trCancel" class="cmtbtn">${TRL("f_cancel")}</button>`:"")
+      + `</div>`);
+  }
+  H.push(`</div>`);
+
+  /* ── 신청 목록 (공개: 팀 이름 + 게임 닉네임만) ── */
+  H.push(`<div class="rptcard"><h3>${TRL("list")}</h3>`);
+  if(!trTeams.length){
+    H.push(`<div class="rnote">${TRL("none")}</div>`);
+  }else{
+    H.push(trTeams.map((t,i)=>{
+      const mem = [t.m1,t.m2,t.m3].filter(Boolean).map(x=>esc(x)).join(" · ");
+      return `<div class="rptev"><span>`
+        + `<b>${i+1}. ${esc(t.name)}</b>${t.solo?` <span class="rptchip">${TRL("solo_tag")}</span>`:""}`
+        + (mem?`<div class="rwl">${mem}${t.sub?` <span class="rnote" style="display:inline">(+${esc(t.sub)})</span>`:""}</div>`:"")
+        + (IS_ADMIN?`<div class="rwl rnote">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span>`
+            + ` <button class="cmtbtn" data-trdel="${esc(t.uid)}">${TRL("a_del")}</button></div>`:"")
+        + `</span></div>`;
+    }).join(""));
+  }
+  H.push(`</div>`);
+  body.innerHTML = H.join("");
+  if(IS_ADMIN) trLoadContacts();
+  renderTrAdmin();
+}
+
+/* 관리자만: 각 팀의 연락처를 따로 읽어 채운다(공개 목록에는 절대 넣지 않는다). */
+async function trLoadContacts(){
+  for(const el of document.querySelectorAll("[data-trct]")){
+    const uid = el.getAttribute("data-trct");
+    try{
+      const snap = await FB.get(FB.ref(FB.db, "tourney/contact/" + uid));
+      const c = snap.val() || {};
+      const parts = [c.kakao?("카톡 "+c.kakao):"", c.discord?("Discord "+c.discord):""].filter(Boolean);
+      el.textContent = parts.length ? parts.join(" · ") : "—";
+    }catch(e){ el.textContent = "—"; }
+  }
+}
+
+function renderTrAdmin(){
+  const box = document.getElementById("trAdmin"); if(!box) return;
+  if(!IS_ADMIN){ box.style.display="none"; box.innerHTML=""; return; }
+  const m = trMeta || {};
+  box.style.display = "block";
+  box.innerHTML = `<div class="rptcard"><h3>${TRL("a_head")}</h3>`
+    + `<div class="rnote">${TRL("a_hint")}</div>`
+    + `<label class="trck"><input type="checkbox" id="trAOn"${m.on?" checked":""}> ${TRL("a_on")}</label>`
+    + `<input class="cmtname trin" id="trATitle" maxlength="60" placeholder="${TRL("a_title")}" value="${esc(m.title||"")}">`
+    + `<input class="cmtname trin" id="trADate" maxlength="60" placeholder="${TRL("a_date")}" value="${esc(m.date||"")}">`
+    + `<input class="cmtname trin" id="trATz" maxlength="40" placeholder="${TRL("a_tz")}" value="${esc(m.tz||"")}">`
+    + `<select class="cmtname trin" id="trAState">` + ["signup","closed","live","done"].map(s=>
+        `<option value="${s}"${(m.state||"signup")===s?" selected":""}>${TR_STATE(s)}</option>`).join("") + `</select>`
+    + `<input class="cmtname trin" id="trANote" maxlength="500" placeholder="${TRL("a_note")}" value="${esc(m.note||"")}">`
+    + `<div class="trbtns"><button id="trASave" class="cmtbtn">${TRL("a_save")}</button></div></div>`;
+}
+
+/* ── 저장·취소·관리자 저장 (위임 — 인라인 onclick 금지, §XSS 패치와 같은 방식) ── */
+document.addEventListener("click", async e => {
+  const G = id => document.getElementById(id);
+  const val = id => (G(id) ? G(id).value.trim() : "");
+
+  if(e.target.id === "trGo"){
+    if(!getNick()){ toast(TRL("f_need_nick")); return; }
+    const name = val("trTeam"), m1 = val("trM1");
+    if(!name || !m1){ toast(TRL("f_need_team")); return; }
+    const solo = !!(G("trSolo") && G("trSolo").checked);
+    const had = !!trMine();
+    try{
+      await FB.set(FB.ref(FB.db, "tourney/teams/" + MY_UID), {
+        name, m1, m2: val("trM2"), m3: val("trM3"), sub: val("trSub"),
+        solo, ts: FB.serverTimestamp()
+      });
+      const kakao = val("trKakao"), discord = val("trDisc");
+      if(kakao || discord){
+        try{ await FB.set(FB.ref(FB.db, "tourney/contact/" + MY_UID), { kakao, discord }); }catch(e2){}
+      }
+      toast(had ? TRL("f_updated") : TRL("f_done"));
+    }catch(err){
+      const perm = String(err && err.message || err).toLowerCase().includes("permission");
+      toast(perm ? TRL("f_need_rules") : TRL("f_fail"));
+    }
+    return;
+  }
+  if(e.target.id === "trCancel"){
+    if(!confirm(TRL("f_cancel_ask"))) return;
+    try{
+      await FB.remove(FB.ref(FB.db, "tourney/teams/" + MY_UID));
+      try{ await FB.remove(FB.ref(FB.db, "tourney/contact/" + MY_UID)); }catch(e2){}
+      toast(TRL("f_cancelled"));
+    }catch(err){ toast(TRL("f_fail")); }
+    return;
+  }
+  if(e.target.id === "trASave"){
+    try{
+      await FB.set(FB.ref(FB.db, "tourney/meta"), {
+        on: !!(G("trAOn") && G("trAOn").checked),
+        title: val("trATitle"), date: val("trADate"), tz: val("trATz"),
+        state: (G("trAState") ? G("trAState").value : "signup"),
+        note: val("trANote")
+      });
+      toast(TRL("a_saved"));
+    }catch(err){
+      const perm = String(err && err.message || err).toLowerCase().includes("permission");
+      toast(perm ? TRL("f_need_rules") : TRL("f_fail"));
+    }
+    return;
+  }
+  const dl = e.target.closest && e.target.closest("[data-trdel]");
+  if(dl && IS_ADMIN){
+    if(!confirm(TRL("a_del_ask"))) return;
+    const uid = dl.getAttribute("data-trdel");
+    try{
+      await FB.remove(FB.ref(FB.db, "tourney/teams/" + uid));
+      try{ await FB.remove(FB.ref(FB.db, "tourney/contact/" + uid)); }catch(e2){}
+    }catch(err){ toast(TRL("f_fail")); }
+  }
+});
+
+/* ── Firebase 구독 (규칙 미게시면 조용히 빈 값 — 다른 기능은 정상) ── */
+FB.onValue(FB.ref(FB.db, "tourney/meta"), snap => {
+  const v = snap.val();
+  trMeta = (v && typeof v === "object") ? v : null;
+  renderTourney(); if(window.renderSubnav) window.renderSubnav();
+}, () => { trMeta = null; renderTourney(); });
+
+FB.onValue(FB.ref(FB.db, "tourney/teams"), snap => {
+  const v = snap.val() || {};
+  trTeams = Object.entries(v).map(([uid,t])=>({
+      uid, name:(t&&t.name)||"", m1:(t&&t.m1)||"", m2:(t&&t.m2)||"", m3:(t&&t.m3)||"",
+      sub:(t&&t.sub)||"", solo:!!(t&&t.solo), ts:(t&&t.ts)||0
+    }))
+    .filter(t => typeof t.name === "string" && t.name)
+    .sort((a,b)=>(a.ts||0)-(b.ts||0));     // 신청 순서 고정 = 순위 아님
+  renderTourney();
+}, () => { trTeams = []; renderTourney(); });
+
+renderTourney();
+/* 🌐 언어를 바꾸면 다시 그린다 — 이 탭은 문구를 전부 TR_L 에서 만들기 때문에
+   언어 전환 이벤트를 안 받으면 한국어로 굳어 있는다.
+   ⚠️ 로그인 뒤 재렌더는 여기서 하지 않는다 — IS_ADMIN 이 정해지는 곳(authReady 블록)에서 부른다.
+      여기에 authReady.then 을 걸면 등록 순서상 IS_ADMIN 대입보다 먼저 돌아 관리자 UI가 안 뜬다. */
+document.addEventListener("rs-lang-changed", renderTourney);
+
 renderCreators();
 window.rsCreDebug = { inject(list){ creCache = (list||[]).map((c,i)=>({ id:"dbg"+i, note:"", lang:"", platform:crePlatformOf(c.url||""), ts:i, ...c })); renderCreators(); } };
 
@@ -7709,6 +8008,9 @@ FB.authReady.then(async uid => {
   document.getElementById("myUidCode").textContent = uid;
   try{ IS_ADMIN = (await FB.get(FB.ref(FB.db, `admins/${uid}`))).exists(); }catch(e){ IS_ADMIN = false; }
   try{ IS_BANNED = (await FB.get(FB.ref(FB.db, `banned/${uid}`))).exists(); }catch(e){ IS_BANNED = false; }
+  // 🏆 대회 탭은 관리자 UI와 "내 신청"이 있어 IS_ADMIN·MY_UID 가 정해진 **뒤**에 다시 그려야 한다.
+  if(typeof renderTourney === "function") renderTourney();
+  if(window.renderSubnav) window.renderSubnav();
   // 🧭 계정이 바뀌었으면 조용히 넘어가지 말고 반드시 알린다 (예전엔 몰라서 "계정이 삭제됐다"고 오해)
   if(window.RS_UID_CHANGED){
     setTimeout(() => toast("⚠️ " + T("이 기기의 계정이 바뀌었어요 — 피드백 탭 맨 아래 '내 ID'를 5번 눌러 복구할 수 있어요")), 1500);
