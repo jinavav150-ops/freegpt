@@ -4021,7 +4021,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.19-f";
+const SITE_VERSION = "2026.08.19-g";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5318,11 +5318,11 @@ const TR_L = {
   int_team_yes:{ko:"3인 팀이 이미 있어요",en:"I already have a squad of 3",ja:"3人チームがあります",zh:"已經有 3 人隊伍"},
   int_team_solo:{ko:"팀원을 찾는 중이에요 (혼자여도 괜찮아요 — 묶어드려요)",en:"Looking for teammates (solo is fine — I'll match you up)",ja:"チームメイト募集中（1人でもOK — 組ませます）",zh:"正在找隊友（一個人也沒關係 — 我會幫你配對）"},
   int_mates:{ko:"팀원 닉네임 (있으면, 선택)",en:"Teammates' nicknames (if any, optional)",ja:"チームメイトのニックネーム（いれば・任意）",zh:"隊友暱稱（若有，選填）"},
-  int_when:{ko:"가능한 시간대 (예: 토·일 저녁 8시 KST)",en:"When you could play (e.g. Sat/Sun 8pm KST)",ja:"参加できる時間帯（例：土日 20時 KST）",zh:"可參加的時段（例：週六日晚上 8 點 KST）"},
-  int_pub_note:{ko:"닉네임과 시간대만 적으면 끝이에요. 팀은 나중에 — 지금은 손만 들어주세요. (명단은 공개돼요 — 누가 오는지 보여야 사람이 모여요)",
-    en:"Just your nickname and when you can play. Teams come later — for now, just raise your hand. (The list is public — seeing who's in brings more people in)",
-    ja:"ニックネームと時間帯だけでOK。チームは後で — 今は手を挙げるだけ。（名簿は公開されます — 誰が来るか見えると人が集まります）",
-    zh:"只要填暱稱和時段就好。隊伍之後再說 — 現在舉個手就行。（名單公開 — 看到誰要來，人才會聚起來）"},
+  int_when:{ko:"가능한 시간대 (선택 · 예: 토·일 저녁 8시 KST)",en:"When you could play (optional · e.g. Sat/Sun 8pm KST)",ja:"参加できる時間帯（任意・例：土日 20時 KST）",zh:"可參加的時段（選填・例：週六日晚上 8 點 KST）"},
+  int_pub_note:{ko:"닉네임만 적어도 돼요. 시간대는 알려주시면 일정 잡는 데 도움이 돼요(안 적어도 괜찮아요). 팀은 나중에 — 지금은 손만 들어주세요. (명단은 공개돼요 — 누가 오는지 보여야 사람이 모여요)",
+    en:"Your nickname is enough. Telling me when you can play helps with scheduling (but it's optional). Teams come later — for now, just raise your hand. (The list is public — seeing who's in brings more people in)",
+    ja:"ニックネームだけでOK。時間帯を書いてくれると日程調整に役立ちます（任意）。チームは後で — 今は手を挙げるだけ。（名簿は公開されます — 誰が来るか見えると人が集まります）",
+    zh:"只填暱稱也可以。時段若能告知，有助於安排日程（可不填）。隊伍之後再說 — 現在舉個手就行。（名單公開 — 看到誰要來，人才會聚起來）"},
   int_go:{ko:"손 들기",en:"Count me in",ja:"手を挙げる",zh:"我要參加"},
   int_edit:{ko:"수정",en:"Update",ja:"更新",zh:"更新"},
   int_cancel:{ko:"손 내리기",en:"Withdraw",ja:"手を下ろす",zh:"收回"},
@@ -5504,7 +5504,6 @@ function renderTourney(){
       + `<div class="rnote">${TRL("int_pub_note")}</div>`
       + `<input class="cmtname trin" id="trINick" maxlength="20" placeholder="${TRL("int_nick")}" value="${esc(v.nick || (localStorage.getItem("rs_gamenick")||"").trim() || getNick() || "")}">`
       + `<input class="cmtname trin" id="trIWhen" maxlength="60" placeholder="${TRL("int_when")}" value="${esc(v.when||"")}">`
-      + `<input class="cmtname trin" id="trIMates" maxlength="60" placeholder="${TRL("int_mates")}" value="${esc(v.mates||"")}">`
       + `<div class="rnote" style="margin-top:8px">${TRL("int_hero_hint")}</div>`
       + `<div class="trbtns"><button id="trIGo" class="cmtbtn">${v.uid?TRL("int_edit"):TRL("int_go")}</button>`
       + (v.uid?`<button id="trICancel" class="cmtbtn">${TRL("int_cancel")}</button>`:"")
@@ -5739,7 +5738,7 @@ document.addEventListener("click", async e => {
     try{
       /* 2026-08-19 MAMMON: 팀 유무·연락처는 안 받는다 — "팀 먼저 짜고 나중에 손 들어야지"를 만들기 때문. 닉네임·시간대(+팀원 선택)만. */
       await FB.set(FB.ref(FB.db, "tourney/interest/" + MY_UID), {
-        nick, mates: val("trIMates"), when: val("trIWhen"), ts: FB.serverTimestamp()
+        nick, when: val("trIWhen"), ts: FB.serverTimestamp()   /* 팀원 칸도 뺌(2026-08-19 MAMMON): 빈칸은 압박, 팀 수는 접수 때 정확히 안다 */
       });
       toast(had ? TRL("int_updated") : TRL("int_done"));
     }catch(err){
