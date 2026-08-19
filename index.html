@@ -4021,7 +4021,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.19-e";
+const SITE_VERSION = "2026.08.19-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5308,10 +5308,10 @@ const TR_L = {
     en:"This is an <b>interest check</b>, not a sign-up — just raise your hand (30 seconds). Once enough teams are in, I'll publish the rules and open sign-ups.<br>The studio said it plainly: <b>the more teams enter, the bigger the rewards get.</b> Bring your squad — and a rival squad.",
     ja:"今は受付ではなく<b>参加意向の調査</b>です — 手を挙げるだけ（30秒）。チームが十分集まったらルールと一緒に受付を始めます。<br>開発元がはっきり言っています：<b>参加チームが多いほど賞品が大きくなります。</b> チームを連れてきてください — ライバルチームも。",
     zh:"現在不是報名，而是<b>參賽意願調查</b> — 舉個手就好（30 秒）。隊伍夠多時會連同規則一起開放報名。<br>開發商明確表示：<b>參賽隊伍越多，獎品越大。</b> 帶你的隊伍來 — 也帶對手隊伍來。"},
-  int_count:{ko:"지금까지 <b>{n}명</b>이 손 들었어요 · 팀 있음 {t}명 · 팀원 찾는 중 {s}명",
-    en:"<b>{n}</b> so far · {t} with a squad · {s} looking for teammates",
-    ja:"これまで<b>{n}人</b> · チームあり {t}人 · チームメイト募集中 {s}人",
-    zh:"目前 <b>{n} 人</b> · 已有隊伍 {t} 人 · 正在找隊友 {s} 人"},
+  int_count:{ko:"지금까지 <b>{n}명</b>이 손 들었어요",
+    en:"<b>{n}</b> hands up so far",
+    ja:"これまで<b>{n}人</b>が手を挙げました",
+    zh:"目前 <b>{n} 人</b>舉手了"},
   int_head:{ko:"참가 의향 남기기",en:"Raise your hand",ja:"参加意向を残す",zh:"表示參賽意願"},
   int_nick:{ko:"게임 닉네임",en:"Your in-game nickname",ja:"ゲーム内ニックネーム",zh:"遊戲暱稱"},
   int_team_q:{ko:"팀은요?",en:"Do you have a team?",ja:"チームは？",zh:"有隊伍嗎？"},
@@ -5319,10 +5319,10 @@ const TR_L = {
   int_team_solo:{ko:"팀원을 찾는 중이에요 (혼자여도 괜찮아요 — 묶어드려요)",en:"Looking for teammates (solo is fine — I'll match you up)",ja:"チームメイト募集中（1人でもOK — 組ませます）",zh:"正在找隊友（一個人也沒關係 — 我會幫你配對）"},
   int_mates:{ko:"팀원 닉네임 (있으면, 선택)",en:"Teammates' nicknames (if any, optional)",ja:"チームメイトのニックネーム（いれば・任意）",zh:"隊友暱稱（若有，選填）"},
   int_when:{ko:"가능한 시간대 (예: 토·일 저녁 8시 KST)",en:"When you could play (e.g. Sat/Sun 8pm KST)",ja:"参加できる時間帯（例：土日 20時 KST）",zh:"可參加的時段（例：週六日晚上 8 點 KST）"},
-  int_pub_note:{ko:"공개되는 것: 닉네임 · 팀 유무 · 시간대 (누가 오는지 보여야 사람이 모여요)",
-    en:"Shown publicly: nickname, team status and time — seeing who's in brings more people in",
-    ja:"公開される情報: ニックネーム・チーム有無・時間帯（誰が来るか見えると人が集まります）",
-    zh:"公開顯示：暱稱・是否有隊伍・時段（看到誰要來，人才會聚起來）"},
+  int_pub_note:{ko:"닉네임과 시간대만 적으면 끝이에요. 팀은 나중에 — 지금은 손만 들어주세요. (명단은 공개돼요 — 누가 오는지 보여야 사람이 모여요)",
+    en:"Just your nickname and when you can play. Teams come later — for now, just raise your hand. (The list is public — seeing who's in brings more people in)",
+    ja:"ニックネームと時間帯だけでOK。チームは後で — 今は手を挙げるだけ。（名簿は公開されます — 誰が来るか見えると人が集まります）",
+    zh:"只要填暱稱和時段就好。隊伍之後再說 — 現在舉個手就行。（名單公開 — 看到誰要來，人才會聚起來）"},
   int_go:{ko:"손 들기",en:"Count me in",ja:"手を挙げる",zh:"我要參加"},
   int_edit:{ko:"수정",en:"Update",ja:"更新",zh:"更新"},
   int_cancel:{ko:"손 내리기",en:"Withdraw",ja:"手を下ろす",zh:"收回"},
@@ -5338,7 +5338,7 @@ const TR_L = {
   int_cancel_ask:{ko:"참가 의향을 취소할까요?",en:"Withdraw your interest?",ja:"参加意向を取り消しますか？",zh:"要取消參賽意願嗎？"},
   int_list:{ko:"손 든 사람들",en:"Who's in so far",ja:"手を挙げた人",zh:"已表示意願的人"},
   int_none:{ko:"아직 아무도 없어요. 첫 번째로 손 들어보세요!",en:"Nobody yet — be the first to raise a hand!",ja:"まだ誰もいません。最初に手を挙げてみませんか！",zh:"還沒有人 — 當第一個舉手的人吧！"},
-  int_tag_team:{ko:"팀 있음",en:"has a squad",ja:"チームあり",zh:"已有隊伍"},
+  int_tag_team:{ko:"팀원 있음",en:"with teammates",ja:"チームメイトあり",zh:"有隊友"},
   int_tag_solo:{ko:"팀원 찾는 중",en:"looking for a team",ja:"チーム募集中",zh:"找隊友"},
   int_closed:{ko:"의향 조사는 끝났어요.",en:"The interest check has ended.",ja:"参加意向の調査は終了しました。",zh:"意願調查已結束。"},
   int_admin_n:{ko:"의향 조사 응답 {n}명 (접수 열리면 알릴 명단)",en:"{n} interest-check responses (people to notify when sign-ups open)",ja:"意向調査の回答 {n}人",zh:"意願調查回覆 {n} 人"},
@@ -5503,15 +5503,9 @@ function renderTourney(){
     H.push(`<div class="rptcard"><h3>${TRL("int_head")}</h3>`
       + `<div class="rnote">${TRL("int_pub_note")}</div>`
       + `<input class="cmtname trin" id="trINick" maxlength="20" placeholder="${TRL("int_nick")}" value="${esc(v.nick || (localStorage.getItem("rs_gamenick")||"").trim() || getNick() || "")}">`
-      + `<div class="rnote" style="margin-top:8px"><b>${TRL("int_team_q")}</b></div>`
-      + `<label class="trck"><input type="radio" name="trITeam" value="1"${v.team?" checked":""}> ${TRL("int_team_yes")}</label>`
-      + `<label class="trck"><input type="radio" name="trITeam" value="0"${(!v.team)?" checked":""}> ${TRL("int_team_solo")}</label>`
-      + `<input class="cmtname trin" id="trIMates" maxlength="60" placeholder="${TRL("int_mates")}" value="${esc(v.mates||"")}">`
       + `<input class="cmtname trin" id="trIWhen" maxlength="60" placeholder="${TRL("int_when")}" value="${esc(v.when||"")}">`
+      + `<input class="cmtname trin" id="trIMates" maxlength="60" placeholder="${TRL("int_mates")}" value="${esc(v.mates||"")}">`
       + `<div class="rnote" style="margin-top:8px">${TRL("int_hero_hint")}</div>`
-      + `<div class="rnote" style="margin-top:10px">${TRL("f_contact_note")}</div>`
-      + `<input class="cmtname trin" id="trIKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}">`
-      + `<input class="cmtname trin" id="trIDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}">`
       + `<div class="trbtns"><button id="trIGo" class="cmtbtn">${v.uid?TRL("int_edit"):TRL("int_go")}</button>`
       + (v.uid?`<button id="trICancel" class="cmtbtn">${TRL("int_cancel")}</button>`:"")
       + `</div></div>`);
@@ -5522,7 +5516,7 @@ function renderTourney(){
     }else{
       H.push(trInterest.map((t,i)=>
         `<div class="rptev"><span>`
-        + `<b>${i+1}. <a href="#" data-trpf-open="${esc(t.uid)}" style="color:inherit;text-decoration:underline dotted">${esc(t.nick)}</a></b> <span class="rptchip">${t.team?TRL("int_tag_team"):TRL("int_tag_solo")}</span>`
+        + `<b>${i+1}. <a href="#" data-trpf-open="${esc(t.uid)}" style="color:inherit;text-decoration:underline dotted">${esc(t.nick)}</a></b>${t.mates?` <span class="rptchip">${TRL("int_tag_team")}</span>`:""}`
         + ` <span class="rnote" style="display:inline" data-trpf="${esc(t.uid)}"></span>`
         + ((t.when||t.mates)?`<div class="rwl">${esc(t.when||"")}${t.mates?` <span class="rnote" style="display:inline">(${esc(t.mates)})</span>`:""}</div>`:"")
         + (IS_ADMIN?`<div class="rwl rnote">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span>`
@@ -5741,17 +5735,12 @@ document.addEventListener("click", async e => {
     if(!getNick()){ toast(TRL("int_need_nick")); if(typeof openNickModal === "function") openNickModal(); return; }
     const nick = val("trINick");
     if(!nick){ toast(TRL("int_need")); return; }
-    const r = document.querySelector('input[name="trITeam"]:checked');
-    const team = !!(r && r.value === "1");
     const had = !!trMyInt();
     try{
+      /* 2026-08-19 MAMMON: 팀 유무·연락처는 안 받는다 — "팀 먼저 짜고 나중에 손 들어야지"를 만들기 때문. 닉네임·시간대(+팀원 선택)만. */
       await FB.set(FB.ref(FB.db, "tourney/interest/" + MY_UID), {
-        nick, team, mates: val("trIMates"), when: val("trIWhen"), ts: FB.serverTimestamp()
+        nick, mates: val("trIMates"), when: val("trIWhen"), ts: FB.serverTimestamp()
       });
-      const kakao = val("trIKakao"), discord = val("trIDisc");
-      if(kakao || discord){
-        try{ await FB.set(FB.ref(FB.db, "tourney/contact/" + MY_UID), { kakao, discord }); }catch(e2){}
-      }
       toast(had ? TRL("int_updated") : TRL("int_done"));
     }catch(err){
       const perm = String(err && err.message || err).toLowerCase().includes("permission");
