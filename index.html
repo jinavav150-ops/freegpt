@@ -1049,6 +1049,11 @@
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/><line x1="12" y1="1.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22.5" y2="12"/></svg>
     <span class="nlbl">공략</span>
   </button>
+  <!-- 🏆 대회 — 대분류(2026-08-19 MAMMON: 공략 옆 큰 메뉴). 대회가 꺼져 있으면 renderTourney 가 숨긴다(rsTrVisible). -->
+  <button data-g="tourney" onclick="navGo('tourney')" style="display:none">
+    <svg viewBox="0 0 24 24"><path d="M7 4h10v3.5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.5 3.4"/><path d="M17 6h2.5A2.5 2.5 0 0 1 17 9.4"/><line x1="12" y1="12.5" x2="12" y2="16"/><path d="M8.5 19.5h7"/><path d="M10 16h4v3.5h-4z"/></svg>
+    <span class="nlbl">대회</span>
+  </button>
   <button data-g="codex" onclick="navGo('codex')">
     <svg viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>
     <span class="nlbl">정보</span>
@@ -1141,6 +1146,10 @@
     <div id="trBody"></div>
     <div id="trAdmin" style="display:none"></div>
   </section>
+  <!-- 🏆 대회 서브탭 3개 (규칙 v31): tourney/rules · tourney/matches · tourney/hall. 전부 관리자 UI로 채운다(배포 불필요). -->
+  <section id="tab-trrules" class="tab"><div id="trRules"></div><div id="trRulesAdmin" style="display:none"></div></section>
+  <section id="tab-trbracket" class="tab"><div id="trBracket"></div><div id="trBracketAdmin" style="display:none"></div></section>
+  <section id="tab-trhall" class="tab"><div id="trHall"></div><div id="trHallAdmin" style="display:none"></div></section>
 
   <section id="tab-creators" class="tab">
     <div id="creHead"></div>
@@ -2822,20 +2831,20 @@ const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 —
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-08-19",
-    ko:"🙋 <b>커뮤니티 컵 — 참가 의향 조사</b>를 시작했어요. 소통 → <b>대회</b> 탭에서 닉네임과 팀 유무만 남기면 됩니다(30초, 아직 접수 아님). 누가 손 들었는지 다 보여요. 개발사가 말했어요 — <b>참가 팀이 많을수록 상품이 커집니다.</b>",
-    en:"🙋 <b>Community Cup — interest check</b> is open. Under Community → <b>Cup</b>, just leave your nickname and whether you have a squad (30 seconds, not a sign-up yet). You can see who's in. The studio said it: <b>the more teams enter, the bigger the rewards.</b>",
-    ja:"🙋 <b>コミュニティカップ — 参加意向の調査</b>を始めました。コミュニティ → <b>大会</b>タブでニックネームとチーム有無を残すだけ（30秒・まだ受付ではありません）。誰が手を挙げたか見えます。開発元いわく — <b>参加チームが多いほど賞品が大きくなります。</b>",
-    zh:"🙋 <b>社群盃 — 參賽意願調查</b>開始了。交流 → <b>賽事</b>分頁留下暱稱和是否有隊伍即可（30 秒，還不是報名）。可以看到誰舉手了。開發商說：<b>參賽隊伍越多，獎品越大。</b>",
+    ko:"🙋 <b>커뮤니티 컵 — 참가 의향 조사</b>를 시작했어요. 상단 <b>대회</b> 메뉴에서 닉네임과 팀 유무만 남기면 됩니다(30초, 아직 접수 아님). 누가 손 들었는지 다 보여요. 개발사가 말했어요 — <b>참가 팀이 많을수록 상품이 커집니다.</b>",
+    en:"🙋 <b>Community Cup — interest check</b> is open. In the new top-level <b>Cup</b> menu, just leave your nickname and whether you have a squad (30 seconds, not a sign-up yet). You can see who's in. The studio said it: <b>the more teams enter, the bigger the rewards.</b>",
+    ja:"🙋 <b>コミュニティカップ — 参加意向の調査</b>を始めました。上部の<b>大会</b>メニューでニックネームとチーム有無を残すだけ（30秒・まだ受付ではありません）。誰が手を挙げたか見えます。開発元いわく — <b>参加チームが多いほど賞品が大きくなります。</b>",
+    zh:"🙋 <b>社群盃 — 參賽意願調查</b>開始了。上方<b>賽事</b>選單留下暱稱和是否有隊伍即可（30 秒，還不是報名）。可以看到誰舉手了。開發商說：<b>參賽隊伍越多，獎品越大。</b>",
     fr:"🙋 <b>Community Cup — sondage d'intérêt</b> ouvert. Onglet Tournoi : laisse ton pseudo et si tu as une équipe (30 s, pas encore une inscription). Plus il y a d'équipes, plus les récompenses sont grandes.",
     de:"🙋 <b>Community Cup — Interessensabfrage</b> ist offen. Turnier-Tab: Nickname und ob du ein Team hast (30 s, noch keine Anmeldung). Je mehr Teams, desto größer die Preise.",
     es:"🙋 <b>Community Cup — sondeo de interés</b> abierto. Pestaña Torneo: deja tu nick y si tienes equipo (30 s, aún no es inscripción). Cuantos más equipos, mayores los premios.",
     pt:"🙋 <b>Community Cup — pesquisa de interesse</b> aberta. Aba Torneio: deixe seu nick e se tem equipe (30 s, ainda não é inscrição). Quanto mais equipes, maiores os prêmios.",
     ru:"🙋 <b>Community Cup — опрос интереса</b> открыт. Вкладка Турнир: ник и есть ли команда (30 с, ещё не регистрация). Чем больше команд, тем больше награды." },
   { date:"2026-08-18",
-    ko:"🏆 <b>커뮤니티 컵</b>이 열립니다! 소통 메뉴에 <b>대회</b> 탭이 생겼어요 — 사이트에서 바로 참가 신청할 수 있습니다. 3v3이고 <b>아시아 시간대</b>에 열리지만 <b>지역 제한은 없어요</b>. 팀원이 없어도 신청하면 다른 분들과 묶어드립니다. 개발사에서 <b>상품(꾸미기 칭호 · 젬)</b>도 지원해 주기로 했어요. 연락처는 운영자만 볼 수 있습니다.",
-    en:"🏆 A <b>Community Cup</b> is happening! There's a new <b>Cup</b> tab under Community — you can enter straight from the site. It's 3v3, held in <b>Asian time zones</b>, but there's <b>no region restriction</b>. No team? Enter anyway and I'll match you with others. The developers are supporting it with <b>prizes (a cosmetic title and gems)</b>. Your contact details are visible only to the organiser.",
-    ja:"🏆 <b>コミュニティカップ</b>を開催します！コミュニティメニューに<b>大会</b>タブができました — サイトから直接申し込めます。3v3、<b>アジアの時間帯</b>ですが<b>地域制限はありません</b>。チームがなくても申し込めば他の方と組ませます。開発元から<b>賞品（꾸미기称号・ジェム）</b>の支援もあります。連絡先は運営者だけが見られます。",
-    zh:"🏆 <b>社群盃</b>即將開賽！交流選單新增<b>賽事</b>分頁 — 可直接在網站報名。3v3，於<b>亞洲時區</b>舉行，但<b>沒有地區限制</b>。沒有隊友也能報名，我會幫你配對。開發商也會提供<b>獎品（外觀稱號・寶石）</b>。聯絡方式僅主辦者可見。",
+    ko:"🏆 <b>커뮤니티 컵</b>이 열립니다! 상단에 <b>대회</b> 메뉴가 생겼어요 — 사이트에서 바로 참가 신청할 수 있습니다. 3v3이고 <b>아시아 시간대</b>에 열리지만 <b>지역 제한은 없어요</b>. 팀원이 없어도 신청하면 다른 분들과 묶어드립니다. 개발사에서 <b>상품(꾸미기 칭호 · 젬)</b>도 지원해 주기로 했어요. 연락처는 운영자만 볼 수 있습니다.",
+    en:"🏆 A <b>Community Cup</b> is happening! There's a new top-level <b>Cup</b> menu — you can enter straight from the site. It's 3v3, held in <b>Asian time zones</b>, but there's <b>no region restriction</b>. No team? Enter anyway and I'll match you with others. The developers are supporting it with <b>prizes (a cosmetic title and gems)</b>. Your contact details are visible only to the organiser.",
+    ja:"🏆 <b>コミュニティカップ</b>を開催します！上部に<b>大会</b>メニューができました — サイトから直接申し込めます。3v3、<b>アジアの時間帯</b>ですが<b>地域制限はありません</b>。チームがなくても申し込めば他の方と組ませます。開発元から<b>賞品（꾸미기称号・ジェム）</b>の支援もあります。連絡先は運営者だけが見られます。",
+    zh:"🏆 <b>社群盃</b>即將開賽！上方新增<b>賽事</b>選單 — 可直接在網站報名。3v3，於<b>亞洲時區</b>舉行，但<b>沒有地區限制</b>。沒有隊友也能報名，我會幫你配對。開發商也會提供<b>獎品（外觀稱號・寶石）</b>。聯絡方式僅主辦者可見。",
     fr:"🏆 Une <b>Community Cup</b> arrive ! Un nouvel onglet <b>Tournoi</b> permet de s'inscrire directement depuis le site. 3v3, aux fuseaux horaires asiatiques, sans restriction de région. Pas d'équipe ? Inscris-toi quand même, je te trouverai des coéquipiers. Les développeurs offrent des récompenses (titre cosmétique et gemmes).",
     de:"🏆 Ein <b>Community Cup</b> kommt! Ein neuer <b>Turnier</b>-Tab erlaubt die Anmeldung direkt auf der Seite. 3v3, in asiatischen Zeitzonen, ohne Regionsbeschränkung. Kein Team? Melde dich trotzdem an, ich bringe dich mit anderen zusammen. Die Entwickler steuern Preise bei (kosmetischer Titel und Gems).",
     es:"🏆 ¡Llega una <b>Community Cup</b>! Hay una nueva pestaña <b>Torneo</b> para inscribirte desde el sitio. 3v3, en zonas horarias asiáticas, sin restricción de región. ¿Sin equipo? Inscríbete igual y te emparejo. Los desarrolladores aportan premios (título cosmético y gemas).",
@@ -3464,6 +3473,8 @@ function applyHeader(){
   if(v.indexOf("comm:")===0){ const h=GOCOMM_HEAD[v.slice(5)]; if(h) setHead(T(h[0]),T(h[1])); return; }
   /* 🔍 경기 분석 — 사전은 모듈 쪽(RPT_L)에 있어 window 브리지로 (§클래식↔모듈 스코프 함정) */
   if(v==="replay"){ if(window.rsReplayHead){ const h=window.rsReplayHead(); setHead(h[0],h[1]); } return; }
+  /* 🏆 대회 — 사전(TR_L)이 모듈 쪽이라 같은 브리지. 없으면 직전 화면 제목이 남는다(08.18-a~19-b 빈틈, 2026-08-19 수정) */
+  if(v==="tourney"||v==="trrules"||v==="trbracket"||v==="trhall"){ if(window.rsTourneyHead){ const h=window.rsTourneyHead(); setHead(h[0],h[1]); } return; }
   const info=TAB_INFO[v]; if(info) setHead(v==="info"?SL("info"):T(info.title),T(info.desc));
 }
 /* ══════ 통합 라우팅 (상단 5개 대분류 → 서브탭 → 실제 뷰) ══════
@@ -3471,7 +3482,7 @@ function applyHeader(){
 const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, board:{g:"talk", view:"board"},
-  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"talk", view:"tourney"}, creators:{g:"guide", view:"creators"},
+  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"tourney", view:"tourney"}, trrules:{g:"tourney", view:"trrules"}, trbracket:{g:"tourney", view:"trbracket"}, trhall:{g:"tourney", view:"trhall"}, creators:{g:"guide", view:"creators"},
   dex:{g:"codex", view:"dex"}, info:{g:"codex", view:"info"}, codes:{g:"codex", view:"codes"}, issues:{g:"codex", view:"issues"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
@@ -3483,8 +3494,10 @@ const SUB_OF = {
 const CODES_ENABLED = true;   /* 2026-07-25 복구: 구글 검토 통과 후 안정화 확인 + 보상 아이콘·출처 표기 보강 */
 const NAV_GROUPS = {
   notice:{ subs:["notice"], solo:true },
-  talk:{ subs:["chat","board","tourney"] },   /* 🏆 대회는 "사람이 모이는 일"이라 소통에 둔다(2026-08-19 MAMMON — 공략에 있는 게 어색) */
+  talk:{ subs:["chat","board"] },
   guide:{ subs:["pick","replay","builds","tier","tips","creators"] },
+  tourney:{ subs:["tourney","trrules","trbracket","trhall"] },   /* 🏆 대회 = 대분류(2026-08-19 MAMMON). 꺼져 있으면 nav 버튼 자체를 숨김.
+     서브: 참가 · 규칙(항상) · 대진표 · 명예의 전당(데이터 있을 때만 — 크리에이터 탭과 같은 방식) */
   codex:{ subs:["dex","info","codes","issues"] },
   feedback:{ subs:["fb"], solo:true },
   stats:{ subs:["stats"], solo:true }
@@ -3493,6 +3506,7 @@ const GROUP_LABEL = {
   notice:{ko:"공지",en:"Notice",ja:"お知らせ",zh:"公告",fr:"Annonces",de:"Ankündigungen",es:"Avisos",pt:"Avisos",ru:"Новости"},
   talk:{ko:"소통",en:"Community",ja:"コミュニティ",zh:"交流",fr:"Communauté",de:"Community",es:"Comunidad",pt:"Comunidade",ru:"Сообщество"},
   guide:{ko:"공략",en:"Strategy",ja:"攻略",zh:"攻略",fr:"Stratégie",de:"Strategie",es:"Estrategia",pt:"Estratégia",ru:"Стратегия"},
+  tourney:{ko:"대회",en:"Cup",ja:"大会",zh:"賽事",fr:"Tournoi",de:"Turnier",es:"Torneo",pt:"Torneio",ru:"Турнир"},
   codex:{ko:"정보",en:"Info",ja:"情報",zh:"資訊",fr:"Infos",de:"Infos",es:"Info",pt:"Infos",ru:"Инфо"},
   feedback:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋",fr:"Feedback",de:"Feedback",es:"Feedback",pt:"Feedback",ru:"Отзывы"},
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計",fr:"Stats",de:"Statistik",es:"Estadísticas",pt:"Estatísticas",ru:"Статистика"}
@@ -3510,8 +3524,11 @@ const SUB_LABEL = {
   info:{ko:"게임 시스템",en:"Game System",ja:"ゲームシステム",zh:"遊戲系統",fr:"Système de jeu",de:"Spielsystem",es:"Sistema de juego",pt:"Sistema do jogo",ru:"Система игры"},
   issues:{ko:"이슈",en:"Issues",ja:"不具合",zh:"問題",fr:"Problèmes",de:"Probleme",es:"Problemas",pt:"Problemas",ru:"Проблемы"},
   codes:{ko:"코드",en:"Codes",ja:"コード",zh:"兌換碼",fr:"Codes",de:"Codes",es:"Códigos",pt:"Códigos",ru:"Коды"},
-  tourney:{ko:"대회",en:"Cup",ja:"大会",zh:"賽事",fr:"Tournoi",de:"Turnier",es:"Torneo",pt:"Torneio",ru:"Турнир"},
+  tourney:{ko:"참가",en:"Enter",ja:"参加",zh:"報名",fr:"Participer",de:"Teilnehmen",es:"Participar",pt:"Participar",ru:"Участие"},
   creators:{ko:"크리에이터",en:"Creators",ja:"クリエイター",zh:"創作者",fr:"Créateurs",de:"Creator",es:"Creadores",pt:"Criadores",ru:"Авторы"},
+  trrules:{ko:"규칙",en:"Rules",ja:"ルール",zh:"規則",fr:"Règles",de:"Regeln",es:"Reglas",pt:"Regras",ru:"Правила"},
+  trbracket:{ko:"대진표",en:"Bracket",ja:"対戦表",zh:"對戰表",fr:"Tableau",de:"Spielplan",es:"Cuadro",pt:"Chave",ru:"Сетка"},
+  trhall:{ko:"명예의 전당",en:"Hall of Fame",ja:"殿堂",zh:"名人堂",fr:"Palmarès",de:"Ruhmeshalle",es:"Salón de la fama",pt:"Hall da Fama",ru:"Зал славы"},
   fb:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋",fr:"Feedback",de:"Feedback",es:"Feedback",pt:"Feedback",ru:"Отзывы"},
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計",fr:"Stats",de:"Statistik",es:"Estadísticas",pt:"Estatísticas",ru:"Статистика"}
 };
@@ -3528,6 +3545,9 @@ const SUB_ICON = {
   issues:'<svg viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>',
   codes:'<svg viewBox="0 0 24 24"><rect x="3.5" y="8.5" width="17" height="12" rx="1.5"/><path d="M3.5 12.5h17"/><path d="M12 8.5v12"/><path d="M12 8.5S10.5 4.5 8 4.5a2 2 0 0 0 0 4z"/><path d="M12 8.5s1.5-4 4-4a2 2 0 0 1 0 4z"/></svg>',
   tourney:'<svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5.5H4.5v1A3.5 3.5 0 0 0 8 10"/><path d="M17 5.5h2.5v1A3.5 3.5 0 0 1 16 10"/><path d="M12 14v3"/><path d="M8.5 20h7"/><path d="M10 17h4l.7 3h-5.4z"/></svg>',
+  trrules:'<svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="8.5" y1="16" x2="12.5" y2="16"/></svg>',
+  trbracket:'<svg viewBox="0 0 24 24"><path d="M4 6h5v4H4zM4 14h5v4H4z"/><path d="M9 8h3v8H9"/><path d="M12 12h4"/><path d="M16 10h4v4h-4z"/></svg>',
+  trhall:'<svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4 6.7 19.1l1-5.8-4.2-4.1 5.9-.9z"/></svg>',
   creators:'<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10.3 9.3l4.6 2.7-4.6 2.7z"/></svg>'
 };
 const SL = s => (SUB_LABEL[s]||{})[LANG] || (SUB_LABEL[s]||{}).ko || s;
@@ -3552,13 +3572,19 @@ function renderSubnav(){
   const cur=curSubKey();
   bar.style.display="flex";
   // 🎬 크리에이터는 명단이 비면 서브탭 자체를 숨김(텅 빈 탭 = 파티 찾기의 실패 원인). 관리자는 채워 넣어야 하니 항상 보임.
-  const subs = grp.subs.filter(s =>
-    (s!=="creators" || (window.rsCreVisible ? window.rsCreVisible() : false)) &&
-    (s!=="tourney"  || (window.rsTrVisible  ? window.rsTrVisible()  : false)) &&
-    (s!=="codes" || CODES_ENABLED));   // 🎁 코드 탭은 CODES_ENABLED=false면 숨김(구글 검토 대응)
+  const subs = grp.subs.filter(subShown);
   bar.innerHTML = subs.map(s=>{
     return `<button data-sub="${s}" class="${s===cur?'on':''}">${SUB_ICON[s]||''}<span>${SL(s)}</span></button>`;
   }).join("");
+}
+/* 서브탭이 지금 보여야 하는가 — 서브 바 렌더와 navGo 가 같은 판정을 쓴다(기억한 서브가 숨김이면 빈 화면이 뜨는 것 방지) */
+function subShown(s){
+  if(s==="creators") return window.rsCreVisible ? window.rsCreVisible() : false;
+  if(s==="tourney" || s==="trrules") return window.rsTrVisible ? window.rsTrVisible() : false;
+  if(s==="trbracket") return window.rsTrBracketVisible ? window.rsTrBracketVisible() : false;
+  if(s==="trhall") return window.rsTrHallVisible ? window.rsTrHallVisible() : false;
+  if(s==="codes") return CODES_ENABLED;   // 🎁 코드 탭은 CODES_ENABLED=false면 숨김(구글 검토 대응)
+  return true;
 }
 function curSubKey(){ for(const k in SUB_OF) if(SUB_OF[k].view===CURVIEW) return k; return "notice"; }
 // 서브 이동 (핵심): 상단 대분류·서브탭 하이라이트 + 뷰 전환
@@ -3587,7 +3613,10 @@ function goSub(sub){
 // 상단 대분류 클릭 → 그룹의 마지막(또는 첫) 서브로
 function navGo(group){
   const grp=NAV_GROUPS[group]; if(!grp) return;
-  goSub(grp.solo ? grp.subs[0] : (groupLast[group] || grp.subs[0]));
+  if(grp.solo){ goSub(grp.subs[0]); return; }
+  // 기억한 서브탭이 지금 숨겨져 있으면(예: 대회 꺼짐 → 참가 탭 숨김) 보이는 첫 서브로
+  const want = groupLast[group] || grp.subs[0];
+  goSub(subShown(want) ? want : (grp.subs.find(subShown) || grp.subs[0]));
 }
 window.navGo=navGo; window.goSub=goSub;
 // 하위 호환 (기존 go/goComm 호출부)
@@ -3957,7 +3986,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.19-b";
+const SITE_VERSION = "2026.08.19-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5210,6 +5239,9 @@ FB.onValue(FB.ref(FB.db, "creators"), snap => {
      tourney/teams/<uid> = 참가 신청. **키가 uid** 라서 "1인 1팀"이 규칙으로 강제된다.
      tourney/contact/<uid> = 🔒 연락처. **본인과 관리자만 읽는다**(개인정보).
      tourney/interest/<uid> = 참가 의향(규칙 v30, 2026-08-19). state=interest 일 때만 쓰기. 닉네임·팀 유무·시간대 공개.
+     tourney/rules {ko,en}  = 규칙 본문(관리자만 쓰기, 공개 읽기) — 서브탭 "규칙"          (규칙 v31, 2026-08-19)
+     tourney/matches/<id>   = 대진·결과(관리자만 쓰기, 공개 읽기) — 서브탭 "대진표", 비면 숨김
+     tourney/hall/<id>      = 명예의 전당(관리자만 쓰기, 공개 읽기) — 대회가 꺼져도 남는다
    🪤 `tourney` 상위에 `.read` 를 걸면 안 된다 — Firebase 는 위에서 허용한 읽기를
       아래에서 못 막아서 연락처가 통째로 공개된다. 공개할 하위 노드마다 따로 준다.
    🪤 진행 중인 대회가 없으면(meta.on=false) **서브탭 자체가 숨겨진다**(rsTrVisible).
@@ -5295,11 +5327,46 @@ const TR_L = {
   f_cancel_ask:{ko:"신청을 취소할까요?",en:"Withdraw your entry?",ja:"申込を取り消しますか？",zh:"要取消報名嗎？"},
   f_closed:{ko:"접수가 마감됐어요.",en:"Sign-ups are closed.",ja:"受付は終了しました。",zh:"報名已截止。"},
   f_fail:{ko:"저장하지 못했어요. 잠시 뒤 다시 시도해주세요.",en:"Could not save. Please try again shortly.",ja:"保存できませんでした。",zh:"儲存失敗，請稍後再試。"},
-  f_need_rules:{ko:"⚠️ 아직 저장이 안 돼요 — Firebase 규칙 v30 게시가 필요합니다.",en:"⚠️ Cannot save yet — Firebase rules v30 need to be published.",ja:"⚠️ まだ保存できません — Firebaseルールv30の公開が必要です。",zh:"⚠️ 尚無法儲存 — 需要發布 Firebase 規則 v30。"},
+  f_need_rules:{ko:"⚠️ 아직 저장이 안 돼요 — Firebase 규칙 v31 게시가 필요합니다.",en:"⚠️ Cannot save yet — Firebase rules v31 need to be published.",ja:"⚠️ まだ保存できません — Firebaseルールv31の公開が必要です。",zh:"⚠️ 尚無法儲存 — 需要發布 Firebase 規則 v31。"},
   mine:{ko:"내 신청",en:"My entry",ja:"自分の申込",zh:"我的報名"},
   list:{ko:"신청한 팀",en:"Entries",ja:"申込チーム",zh:"報名隊伍"},
   none:{ko:"아직 신청한 팀이 없어요. 첫 번째가 되어보세요!",en:"No entries yet — be the first!",ja:"まだ申込がありません。最初の一組になりませんか！",zh:"目前還沒有隊伍報名，來當第一隊吧！"},
   solo_tag:{ko:"팀원 구함",en:"looking for a team",ja:"チーム募集中",zh:"找隊友"},
+  /* ── 규칙 탭 ── */
+  r_head:{ko:"규칙 · 상품 · 일정",en:"Rules · Rewards · Schedule",ja:"ルール・賞品・日程",zh:"規則・獎品・時程"},
+  r_none:{ko:"규칙은 접수를 열기 전에 여기에 공개됩니다.",en:"The rules will be published here before sign-ups open.",ja:"ルールは受付開始前にここで公開します。",zh:"規則會在開放報名前公布於此。"},
+  r_a_head:{ko:"규칙 편집 (관리자만 보임)",en:"Edit rules (admin only)",ja:"ルール編集（管理者のみ）",zh:"編輯規則（僅管理員）"},
+  r_a_hint:{ko:"줄 앞에 #을 붙이면 소제목, -를 붙이면 항목. 한국어·영어만 쓰면 나머지 언어는 영어로 보여요.",
+    en:"Start a line with # for a heading, - for a bullet. Other languages fall back to English.",
+    ja:"行頭に # で見出し、- で箇条書き。他言語は英語にフォールバック。",zh:"行首加 # 為小標題、- 為項目。其他語言會顯示英文。"},
+  r_a_ko:{ko:"규칙 (한국어)",en:"Rules (Korean)",ja:"ルール（韓国語）",zh:"規則（韓文）"},
+  r_a_en:{ko:"규칙 (영어)",en:"Rules (English)",ja:"ルール（英語）",zh:"規則（英文）"},
+  /* ── 대진표 탭 ── */
+  b_head:{ko:"대진표 · 결과",en:"Bracket · Results",ja:"対戦表・結果",zh:"對戰表・結果"},
+  b_none:{ko:"대진표는 접수가 마감되면 공개됩니다.",en:"The bracket will be posted once sign-ups close.",ja:"対戦表は受付終了後に公開します。",zh:"對戰表將於報名截止後公布。"},
+  b_code:{ko:"매치 코드",en:"Match code",ja:"マッチコード",zh:"對戰代碼"},
+  b_a_head:{ko:"경기 추가 (관리자만 보임)",en:"Add a match (admin only)",ja:"試合を追加（管理者のみ）",zh:"新增比賽（僅管理員）"},
+  b_a_round:{ko:"라운드 (예: 스위스 1R / 컵 4강 / 플레이트 결승)",en:"Round (e.g. Swiss R1 / Cup SF / Plate Final)",ja:"ラウンド（例：スイス1R / カップ準決勝）",zh:"輪次（例：瑞士制 R1 / 盃賽四強）"},
+  b_a_a:{ko:"팀 A",en:"Team A",ja:"チームA",zh:"隊伍 A"},
+  b_a_b:{ko:"팀 B",en:"Team B",ja:"チームB",zh:"隊伍 B"},
+  b_a_score:{ko:"결과 (예: 2-1, 비면 예정)",en:"Result (e.g. 2-1; blank = upcoming)",ja:"結果（例：2-1、空欄=予定）",zh:"結果（例：2-1，空白＝待賽）"},
+  b_a_code:{ko:"매치 코드 (선택, 여러 개면 쉼표)",en:"Match code(s) (optional, comma-separated)",ja:"マッチコード（任意）",zh:"對戰代碼（選填）"},
+  b_a_add:{ko:"추가",en:"Add",ja:"追加",zh:"新增"},
+  b_a_need:{ko:"라운드와 두 팀 이름은 꼭 적어주세요.",en:"Round and both team names are required.",ja:"ラウンドと両チーム名は必須です。",zh:"輪次與兩隊名稱為必填。"},
+  b_upcoming:{ko:"예정",en:"upcoming",ja:"予定",zh:"待賽"},
+  /* ── 명예의 전당 탭 ── */
+  h_head:{ko:"명예의 전당",en:"Hall of Fame",ja:"殿堂",zh:"名人堂"},
+  h_sub:{ko:"역대 커뮤니티 컵의 기록 — 여기 이름은 지워지지 않아요.",en:"Every community cup so far — these names stay.",ja:"歴代コミュニティカップの記録 — ここの名前は消えません。",zh:"歷屆社群盃紀錄 — 這裡的名字不會消失。"},
+  h_none:{ko:"아직 기록이 없어요. 첫 우승팀이 여기 새겨집니다.",en:"No entries yet — the first champions will be carved here.",ja:"まだ記録がありません。最初の優勝チームがここに刻まれます。",zh:"還沒有紀錄 — 第一支冠軍隊伍會刻在這裡。"},
+  h_win:{ko:"🥇 우승",en:"🥇 Champions",ja:"🥇 優勝",zh:"🥇 冠軍"},
+  h_plate:{ko:"🏅 플레이트 우승",en:"🏅 Plate winners",ja:"🏅 プレート優勝",zh:"🏅 Plate 冠軍"},
+  h_mvp:{ko:"📊 데이터 MVP",en:"📊 Data MVP",ja:"📊 データMVP",zh:"📊 數據 MVP"},
+  h_a_head:{ko:"기록 추가 (관리자만 보임)",en:"Add an entry (admin only)",ja:"記録を追加（管理者のみ）",zh:"新增紀錄（僅管理員）"},
+  h_a_cup:{ko:"대회 이름 (예: Asia Community Cup #1 · 2026-09)",en:"Cup name (e.g. Asia Community Cup #1 · 2026-09)",ja:"大会名",zh:"賽事名稱"},
+  h_a_win:{ko:"우승 팀 (팀 이름 — 닉네임들)",en:"Champions (team — nicknames)",ja:"優勝チーム",zh:"冠軍隊伍"},
+  h_a_plate:{ko:"플레이트 우승 (선택)",en:"Plate winners (optional)",ja:"プレート優勝（任意）",zh:"Plate 冠軍（選填）"},
+  h_a_mvp:{ko:"데이터 MVP (선택)",en:"Data MVP (optional)",ja:"データMVP（任意）",zh:"數據 MVP（選填）"},
+  h_a_need:{ko:"대회 이름과 우승 팀은 꼭 적어주세요.",en:"Cup name and champions are required.",ja:"大会名と優勝チームは必須です。",zh:"賽事名稱與冠軍為必填。"},
   /* 관리자 */
   a_head:{ko:"대회 설정 (관리자만 보임)",en:"Cup settings (admin only)",ja:"大会設定（管理者のみ）",zh:"賽事設定（僅管理員）"},
   a_on:{ko:"대회 탭 켜기 (끄면 메뉴에서 숨겨져요)",en:"Show the cup tab (off = hidden from the menu)",ja:"大会タブを表示（オフでメニューから非表示）",zh:"顯示賽事分頁（關閉則從選單隱藏）"},
@@ -5322,16 +5389,31 @@ const TRL = k => { const o=TR_L[k]||{}; const v=o[LANG]; return v!==undefined?v:
 const TR_FILL = (t,m) => String(t).replace(/\{(\w+)\}/g,(_,k)=> m[k]!==undefined?String(m[k]):"");
 
 let trMeta = null, trTeams = [], trMyContact = null, trInterest = [];
+let trRules = null, trMatches = [], trHall = [];      // 규칙 v31: tourney/rules · tourney/matches · tourney/hall
 /* 대회 상태 순서: 의향 조사 → 접수 → 마감 → 진행 → 종료. interest 는 2026-08-19 추가(규칙 v30). */
 const TR_STATES = ["interest","signup","closed","live","done"];
 /* 대회가 켜져 있을 때만 탭을 보여준다. 관리자는 설정하러 들어가야 하니 항상 보인다. */
 window.rsTrVisible = () => !!(trMeta && trMeta.on) || !!IS_ADMIN;
+/* 대진표·명예의 전당은 내용이 있을 때만(빈 탭 금지). 관리자는 채우러 들어가야 하니 항상. */
+window.rsTrBracketVisible = () => (window.rsTrVisible() && trMatches.length > 0) || !!IS_ADMIN;
+window.rsTrHallVisible    = () => trHall.length > 0 || !!IS_ADMIN;   // 명예의 전당은 대회가 꺼져 있어도 남는다(그게 목적)
+/* 헤더 큰 제목·부제 (applyHeader 가 부른다) */
+window.rsTourneyHead = () => {
+  const big = (typeof GRL === "function") ? GRL("tourney") : TRL("head");          // "대회" — 다른 화면(카운터픽·채팅)과 같은 결
+  const t = trMeta && trMeta.title;
+  return [ big, t ? (t + " · " + TRL("sub")) : TRL("sub") ];
+};
 
 const TR_STATE = s => TRL("st_" + (TR_STATES.includes(s) ? s : "signup"));
 const trMine = () => trTeams.find(t => t.uid === MY_UID) || null;
 const trMyInt = () => trInterest.find(t => t.uid === MY_UID) || null;
 
 function renderTourney(){
+  /* 상단 대분류 버튼: 대회 켜짐 또는 관리자일 때만 보인다 */
+  const nb = document.querySelector('nav button[data-g="tourney"]');
+  if(nb) nb.style.display = (window.rsTrVisible() || window.rsTrHallVisible()) ? "" : "none";   // 명예의 전당만 남아도 버튼은 산다
+  if(typeof CURVIEW !== "undefined" && /^(tourney|trrules|trbracket|trhall)$/.test(CURVIEW) && typeof applyHeader === "function") applyHeader();
+  renderTrRules(); renderTrBracket(); renderTrHall();
   const head = document.getElementById("trHead"); if(!head) return;
   const m = trMeta || {};
   const state = TR_STATES.includes(m.state) ? m.state : "signup";
@@ -5450,6 +5532,92 @@ async function trLoadContacts(){
   }
 }
 
+/* 규칙 텍스트 → 간이 서식: "# " 소제목 · "- " 항목 · 빈 줄 문단. esc() 뒤에만 태그를 붙인다(XSS). */
+function trFmt(text){
+  const out=[]; let ul=[];
+  const flush=()=>{ if(ul.length){ out.push('<ul style="margin:4px 0;padding-left:20px">'+ul.map(x=>`<li style="margin:2px 0">${x}</li>`).join("")+"</ul>"); ul=[]; } };
+  for(const raw of String(text||"").split(/\r?\n/)){
+    const line=raw.trim();
+    if(!line){ flush(); continue; }
+    if(line.startsWith("#")){ flush(); out.push(`<h4 style="margin:12px 0 4px">${esc(line.replace(/^#+\s*/,""))}</h4>`); continue; }
+    if(/^[-•*]\s+/.test(line)){ ul.push(esc(line.replace(/^[-•*]\s+/,""))); continue; }
+    flush(); out.push(`<p style="margin:4px 0">${esc(line)}</p>`);
+  }
+  flush(); return out.join("");
+}
+function trRulesText(){
+  const r = trRules || {};
+  const v = r[LANG]; if(v) return v;
+  return r.en || r.ko || "";
+}
+function renderTrRules(){
+  const box=document.getElementById("trRules"); if(!box) return;
+  const t = trRulesText();
+  box.innerHTML = `<div class="rptcard"><h3>${TRL("r_head")}</h3>` + (t ? trFmt(t) : `<div class="rnote">${TRL("r_none")}</div>`) + `</div>`;
+  const ad=document.getElementById("trRulesAdmin"); if(!ad) return;
+  if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
+  const r = trRules || {};
+  ad.style.display="block";
+  ad.innerHTML = `<div class="rptcard"><h3>${TRL("r_a_head")}</h3><div class="rnote">${TRL("r_a_hint")}</div>`
+    + `<div class="rnote" style="margin-top:8px"><b>${TRL("r_a_ko")}</b></div><textarea class="cmttext" id="trRKo" rows="12" maxlength="8000" style="width:100%">${esc(r.ko||"")}</textarea>`
+    + `<div class="rnote" style="margin-top:8px"><b>${TRL("r_a_en")}</b></div><textarea class="cmttext" id="trREn" rows="12" maxlength="8000" style="width:100%">${esc(r.en||"")}</textarea>`
+    + `<div class="trbtns"><button id="trRSave" class="cmtbtn">${TRL("a_save")}</button></div></div>`;
+}
+function renderTrBracket(){
+  const box=document.getElementById("trBracket"); if(!box) return;
+  const H=[`<div class="rptcard"><h3>${TRL("b_head")}</h3>`];
+  if(!trMatches.length){ H.push(`<div class="rnote">${TRL("b_none")}</div>`); }
+  else{
+    const rounds=[]; for(const m of trMatches){ if(!rounds.includes(m.round)) rounds.push(m.round); }
+    for(const rd of rounds){
+      H.push(`<h4 style="margin:12px 0 4px">${esc(rd)}</h4>`);
+      for(const m of trMatches.filter(x=>x.round===rd)){
+        H.push(`<div class="rptev"><span><b>${esc(m.a)}</b> <span class="rnote" style="display:inline">vs</span> <b>${esc(m.b)}</b>`
+          + ` <span class="rptchip">${m.score?esc(m.score):TRL("b_upcoming")}</span>`
+          + (m.code?`<div class="rwl rnote">${TRL("b_code")}: ${esc(m.code)}</div>`:"")
+          + (IS_ADMIN?`<div class="rwl"><button class="cmtbtn" data-trmdel="${esc(m.id)}">${TRL("a_del")}</button></div>`:"")
+          + `</span></div>`);
+      }
+    }
+  }
+  H.push(`</div>`); box.innerHTML=H.join("");
+  const ad=document.getElementById("trBracketAdmin"); if(!ad) return;
+  if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
+  ad.style.display="block";
+  ad.innerHTML = `<div class="rptcard"><h3>${TRL("b_a_head")}</h3>`
+    + `<input class="cmtname trin" id="trBRound" maxlength="40" placeholder="${TRL("b_a_round")}">`
+    + `<input class="cmtname trin" id="trBA" maxlength="24" placeholder="${TRL("b_a_a")}">`
+    + `<input class="cmtname trin" id="trBB" maxlength="24" placeholder="${TRL("b_a_b")}">`
+    + `<input class="cmtname trin" id="trBScore" maxlength="12" placeholder="${TRL("b_a_score")}">`
+    + `<input class="cmtname trin" id="trBCode" maxlength="60" placeholder="${TRL("b_a_code")}">`
+    + `<div class="trbtns"><button id="trBAdd" class="cmtbtn">${TRL("b_a_add")}</button></div></div>`;
+}
+function renderTrHall(){
+  const box=document.getElementById("trHall"); if(!box) return;
+  const H=[`<div class="rptcard"><h3>${TRL("h_head")}</h3><div class="rnote">${TRL("h_sub")}</div></div>`];
+  if(!trHall.length){ H.push(`<div class="rptcard"><div class="rnote">${TRL("h_none")}</div></div>`); }
+  else{
+    for(const h of [...trHall].reverse()){   // 최신 회차가 위
+      H.push(`<div class="rptcard"><h3 style="margin:0 0 6px">🏆 ${esc(h.cup)}</h3>`
+        + `<div class="trrow"><b>${TRL("h_win")}</b><span>${esc(h.winner)}</span></div>`
+        + (h.plate?`<div class="trrow"><b>${TRL("h_plate")}</b><span>${esc(h.plate)}</span></div>`:"")
+        + (h.mvp?`<div class="trrow"><b>${TRL("h_mvp")}</b><span>${esc(h.mvp)}</span></div>`:"")
+        + (IS_ADMIN?`<div class="trbtns"><button class="cmtbtn" data-trhdel="${esc(h.id)}">${TRL("a_del")}</button></div>`:"")
+        + `</div>`);
+    }
+  }
+  box.innerHTML=H.join("");
+  const ad=document.getElementById("trHallAdmin"); if(!ad) return;
+  if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
+  ad.style.display="block";
+  ad.innerHTML = `<div class="rptcard"><h3>${TRL("h_a_head")}</h3>`
+    + `<input class="cmtname trin" id="trHCup" maxlength="60" placeholder="${TRL("h_a_cup")}">`
+    + `<input class="cmtname trin" id="trHWin" maxlength="120" placeholder="${TRL("h_a_win")}">`
+    + `<input class="cmtname trin" id="trHPlate" maxlength="120" placeholder="${TRL("h_a_plate")}">`
+    + `<input class="cmtname trin" id="trHMvp" maxlength="60" placeholder="${TRL("h_a_mvp")}">`
+    + `<div class="trbtns"><button id="trHAdd" class="cmtbtn">${TRL("b_a_add")}</button></div></div>`;
+}
+
 function renderTrAdmin(){
   const box = document.getElementById("trAdmin"); if(!box) return;
   if(!IS_ADMIN){ box.style.display="none"; box.innerHTML=""; return; }
@@ -5540,6 +5708,38 @@ document.addEventListener("click", async e => {
     }catch(err){ toast(TRL("f_fail")); }
     return;
   }
+  const permToast = err => { const perm = String(err && err.message || err).toLowerCase().includes("permission"); toast(perm ? TRL("f_need_rules") : TRL("f_fail")); };
+  if(e.target.id === "trRSave" && IS_ADMIN){
+    try{ await FB.set(FB.ref(FB.db, "tourney/rules"), { ko: val("trRKo"), en: val("trREn") }); toast(TRL("a_saved")); }
+    catch(err){ permToast(err); }
+    return;
+  }
+  if(e.target.id === "trBAdd" && IS_ADMIN){
+    const round=val("trBRound"), a=val("trBA"), b=val("trBB");
+    if(!round||!a||!b){ toast(TRL("b_a_need")); return; }
+    try{ await FB.push(FB.ref(FB.db, "tourney/matches"), { round, a, b, score: val("trBScore"), code: val("trBCode"), ts: FB.serverTimestamp() }); toast(TRL("a_saved")); }
+    catch(err){ permToast(err); }
+    return;
+  }
+  const mdl = e.target.closest && e.target.closest("[data-trmdel]");
+  if(mdl && IS_ADMIN){
+    if(!confirm(TRL("a_del_ask"))) return;
+    try{ await FB.remove(FB.ref(FB.db, "tourney/matches/" + mdl.getAttribute("data-trmdel"))); }catch(err){ permToast(err); }
+    return;
+  }
+  if(e.target.id === "trHAdd" && IS_ADMIN){
+    const cup=val("trHCup"), winner=val("trHWin");
+    if(!cup||!winner){ toast(TRL("h_a_need")); return; }
+    try{ await FB.push(FB.ref(FB.db, "tourney/hall"), { cup, winner, plate: val("trHPlate"), mvp: val("trHMvp"), ts: FB.serverTimestamp() }); toast(TRL("a_saved")); }
+    catch(err){ permToast(err); }
+    return;
+  }
+  const hdl = e.target.closest && e.target.closest("[data-trhdel]");
+  if(hdl && IS_ADMIN){
+    if(!confirm(TRL("a_del_ask"))) return;
+    try{ await FB.remove(FB.ref(FB.db, "tourney/hall/" + hdl.getAttribute("data-trhdel"))); }catch(err){ permToast(err); }
+    return;
+  }
   if(e.target.id === "trASave"){
     try{
       await FB.set(FB.ref(FB.db, "tourney/meta"), {
@@ -5584,6 +5784,22 @@ FB.onValue(FB.ref(FB.db, "tourney/teams"), snap => {
   renderTourney();
 }, () => { trTeams = []; renderTourney(); });
 
+FB.onValue(FB.ref(FB.db, "tourney/rules"), snap => {
+  const v = snap.val(); trRules = (v && typeof v === "object") ? v : null; renderTourney();
+}, () => { trRules = null; renderTourney(); });
+FB.onValue(FB.ref(FB.db, "tourney/matches"), snap => {
+  const v = snap.val() || {};
+  trMatches = Object.entries(v).map(([id,m])=>({ id, round:(m&&m.round)||"", a:(m&&m.a)||"", b:(m&&m.b)||"", score:(m&&m.score)||"", code:(m&&m.code)||"", ts:(m&&m.ts)||0 }))
+    .filter(m=>m.round&&m.a&&m.b).sort((x,y)=>(x.ts||0)-(y.ts||0));
+  renderTourney(); if(window.renderSubnav) window.renderSubnav();
+}, () => { trMatches = []; renderTourney(); });
+FB.onValue(FB.ref(FB.db, "tourney/hall"), snap => {
+  const v = snap.val() || {};
+  trHall = Object.entries(v).map(([id,h])=>({ id, cup:(h&&h.cup)||"", winner:(h&&h.winner)||"", plate:(h&&h.plate)||"", mvp:(h&&h.mvp)||"", ts:(h&&h.ts)||0 }))
+    .filter(h=>h.cup&&h.winner).sort((x,y)=>(x.ts||0)-(y.ts||0));
+  renderTourney(); if(window.renderSubnav) window.renderSubnav();
+}, () => { trHall = []; renderTourney(); });
+
 FB.onValue(FB.ref(FB.db, "tourney/interest"), snap => {
   const v = snap.val() || {};
   trInterest = Object.entries(v).map(([uid,t])=>({
@@ -5606,7 +5822,10 @@ renderCreators();
 window.rsTrDebug = {
   meta(m){ trMeta = m; renderTourney(); if(window.renderSubnav) window.renderSubnav(); },
   interest(list){ trInterest = (list||[]).map((t,i)=>({ uid:"dbg"+i, nick:"", team:false, mates:"", when:"", ts:i, ...t })); renderTourney(); },
-  teams(list){ trTeams = (list||[]).map((t,i)=>({ uid:"dbg"+i, name:"", m1:"", m2:"", m3:"", sub:"", solo:false, ts:i, ...t })); renderTourney(); }
+  teams(list){ trTeams = (list||[]).map((t,i)=>({ uid:"dbg"+i, name:"", m1:"", m2:"", m3:"", sub:"", solo:false, ts:i, ...t })); renderTourney(); },
+  rules(o){ trRules = o||null; renderTourney(); },
+  matches(list){ trMatches = (list||[]).map((m,i)=>({ id:"dbg"+i, round:"", a:"", b:"", score:"", code:"", ts:i, ...m })); renderTourney(); if(window.renderSubnav) window.renderSubnav(); },
+  hall(list){ trHall = (list||[]).map((h,i)=>({ id:"dbg"+i, cup:"", winner:"", plate:"", mvp:"", ts:i, ...h })); renderTourney(); if(window.renderSubnav) window.renderSubnav(); }
 };
 window.rsCreDebug = { inject(list){ creCache = (list||[]).map((c,i)=>({ id:"dbg"+i, note:"", lang:"", platform:crePlatformOf(c.url||""), ts:i, ...c })); renderCreators(); } };
 
