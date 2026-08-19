@@ -4021,7 +4021,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.19-g";
+const SITE_VERSION = "2026.08.19-h";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5441,12 +5441,13 @@ let trRules = null, trMatches = [], trHall = [];      // 규칙 v31: tourney/rul
 /* 대회 상태 순서: 의향 조사 → 접수 → 마감 → 진행 → 종료. interest 는 2026-08-19 추가(규칙 v30). */
 const TR_STATES = ["interest","signup","closed","live","done"];
 /* 대회가 켜져 있을 때만 탭을 보여준다. 관리자는 설정하러 들어가야 하니 항상 보인다. */
-window.rsTrVisible = () => !!(trMeta && trMeta.on) || !!IS_ADMIN;
+/* 🚑 2026-08-19: 설정(meta)이 아직 저장되지 않았으면 **켜짐·의향 조사 중**으로 간주한다 — 관리자 저장이 막혀 유저 손 들기가 거부된 사고 대응(규칙 v32도 같은 예외). */
+window.rsTrVisible = () => (trMeta ? !!trMeta.on : true) || !!IS_ADMIN;
 /* 대진표·명예의 전당은 내용이 있을 때만(빈 탭 금지). 관리자는 채우러 들어가야 하니 항상. */
 window.rsTrBracketVisible = () => (window.rsTrVisible() && trMatches.length > 0) || !!IS_ADMIN;
 window.rsTrHallVisible    = () => trHall.length > 0 || !!IS_ADMIN;   // 명예의 전당은 대회가 꺼져 있어도 남는다(그게 목적)
 /* 상단 컵 배너용 상태 (클래식 스코프 rsCupBannerSync 가 읽는다) */
-window.rsTrBannerState = () => trMeta ? { on: !!trMeta.on, state: trMeta.state || "interest", title: trMeta.title || "" } : null;
+window.rsTrBannerState = () => trMeta ? { on: !!trMeta.on, state: trMeta.state || "interest", title: trMeta.title || "" } : { on: true, state: "interest", title: "" };
 /* 서브탭 "참가"의 상태별 이름 (renderSubnav 가 부른다) */
 window.rsTrSubLabel = () => {
   const st = trMeta && trMeta.state;
