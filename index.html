@@ -141,7 +141,17 @@
   #issueBanner .ibmore{flex-shrink:0;font-size:11px;color:var(--ricochet);font-weight:800}
   #issueBanner .ibx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
   /* 🏆 티어 투표 유도 배너 (닫을 수 있음 · 한 번 닫으면 안 뜸) */
-  #cupBanner{display:flex;align-items:center;gap:8px;width:100%;border:none;background:linear-gradient(90deg,rgba(255,209,63,.26),rgba(255,209,63,.08));border-bottom:1px solid rgba(255,209,63,.45);color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;text-align:left}
+  .trppl{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.trp{display:flex;align-items:center;gap:11px;padding:10px 12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:12px}
+.trpav{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(255,209,63,.12);border:1px solid rgba(255,209,63,.25);overflow:hidden}
+.trpav img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.trpmain{flex:1;min-width:0}
+.trpnick{font-weight:800;font-size:13.5px;line-height:1.3}
+.trpnick a{color:inherit;text-decoration:none}
+.trpsub{margin-top:3px;font-size:11.5px;color:var(--sub);display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.5}
+.trpsub img{width:15px;height:15px;border-radius:50%;vertical-align:-3px;margin-right:2px}
+.trpnum{flex-shrink:0;font-size:11px;color:var(--sub);opacity:.55;font-weight:700}
+#cupBanner{display:flex;align-items:center;gap:8px;width:100%;border:none;background:linear-gradient(90deg,rgba(255,209,63,.26),rgba(255,209,63,.08));border-bottom:1px solid rgba(255,209,63,.45);color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;text-align:left}
 #cupBanner .cbtxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #cupBanner .cbmore{flex-shrink:0;font-size:11px;color:var(--ricochet);font-weight:800}
 #cupBanner .cbx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
@@ -4021,7 +4031,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.19-h";
+const SITE_VERSION = "2026.08.19-i";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5514,14 +5524,17 @@ function renderTourney(){
     if(!trInterest.length){
       H.push(`<div class="rnote">${TRL("int_none")}</div>`);
     }else{
-      H.push(trInterest.map((t,i)=>
-        `<div class="rptev"><span>`
-        + `<b>${i+1}. <a href="#" data-trpf-open="${esc(t.uid)}" style="color:inherit;text-decoration:underline dotted">${esc(t.nick)}</a></b>${t.mates?` <span class="rptchip">${TRL("int_tag_team")}</span>`:""}`
-        + ` <span class="rnote" style="display:inline" data-trpf="${esc(t.uid)}"></span>`
-        + ((t.when||t.mates)?`<div class="rwl">${esc(t.when||"")}${t.mates?` <span class="rnote" style="display:inline">(${esc(t.mates)})</span>`:""}</div>`:"")
-        + (IS_ADMIN?`<div class="rwl rnote">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span>`
-            + ` <button class="cmtbtn" data-tridel="${esc(t.uid)}">${TRL("a_del")}</button></div>`:"")
-        + `</span></div>`).join(""));
+      /* 카드형 명단 (2026-08-19 MAMMON: 줄글로 붙어 있으면 난잡) — 아바타(첫 주력 영웅)·닉네임·영웅/시간대 줄 */
+      H.push(`<div class="trppl">` + trInterest.map((t,i)=>
+        `<div class="trp">`
+        + `<span class="trpav" data-trpfav="${esc(t.uid)}">🙋</span>`
+        + `<div class="trpmain">`
+        +   `<div class="trpnick"><a href="#" data-trpf-open="${esc(t.uid)}">${esc(t.nick)}</a></div>`
+        +   `<div class="trpsub"><span data-trpf="${esc(t.uid)}"></span>${t.when?`<span>🕐 ${esc(t.when)}</span>`:""}${t.mates?`<span>👥 ${esc(t.mates)}</span>`:""}</div>`
+        +   (IS_ADMIN?`<div class="trpsub">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span> <button class="cmtbtn" data-tridel="${esc(t.uid)}">${TRL("a_del")}</button></div>`:"")
+        + `</div>`
+        + `<span class="trpnum">#${i+1}</span>`
+        + `</div>`).join("") + `</div>`);
     }
     H.push(`</div>`);
     body.innerHTML = H.join("");
@@ -5582,7 +5595,9 @@ async function trLoadMains(){
     try{
       if(!(uid in trProfCache)){ const snap = await FB.get(FB.ref(FB.db, "profiles/" + uid)); trProfCache[uid] = snap.val() || null; }
       const p = trProfCache[uid]; const mains = p ? [p.main1||p.main, p.main2, p.main3].filter(Boolean) : [];
-      el.innerHTML = mains.length ? mains.map(k => (typeof PIC!=="undefined" && PIC[k] ? `<img src="${PIC[k]}" alt="" style="width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:2px">` : "") + esc(typeof hName==="function" ? hName(k) : k)).join(" ") : "";
+      el.innerHTML = mains.length ? `<span>` + mains.map(k => (typeof PIC!=="undefined" && PIC[k] ? `<img src="${PIC[k]}" alt="">` : "") + esc(typeof hName==="function" ? hName(k) : k)).join(" · ") + `</span>` : "";
+      const av = document.querySelector(`[data-trpfav="${uid}"]`);
+      if(av && mains.length && typeof PIC!=="undefined" && PIC[mains[0]]) av.innerHTML = `<img src="${PIC[mains[0]]}" alt="">`;
     }catch(e){ el.textContent = ""; }
   }
 }
