@@ -4261,7 +4261,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.25-b";
+const SITE_VERSION = "2026.08.26-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6403,6 +6403,7 @@ document.addEventListener("click", async e => {
     try{
       await FB.remove(FB.ref(FB.db, "tourney/teams/" + MY_UID));
       try{ await FB.remove(FB.ref(FB.db, "tourney/contact/" + MY_UID)); }catch(e2){}
+      try{ await FB.remove(FB.ref(FB.db, "tourney/ids/" + MY_UID)); }catch(e3){}   /* 취소 시 게임 ID도 정리 (2026-08-26) */
       toast(TRL("f_cancelled"));
     }catch(err){ toast(TRL("f_fail")); }
     return;
