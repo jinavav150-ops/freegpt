@@ -1016,6 +1016,236 @@
   .rptMe{background:rgba(255,193,77,.10);outline:1px solid rgba(255,193,77,.45);border-radius:6px}
   tr.rptMe td{background:rgba(255,193,77,.10)}
 </style>
+<style id="cupCss">
+@keyframes cupRays{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes cupShine{0%,60%{background-position:200% center}100%{background-position:-200% center}}
+.cupHero{position:relative;overflow:hidden;text-align:center;padding:28px 16px 24px;border-radius:14px;background:#0a0c14;border:1px solid #2a3347;margin-bottom:12px}
+.cupRaysEl{position:absolute;top:-190px;left:50%;margin-left:-330px;width:660px;height:660px;border-radius:50%;pointer-events:none;animation:cupRays 40s linear infinite;background:conic-gradient(from 0deg,rgba(255,176,46,.13) 0 14deg,transparent 14deg 40deg,rgba(255,176,46,.09) 40deg 52deg,transparent 52deg 86deg,rgba(255,176,46,.13) 86deg 100deg,transparent 100deg 138deg,rgba(255,176,46,.09) 138deg 150deg,transparent 150deg 190deg,rgba(255,176,46,.13) 190deg 204deg,transparent 204deg 244deg,rgba(255,176,46,.09) 244deg 256deg,transparent 256deg 300deg,rgba(255,176,46,.13) 300deg 314deg,transparent 314deg 360deg)}
+.cupGlow{position:absolute;top:-110px;left:50%;margin-left:-200px;width:400px;height:400px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,176,46,.26),rgba(255,176,46,0) 70%);pointer-events:none}
+.cupEyebrow{position:relative;font-size:11px;letter-spacing:.28em;color:#ffb02e;font-weight:700}
+.cupTitle{position:relative;font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-size:38px;line-height:.98;margin-top:10px;background:linear-gradient(100deg,#ffb02e 30%,#ffe9b0 45%,#ffb02e 60%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cupShine 5s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.cupRaysEl,.cupTitle{animation:none}}
+.cupSub{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px;color:#c8d0de}
+.cupSub i{height:1px;width:24px;background:rgba(255,176,46,.5);display:inline-block}
+.cupOpen{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 14px;border-radius:999px;background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.4);font-size:13px;font-weight:700;color:#ffd257}
+.cupOpen i{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block}
+.cupSecHead{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+.cupSecHead b{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#fff;letter-spacing:.02em}
+.cupSecHead .cupTag{font-size:11px;padding:3px 8px;border-radius:5px;background:rgba(93,169,255,.12);color:#5da9ff;font-weight:700}
+.cupSecHead i{height:1px;flex-grow:1;background:#232b3d;display:block}
+.cupPrz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cupPrzCard{display:flex;flex-direction:column;align-items:center;gap:8px;padding:13px 6px 11px;background:#151b2a;border:1px solid #2a3347;border-radius:12px;text-align:center;font-size:11.5px;font-weight:700;color:#fff;line-height:1.35}
+.cupLad{margin-top:14px;padding:16px 14px 14px;border-radius:14px;background:linear-gradient(180deg,#171d2e,#121724);border:1px solid rgba(255,176,46,.45);box-shadow:0 0 0 1px rgba(255,176,46,.1)}
+.cupLadT{font-family:'Black Han Sans',sans-serif;font-size:16px;color:#ffd257;letter-spacing:.02em}
+.cupLadS{font-size:11px;color:#8b96ab;margin-top:2px}
+.cupLadBars{display:flex;align-items:flex-end;gap:6px;height:88px;margin-top:10px}
+.cupLadCol{flex-grow:1;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;height:100%;text-align:center;font-size:11px}
+.cupLadCol .on{color:#ffd257;font-weight:700}.cupLadCol .off{color:#c8d0de}
+.cupLadBar1{border-radius:6px 6px 0 0;background:linear-gradient(180deg,#ffb02e,#b87708)}
+.cupLadBar0{border-radius:6px 6px 0 0;background:#222b40;border:1px dashed #3a4660}
+.cupLadNote{font-size:12px;color:#c8d0de;line-height:1.55;margin-top:10px}
+.cupIdIn{font-family:ui-monospace,Menlo,monospace !important;color:#ffd257 !important;letter-spacing:.06em}
+.cupRow{display:grid;grid-template-columns:minmax(0,1fr) 116px;gap:8px}
+.cupRow .cmtname{margin:0}
+.cupGuide{display:flex;gap:10px;padding:12px;border-radius:10px;background:rgba(255,176,46,.07);border:1px solid rgba(255,176,46,.3);font-size:12px;color:#e8ecf4;line-height:1.6;margin-top:10px}
+.cupGo{width:100%;height:50px;border:0;border-radius:12px;background:linear-gradient(100deg,#ffb02e,#ffd257);color:#1a1300;font-size:15px;font-weight:700;font-family:inherit;box-shadow:0 6px 22px rgba(255,176,46,.3);cursor:pointer}
+.cupTeam{position:relative;display:flex;align-items:center;gap:12px;padding:12px 13px 12px 17px;background:#151b2a;border-radius:12px;overflow:hidden;margin-top:8px}
+.cupTeam:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#ffb02e,#b87708)}
+.cupTeamN{font-family:'Black Han Sans',sans-serif;font-size:14px;color:#ffd257}
+.cupSolo{display:flex;align-items:center;gap:10px;padding:11px 13px;background:rgba(255,93,93,.06);border:1px dashed rgba(255,93,93,.4);border-radius:12px;margin-top:8px;font-size:12.5px;color:#c8d0de}
+.cupSoloTag{font-size:11px;padding:3px 8px;border-radius:5px;background:rgba(255,93,93,.15);color:#ff8a8a;font-weight:700;flex-shrink:0}
+.cupFoot{text-align:center;font-size:11px;color:#5f6a80;line-height:1.7;padding:14px 0 4px}
+.cupEmbWrap{display:flex;gap:12px;align-items:flex-start;margin-top:6px}
+.cupEmb{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:#0e1320;border:1.5px solid #ffb02e;flex-shrink:0}
+.cupEmbGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;flex-grow:1;max-height:196px;overflow-y:auto;padding:2px;border-radius:10px}
+.cupEmbBtn{aspect-ratio:1/1;padding:3px;border-radius:9px;border:1px solid #2a3347;background:#0e1320;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cupEmbBtn img{width:100%;height:100%;border-radius:6px;display:block;object-fit:cover}
+.cupEmbBtn.sel{border-color:#ffb02e;box-shadow:0 0 0 1px #ffb02e}
+.cupAf{display:inline-block;border-radius:7px;background-repeat:no-repeat}
+.cupA9{background-size:300% 300%;animation:cupA9 1.08s step-end infinite}
+.cupA4{background-size:200% 200%;animation:cupA4 .8s step-end infinite}
+@keyframes cupA9{0%{background-position:0% 0%}11.1%{background-position:50% 0%}22.2%{background-position:100% 0%}33.3%{background-position:0% 50%}44.4%{background-position:50% 50%}55.5%{background-position:100% 50%}66.6%{background-position:0% 100%}77.7%{background-position:50% 100%}88.8%{background-position:100% 100%}}
+@keyframes cupA4{0%{background-position:0% 0%}25%{background-position:100% 0%}50%{background-position:0% 100%}75%{background-position:100% 100%}}
+@media (prefers-reduced-motion:reduce){.cupA9,.cupA4{animation:none}}
+.cupChips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cupChips span{height:30px;padding:0 12px;display:inline-flex;align-items:center;border-radius:999px;border:1px solid rgba(255,176,46,.4);background:rgba(255,176,46,.08);color:#ffd257;font-size:12.5px;font-weight:700}
+.cupDate{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:10px;background:#151b2a;border:1px dashed #3a4660;font-size:12.5px;color:#c8d0de;line-height:1.6;margin-bottom:12px}
+.cupDate svg{flex-shrink:0;margin-top:1px}
+.cupRuleCard{padding:16px 14px;border-radius:14px;background:#10151f;border:1px solid #232b3d;margin-bottom:12px}
+.cupRuleH{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cupRuleH b{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#fff;letter-spacing:.02em}
+.cupRuleH i{height:1px;flex-grow:1;background:#232b3d;display:block}
+.cupRuleTx{font-size:13px;color:#c8d0de;line-height:1.65}
+.cupRuleUl{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.cupRuleUl li{position:relative;padding-left:16px;font-size:13px;color:#c8d0de;line-height:1.6}
+.cupRuleUl li:before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:2px;background:#ffb02e}
+.cupFlow{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.cupFlowBox{padding:12px;border-radius:10px;background:#151b2a;border:1px solid #2a3347;text-align:center}
+.cupFlowBox.on{border-color:rgba(255,176,46,.5);background:rgba(255,176,46,.06)}
+.cupFlowBox b{display:block;font-size:13.5px;color:#fff}
+.cupFlowBox span{display:block;font-size:11.5px;color:#8b96ab;margin-top:3px}
+.cupFlowArr{text-align:center;font-size:11.5px;color:#ffb02e;font-weight:700}
+.cupFlowRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cupMt{background:#10151f;border:1px solid #232b3d;border-radius:12px;padding:12px;margin-bottom:8px}
+.cupMtRow{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.cupMtT{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 4px;border-radius:10px;border:1px solid transparent}
+.cupMtT.win{border-color:rgba(255,176,46,.5);background:rgba(255,176,46,.06)}
+.cupMtT.win .cupMtN{color:#ffd257}
+.cupMtN{font-size:13px;font-weight:700;color:#fff;text-align:center;word-break:keep-all}
+.cupMtVs{text-align:center;min-width:64px}
+.cupMtVs b{font-family:'Black Han Sans',sans-serif;font-size:22px;color:#fff;letter-spacing:.04em}
+.cupMtVs.up b{color:#5f6a80}
+.cupMtVs span{display:block;font-size:10px;color:#ffb02e;font-weight:700;margin-top:2px}
+.cupMtCode{margin-top:8px;font-size:11px;color:#5f6a80;text-align:center}
+.cupMtCode span{font-family:ui-monospace,Menlo,monospace;color:#8b96ab}
+.cupTree{display:grid;grid-template-columns:1fr 18px 1fr;align-items:center;margin-bottom:8px}
+.cupTreeL{display:flex;flex-direction:column;gap:16px}
+.cupTreeC{position:relative;height:70%;min-height:90px}
+.cupTreeC i{position:absolute;top:18%;bottom:18%;left:0;width:9px;border-top:1.5px solid #3a4660;border-bottom:1.5px solid #3a4660;border-right:1.5px solid #3a4660;border-radius:0 7px 7px 0}
+.cupTreeC:after{content:"";position:absolute;top:50%;left:9px;right:0;border-top:1.5px solid #3a4660}
+.cupTrBox{background:#10151f;border:1px solid #232b3d;border-radius:10px;padding:7px}
+.cupTrBox.cupTrTbd{border-style:dashed}
+.cupTrRow{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:8px;border:1px solid transparent}
+.cupTrRow.win{border-color:rgba(255,176,46,.5);background:rgba(255,176,46,.06)}
+.cupTrRow.win .cupTrN,.cupTrRow.win .cupTrS{color:#ffd257}
+.cupTrN{font-size:12px;font-weight:700;color:#fff;flex-grow:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cupTrS{font-family:'Black Han Sans',sans-serif;font-size:15px;color:#c8d0de;min-width:13px;text-align:right}
+.cupTrCode{margin-top:4px;font-size:10px;color:#5f6a80;text-align:center;font-family:ui-monospace,Menlo,monospace}
+.cupSemis{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+.cupMerge{display:block;width:100%;height:26px;margin:2px 0}
+.cupTrTag{font-size:10px;color:#ffb02e;font-weight:700;letter-spacing:.08em;text-align:center;margin-bottom:5px}
+.cupFinalTag{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 8px;color:#ffd257;font-family:'Black Han Sans',sans-serif;font-size:13px;letter-spacing:.24em}
+.cupMtGold{border-color:rgba(255,176,46,.55);box-shadow:0 0 0 1px rgba(255,176,46,.14),0 8px 28px rgba(255,176,46,.08)}
+.cupStand{background:#10151f;border:1px solid #232b3d;border-radius:12px;padding:6px;margin-bottom:8px}
+.cupStRow{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px}
+.cupStRow:nth-child(-n+4){background:rgba(255,176,46,.04)}
+.cupStRk{font-family:'Black Han Sans',sans-serif;font-size:13px;color:#8b96ab;width:16px;text-align:center;flex-shrink:0}
+.cupStWL{font-size:11.5px;color:#8b96ab;flex-shrink:0}
+.cupMtSm{padding:10px 10px 8px}
+.cupMtSm .cupMtT{padding:6px 2px;gap:5px}
+.cupMtSm .cupMtN{font-size:12.5px}
+.cupMtVs.sm b{font-size:18px}
+.cupMtVs.sm span{font-size:9.5px}
+.cupAdv{font-size:9.5px;padding:2px 7px;border-radius:5px;background:rgba(255,176,46,.14);color:#ffd257;font-weight:700;letter-spacing:.02em}
+.cupChev{display:flex;justify-content:center;margin:2px 0 6px;color:#ffb02e;opacity:.8}
+.cupFinFrame{padding:1.5px;border-radius:16px;background:linear-gradient(160deg,#ffb02e,#6b4a08 45%,#ffd257 95%);box-shadow:0 10px 34px rgba(255,176,46,.14);margin-bottom:10px}
+.cupFin{position:relative;border-radius:14.5px;background:radial-gradient(130% 100% at 50% 0%,#1c2133,#0e1118 62%);padding:16px 12px 12px;overflow:hidden}
+.cupFinRibbon{display:flex;align-items:center;justify-content:center;gap:7px;color:#ffd257;font-family:'Black Han Sans',sans-serif;font-size:14px;letter-spacing:.26em;margin-bottom:14px}
+.cupFinT{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
+.cupFinN{font-size:14px;font-weight:700;color:#fff;text-align:center;word-break:keep-all}
+.cupFinT.win .cupFinN{color:#ffd257}
+.cupWinChip{font-size:9.5px;letter-spacing:.14em;padding:2px 9px;border-radius:5px;background:rgba(255,176,46,.16);color:#ffd257;font-weight:700}
+.cupFinVs{text-align:center;min-width:70px}
+.cupFinVs b{font-family:'Black Han Sans',sans-serif;font-size:30px;color:#ffd257;letter-spacing:.04em}
+.cupFinVs.up b{color:#5f6a80}
+.cupFinVs span{display:block;font-size:10px;color:#ffb02e;font-weight:700;margin-top:3px}
+/* ===== v5 결선 무대 「온에어 스코어밴드」 ===== */
+.bo-stage{--acc:#ffb02e;--acc2:#ffd257;--ink:#0e1118;--glow:rgba(255,176,46,.08);margin:24px -10px 0;padding:22px 8px 26px;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.015) 3px 4px),radial-gradient(120% 50% at 50% 0%,var(--glow),transparent 60%),linear-gradient(180deg,#07090f,#0b0f18 72%);border-bottom:1px solid #2a3347;clip-path:polygon(0 12px,100% 0,100% 100%,0 100%)}
+.bo-stage[data-bracket="plate"]{--acc:#5da9ff;--acc2:#8fc4ff;--glow:rgba(93,169,255,.07)}
+.bo-round{position:relative;display:flex;align-items:center;gap:12px;margin:2px 12px 14px;font:22px/1.1 'Black Han Sans',sans-serif;font-weight:400;letter-spacing:.05em;color:#fff}
+.bo-round:before{content:"";width:5px;align-self:stretch;background:linear-gradient(180deg,var(--acc),var(--acc2));transform:skewX(-12deg)}
+.bo-round:after{content:"";height:1px;flex-grow:1;background:linear-gradient(90deg,#2a3347,transparent)}
+.bo-match{--split:50%;position:relative;height:92px;margin:10px 4px;overflow:hidden;isolation:isolate;background:#0a0d14;border:1px solid #232b3d;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.bo-side{position:absolute;inset:0;z-index:0;display:flex;align-items:center;gap:8px;padding:0 12px;transition:clip-path .6s cubic-bezier(.22,.9,.24,1),filter .6s}
+.bo-side--l{background:linear-gradient(100deg,rgba(255,93,93,.20),rgba(255,93,93,.03) 72%);clip-path:polygon(0 0,calc(var(--split) + 10px) 0,calc(var(--split) - 16px) 100%,0 100%);padding-right:calc(100% - var(--split) + 48px);transition:clip-path .6s cubic-bezier(.22,.9,.24,1),filter .6s,padding .6s}
+.bo-side--r{flex-direction:row-reverse;background:linear-gradient(-100deg,rgba(93,169,255,.20),rgba(93,169,255,.03) 72%);clip-path:polygon(calc(var(--split) + 16px) 0,100% 0,100% 100%,calc(var(--split) - 10px) 100%);padding-left:calc(var(--split) + 48px);transition:clip-path .6s cubic-bezier(.22,.9,.24,1),filter .6s,padding .6s}
+.bo-emblem{width:44px;height:44px;flex:none;border-radius:9px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+.bo-emblem.is-sprite{background-repeat:no-repeat;background-position:0 0}
+.bo-embFb{display:inline-flex;align-items:center;justify-content:center;background:#10151f;border:1px solid #3a4660}
+.bo-name{font:14px/1.15 'Black Han Sans',sans-serif;font-size:clamp(12px,3.6vw,14px);color:#c8d0de;word-break:normal;overflow-wrap:anywhere;min-width:0;font-weight:400}
+.bo-plate{position:absolute;z-index:2;top:50%;left:var(--split);transform:translate(-50%,-50%) skewX(-12deg);min-width:74px;padding:6px 12px;text-align:center;background:var(--ink);border:1px solid #2a3347;transition:left .6s cubic-bezier(.22,.9,.24,1)}
+.bo-score{display:inline-block;transform:skewX(12deg);white-space:nowrap;font:26px/1 'Black Han Sans',sans-serif;color:#fff;font-weight:400}
+.bo-score b{font-weight:400;color:var(--acc2)}
+.bo-tag{position:absolute;z-index:3;top:0;left:20px;padding:3px 10px 4px;font:700 10px/1 'Noto Sans KR',sans-serif;letter-spacing:.12em;color:var(--ink);background:var(--acc);clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,6px 100%)}
+.bo-match.is-upcoming .bo-score{font-size:15px;color:#8b96ab;letter-spacing:.2em}
+.bo-when{position:absolute;z-index:3;left:50%;bottom:6px;translate:-50%;font:11px/1 'Noto Sans KR',sans-serif;color:#8b96ab}
+.bo-match.is-done.is-win-l{--split:58%}
+.bo-match.is-done.is-win-r{--split:42%}
+.is-win-l .bo-side--r,.is-win-r .bo-side--l{filter:grayscale(1) brightness(.65)}
+.is-win-l .bo-side--l .bo-name,.is-win-r .bo-side--r .bo-name{color:var(--acc2)}
+.is-win-l .bo-side--l,.is-win-r .bo-side--r{box-shadow:inset 0 -3px 0 var(--acc)}
+.is-win-l .bo-side--r .bo-emblem,.is-win-r .bo-side--l .bo-emblem{width:34px;height:34px}
+.bo-ticket{display:none}
+.is-done.is-win-l .bo-side--l .bo-ticket,.is-done.is-win-r .bo-side--r .bo-ticket{display:block;position:absolute;bottom:5px;left:12px;padding:3px 9px;font:700 10px/1 'Noto Sans KR',sans-serif;font-style:normal;color:var(--ink);background:linear-gradient(90deg,var(--acc),var(--acc2));clip-path:polygon(0 0,100% 0,94% 100%,6% 100%)}
+.is-done.is-win-r .bo-side--r .bo-ticket{left:auto;right:12px}
+.bo-meta{margin:-4px 6px 6px;text-align:center;font-size:10px;color:#5f6a80}
+.bo-meta span{font-family:ui-monospace,Menlo,monospace;color:#8b96ab}
+.bo-code{position:absolute;z-index:3;top:6px;right:8px;width:26px;height:22px;display:flex;align-items:center;justify-content:center;background:rgba(14,17,24,.6);border:1px solid #2a3347;border-radius:6px;color:#5f6a80;cursor:pointer;padding:0}
+.bo-code:active{color:#ffd257;border-color:#ffb02e}
+.bo-del{position:absolute;z-index:3;top:6px;right:40px;width:24px;height:22px;background:rgba(14,17,24,.6);border:1px solid #3a2430;border-radius:6px;color:#ff8a8a;font-size:14px;line-height:1;cursor:pointer;padding:0}
+.bo-final .bo-code{top:8px;right:10px}
+.bo-final .bo-del{top:8px;right:42px}
+.bo-copied{position:fixed;z-index:99999;left:50%;bottom:84px;translate:-50%;padding:9px 16px;border-radius:999px;background:#151b2a;border:1px solid #ffb02e;color:#ffd257;font:700 12px/1 'Noto Sans KR',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.bo-tracer{position:relative;height:34px;margin:-2px 24px}
+.bo-tracer .seg{position:absolute;top:14px;width:42%;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--acc) 0 10px,transparent 10px 18px) 0 0/36px 3px;box-shadow:0 0 8px var(--glow)}
+.bo-tracer.from-l .seg{left:8%;transform:rotate(14deg);transform-origin:left center}
+.bo-tracer.from-r .seg{right:8%;transform:rotate(-14deg);transform-origin:right center}
+.bo-tracer .stub{position:absolute;top:14px;width:15%;height:3px;background:#2a3347}
+.bo-tracer.from-l .stub{right:8%;transform:rotate(14deg);transform-origin:right center}
+.bo-tracer.from-r .stub{left:8%;transform:rotate(-14deg);transform-origin:left center}
+.bo-tracer .hole{position:absolute;top:10px;width:12px;height:12px;border-radius:50%;background:radial-gradient(#05070c 35%,#2a3347 62%,transparent 70%)}
+.bo-tracer.from-l .hole{right:calc(8% + 13%)}
+.bo-tracer.from-r .hole{left:calc(8% + 13%)}
+@keyframes bo-flow{to{background-position:36px 0}}
+.bo-final{height:auto;padding:2px;margin-top:16px;border:0;background:linear-gradient(120deg,var(--acc),var(--acc2) 40%,#6b4a10 60%,var(--acc));clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.bo-final__in{position:relative;height:178px;overflow:hidden;clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);background:radial-gradient(90% 90% at 50% 120%,var(--glow),transparent 60%),#10151f}
+.bo-final .bo-side{flex-direction:column;justify-content:center;gap:6px;text-align:center}
+.bo-final .bo-side--l{padding:12px calc(100% - var(--split) + 12px) 12px 10px}
+.bo-final .bo-side--r{padding:12px 10px 12px calc(var(--split) + 12px)}
+.bo-final .bo-emblem{width:62px;height:62px}
+.bo-final .bo-name{font-size:15px}
+.bo-final .bo-score{font-size:38px}
+.bo-final.is-champion.is-win-l{--split:64%}
+.bo-final.is-champion.is-win-r{--split:36%}
+.bo-final.is-champion .bo-side{padding-bottom:44px}
+.is-champion.is-win-l .bo-side--r .bo-name,.is-champion.is-win-r .bo-side--l .bo-name{font:700 12px/1.15 'Noto Sans KR',sans-serif;color:#aab3c5}
+.is-champion.is-win-l .bo-side--r .bo-emblem,.is-champion.is-win-r .bo-side--l .bo-emblem{width:42px;height:42px}
+.bo-final.is-champion.is-win-l .bo-side--r{padding-left:calc(var(--split) + 52px)}
+.bo-final.is-champion.is-win-r .bo-side--l{padding-right:calc(100% - var(--split) + 52px)}
+.bo-qhead{display:flex;align-items:center;gap:12px;margin:26px 4px 10px}
+.bo-qhead i:first-child{display:none}
+.bo-qhead i:last-child{height:1px;flex-grow:1;background:linear-gradient(90deg,#2a3347,transparent)}
+.bo-qhead span{position:relative;padding:0 0 0 15px;font:21px/1.1 'Black Han Sans',sans-serif;font-weight:400;letter-spacing:.04em;color:#fff;background:none;border:0}
+.bo-qhead span:before{content:"";position:absolute;left:0;top:1px;bottom:1px;width:5px;background:linear-gradient(180deg,#ffb02e,#b87708);transform:skewX(-12deg)}
+.bo-q{height:64px;margin:8px 4px;--acc:#ffb02e;--acc2:#ffd257;--ink:#0e1118;--glow:rgba(255,176,46,.08)}
+.bo-q .bo-emblem{width:32px;height:32px}
+.bo-q.is-done.is-win-l .bo-side--r .bo-emblem,.bo-q.is-done.is-win-r .bo-side--l .bo-emblem{width:28px;height:28px}
+.bo-q .bo-score{font-size:19px}
+.bo-q .bo-plate{min-width:62px;padding:5px 10px}
+.bo-q.is-upcoming .bo-score{font-size:13px}
+.bo-q .bo-when{bottom:4px}
+.bo-stand{margin:0 4px}
+.bo-strow{position:relative;display:flex;align-items:center;gap:9px;height:44px;padding:0 12px;margin:5px 0;background:#0a0d14;border:1px solid #232b3d;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.bo-strow.top{background:linear-gradient(90deg,rgba(255,176,46,.10),rgba(255,176,46,.015) 55%,#0a0d14)}
+.bo-strow.bot{background:linear-gradient(90deg,rgba(93,169,255,.08),rgba(93,169,255,.012) 55%,#0a0d14)}
+.bo-strow.r1{border-color:rgba(255,176,46,.5);box-shadow:inset 3px 0 0 #ffb02e}
+.bo-strk{font:16px/1 'Black Han Sans',sans-serif;font-weight:400;color:#8b96ab;width:20px;text-align:center;flex-shrink:0}
+.bo-strow.top .bo-strk{color:#ffd257}
+.bo-strow .bo-emblem{width:26px;height:26px;border-radius:6px}
+.bo-stname{font:13px/1.1 'Black Han Sans',sans-serif;font-weight:400;color:#e8ecf4;flex-grow:1;min-width:0;overflow-wrap:anywhere}
+.bo-stwl{font-size:11.5px;color:#8b96ab;flex-shrink:0}
+.bo-stcut{display:flex;align-items:center;gap:8px;margin:10px 2px}
+.bo-stcut .ln{flex-grow:1;height:2px;background:linear-gradient(90deg,transparent,#ffb02e);box-shadow:0 0 6px rgba(255,176,46,.35)}
+.bo-stcut .ln:last-child{background:linear-gradient(90deg,#ffb02e,transparent)}
+.bo-stcut span{font:700 10px/1 'Noto Sans KR',sans-serif;letter-spacing:.14em;color:#ffd257;padding:4px 10px;border:1px solid rgba(255,176,46,.45);background:rgba(255,176,46,.08);clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);flex-shrink:0}
+@media (prefers-reduced-motion:reduce){.bo-stcut .ln{animation:none}}
+.is-champion.is-win-l .bo-side--l .bo-emblem,.is-champion.is-win-r .bo-side--r .bo-emblem{border-radius:50%;box-shadow:0 0 0 3px var(--acc2),0 0 24px var(--glow)}
+.bo-champ{display:none}
+.is-champion .bo-champ{display:block;position:absolute;z-index:4;inset:auto 0 0;padding:9px 0 10px;text-align:center;font:15px/1 'Black Han Sans',sans-serif;font-weight:400;color:var(--ink);background:linear-gradient(100deg,var(--acc) 20%,var(--acc2) 45%,#fff3c4 50%,var(--acc2) 55%,var(--acc) 80%) 0 0/220% 100%;animation:bo-shine 2.6s linear infinite}
+@keyframes bo-shine{to{background-position:-220% 0}}
+@media (prefers-reduced-motion:reduce){.bo-side,.bo-plate{transition:none}.bo-champ,.bo-tracer .seg{animation:none}}
+.cupHallPlq{border-radius:8px;background:linear-gradient(180deg,#232b3f,#141a28);border:1px solid #3a4660;box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08);padding:3px;margin-bottom:10px}
+.cupHallIn{border:1px solid rgba(255,176,46,.5);border-radius:6px;padding:20px 14px 16px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.cupHallCup{font-size:10px;letter-spacing:.28em;color:#ffb02e;font-weight:700;text-transform:uppercase}
+.cupHallName{font-family:'Black Han Sans',sans-serif;font-size:30px;color:#ffd257;line-height:1.05}
+.cupHallSub{font-size:12px;color:#8b96ab;line-height:1.6}
+.cupHallRows{width:100%;display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.cupHallRow{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:9px;background:rgba(10,14,24,.55);font-size:12.5px;color:#c8d0de;text-align:left}
+.cupHallRow b{color:#fff;font-weight:700}
+.cupHallRow svg{flex-shrink:0}
+.cupHallQ{font-family:'Black Han Sans',sans-serif;font-size:40px;letter-spacing:.18em;line-height:1;background:linear-gradient(100deg,#6b7690 35%,#fff3d6 50%,#6b7690 65%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cupShine 4.5s ease-in-out infinite;padding:6px 0}
+@media (prefers-reduced-motion:reduce){.cupHallQ{animation:none}}
+</style>
 </head>
 <body>
 
@@ -4031,7 +4261,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.19-i";
+const SITE_VERSION = "2026.08.25-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5444,6 +5674,137 @@ const TR_L = {
     zh:"⚠️ 開放報名前請先公布規則。"}
 };
 const TRL = k => { const o=TR_L[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
+/* ── 🏆 접수 화면(1안) 전용 문구 — 4개 언어 (대회_접수화면_문구_다국어.md) ── */
+const TR_CUP = {
+  cp_sub:{ko:"3v3 · 개발사 후원 상품 · 온라인",en:"3v3 · Dev-sponsored prizes · Online",ja:"3v3・開発元提供の賞品・オンライン",zh:"3v3・開發商贊助獎品・線上"},
+  cp_open:{ko:"지금 팀 접수 중",en:"Team sign-ups open now",ja:"チーム受付中",zh:"隊伍報名進行中"},
+  cp_prz_head:{ko:"우승팀 상품",en:"Winners' prizes",ja:"優勝チームの賞品",zh:"冠軍隊伍獎品"},
+  cp_prz_sure:{ko:"개발사 확정",en:"Confirmed by the devs",ja:"開発元公認",zh:"開發商確認"},
+  cp_prz1:{ko:"공식 디스코드<br>우승 공지",en:"Victory post on<br>official Discord",ja:"公式Discordで<br>優勝発表",zh:"官方Discord<br>冠軍公告"},
+  cp_prz2:{ko:"프로모 코드<br>(젬 · 직접 지급)",en:"Promo codes<br>(gems, direct)",ja:"プロモコード<br>（ジェム・直接支給）",zh:"兌換碼<br>（寶石・直接發放）"},
+  cp_prz3:{ko:"우승팀 전용<br>게임 내 칭호",en:"Exclusive in-game<br>title",ja:"優勝チーム限定<br>ゲーム内称号",zh:"冠軍專屬<br>遊戲稱號"},
+  cp_lad_head:{ko:"팀이 모일수록 상품이 커집니다",en:"More teams, bigger prizes",ja:"チームが増えるほど賞品が大きくなります",zh:"隊伍越多，獎品越大"},
+  cp_lad_sub:{ko:"개발사가 직접 한 약속 — \"More players = more rewards\"",en:"The devs' own promise — \"More players = more rewards\"",ja:"開発元の約束 — \"More players = more rewards\"",zh:"開發商的承諾 — \"More players = more rewards\""},
+  cp_lad1:{ko:"지금 {n}팀",en:"{n} teams now",ja:"現在{n}チーム",zh:"目前{n}隊"},
+  cp_lad2:{ko:"4팀 · 개최 확정",en:"4 teams · Confirmed",ja:"4チーム・開催確定",zh:"4隊・確定舉辦"},
+  cp_lad3:{ko:"8팀 · 풀 대진표",en:"8 teams · Full bracket",ja:"8チーム・フル対戦表",zh:"8隊・完整賽程"},
+  cp_lad_note:{ko:"팀을 데려오세요 — <b style='color:#ffd257'>라이벌 팀도요.</b> 참가 팀 수를 개발사에 보고하고 상품 규모를 함께 정합니다.",en:"Bring your team — <b style='color:#ffd257'>and your rivals too.</b> Team numbers go to the devs, and prize size is decided together.",ja:"チームを連れてきてください — <b style='color:#ffd257'>ライバルチームも。</b>参加チーム数を開発元に報告し、賞品の規模を一緒に決めます。",zh:"帶你的隊伍來吧 — <b style='color:#ffd257'>對手隊伍也一起。</b>參賽隊數會回報給開發商，共同決定獎品規模。"},
+  cp_id:{ko:"게임 ID",en:"Game ID",ja:"ゲームID",zh:"遊戲ID"},
+  cp_id_guide:{ko:"<b style='color:#ffd257'>게임 ID는 상품 지급에 꼭 필요해요.</b><br>게임 → <b>친구</b> 탭 → 왼쪽 아래 <b>내 ID</b> → <b>눌러서 복사하기</b>로 복사한 값을 그대로 붙여넣어 주세요. (예: RZ1RA4U8)",en:"<b style='color:#ffd257'>Your game ID is required for prize delivery.</b><br>In game: <b>Friends</b> tab → bottom-left <b>My ID</b> → tap to copy, then paste it here. (e.g. RZ1RA4U8)",ja:"<b style='color:#ffd257'>ゲームIDは賞品の支給に必須です。</b><br>ゲーム → <b>フレンド</b>タブ → 左下の<b>マイID</b> → <b>タップしてコピー</b>し、そのまま貼り付けてください。（例: RZ1RA4U8）",zh:"<b style='color:#ffd257'>遊戲ID是發放獎品的必要資訊。</b><br>遊戲 → <b>好友</b>頁籤 → 左下角<b>我的ID</b> → <b>點擊複製</b>後直接貼上。（例: RZ1RA4U8）"},
+  cp_count:{ko:"{t}팀 + 대기 {s}명",en:"{t} teams + {s} waiting",ja:"{t}チーム + 待機{s}名",zh:"{t}隊 + 候補{s}人"},
+  cp_solo_wait:{ko:"함께할 팀원을 기다려요",en:"waiting for teammates",ja:"一緒に戦う仲間を待っています",zh:"正在等待隊友"},
+  cp_emb:{ko:"팀 엠블럼 — 74가지 중 선택",en:"Team emblem — pick one of 74",ja:"チームエンブレム — 74種から選択",zh:"隊徽 — 74款任選"},
+  cp_edit_note:{ko:"수정·취소는 접수 마감 전까지만 가능해요 — 마감 후 변경은 운영자에게 문의해 주세요.",en:"You can edit or cancel your entry until sign-ups close — after that, contact the organiser.",ja:"登録の修正・キャンセルは受付締切まで可能です。締切後の変更は運営者にお問い合わせください。",zh:"報名截止前可修改或取消；截止後如需變更，請聯絡管理員。"},
+  cp_adv:{ko:"결승 진출",en:"To the final",ja:"決勝進出",zh:"晉級決賽"},
+  cp_win:{ko:"우승",en:"CHAMPIONS",ja:"優勝",zh:"冠軍"},
+  cp_id_bad:{ko:"게임 ID를 다시 확인해 주세요 — 영문과 숫자만이에요. (예: RZ1RA4U8) 게임 → 친구 탭 → 왼쪽 아래 내 ID에서 복사할 수 있어요.",en:"Please check the game ID — letters and numbers only (e.g. RZ1RA4U8). In game: Friends tab → bottom-left My ID.",ja:"ゲームIDをご確認ください — 英数字のみです（例: RZ1RA4U8）。ゲーム → フレンドタブ → 左下のマイIDでコピーできます。",zh:"請再確認遊戲ID — 僅限英文與數字（例: RZ1RA4U8）。遊戲 → 好友頁籤 → 左下角我的ID可複製。"},
+  ch_empty:{ko:"이 명패는 아직 비어 있습니다 — 첫 주인을 찾는 중",en:"This plaque is still empty — waiting for its first owners.",ja:"この銘板はまだ空です — 最初の主を探しています。",zh:"這塊銘牌仍然空著 — 正在等待第一位主人。"},
+  cp_foot:{ko:"비공식 커뮤니티 대회 · 운영 MAMMON · 상품은 개발사가 우승팀에게 직접 지급합니다",en:"Unofficial community cup · run by MAMMON · prizes delivered to winners directly by the devs",ja:"非公式コミュニティ大会・運営 MAMMON・賞品は開発元が優勝チームへ直接支給します",zh:"非官方社群比賽・由 MAMMON 主辦・獎品由開發商直接發放給冠軍隊伍"}
+};
+const CUPL = k => { const o=TR_CUP[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
+/* ── 규칙 탭 문구 — 4개 언어 (대회규칙서_초안_v1 요약 · 2026-08-24) ── */
+const CUP_R = {
+  r_date:{ko:"9월 19일 (토) 저녁 8시 (한국 시간) — 하루에 끝나요. 접수 마감은 9월 14일 (월).",en:"Saturday, September 19 · 20:00 KST — one-day event. Sign-ups close September 14 (Mon).",ja:"9月19日(土) 20時（韓国時間）— 1日で完結。受付締切は9月14日(月)。",zh:"9月19日 (六) 20:00（韓國時間）— 一日完賽。報名截止：9月14日 (一)。"},
+  r_chip1:{ko:"3v3 + 예비 1명",en:"3v3 + 1 sub",ja:"3v3＋補欠1名",zh:"3v3＋替補1人"},
+  r_chip2:{ko:"하루 완결",en:"One-day event",ja:"1日で完結",zh:"一日完賽"},
+  r_chip3:{ko:"온라인",en:"Online",ja:"オンライン",zh:"線上"},
+  r_chip4:{ko:"참가비 없음",en:"Free entry",ja:"参加費なし",zh:"免費參加"},
+  r_chip5:{ko:"자격 제한 없음",en:"Open to everyone",ja:"参加資格フリー",zh:"不限資格"},
+  r_how:{ko:"진행 방식",en:"How it works",ja:"進行方式",zh:"賽制"},
+  r_how_sum:{ko:"모든 팀이 최소 3경기를 뛰어요. 예선 성적에 따라 두 개의 결선으로 나뉘고 — 어느 쪽이든 우승 트로피가 있습니다.",en:"Every team plays at least 3 matches, then moves into one of two finals brackets — and both have a trophy to win.",ja:"全チームが最低3試合。予選成績で2つの決勝トーナメントに分かれ — どちらにも優勝トロフィーがあります。",zh:"每隊至少打3場，依預賽成績進入兩座決賽的其中一座 — 兩邊都有冠軍獎盃。"},
+  r_sw:{ko:"예선 3라운드 · 한 판 승부",en:"Round stage · 3 rounds · one game each",ja:"予選3回戦・1本勝負",zh:"預賽3輪・單局"},
+  r_sw2:{ko:"비슷한 성적끼리 붙어요",en:"Similar records play each other",ja:"近い成績同士が対戦",zh:"戰績相近者對戰"},
+  r_split:{ko:"성적에 따라 두 결선으로 나뉘어요",en:"Results decide which finals you enter",ja:"成績で2つの決勝に分かれます",zh:"依戰績進入不同決賽"},
+  r_cup:{ko:"컵 결선",en:"Cup finals",ja:"カップ決勝",zh:"盃賽決賽"},
+  r_plate:{ko:"플레이트 결선",en:"Plate finals",ja:"プレート決勝",zh:"銀盤決賽"},
+  r_bo3:{ko:"3판 2선승 · 우승팀 시상",en:"Best of 3 · winners get prizes",ja:"3本2先取・優勝チームに賞品",zh:"三戰兩勝・冠軍有獎"},
+  r_reg:{ko:"팀 등록",en:"Entering",ja:"チーム登録",zh:"報名"},
+  r_reg1:{ko:"팀 3명 + 예비 1명(선택)으로 신청해요. 혼자여도 괜찮아요 — 운영자가 시간대를 맞춰 팀을 묶어드립니다.",en:"Enter with 3 players + 1 optional sub. Solo? That's fine — the organiser will match you into a team.",ja:"3人＋補欠1名（任意）で登録。1人でもOK — 運営が時間帯を合わせてチームを組みます。",zh:"以3人＋替補1人（選填）報名。單人也可以 — 管理員會依時段幫你組隊。"},
+  r_reg2:{ko:"닉네임은 게임 안 실제 닉네임으로 적어주세요. 게임 ID는 상품 지급용이라 꼭 필요하고, 운영자만 봅니다.",en:"Use your real in-game nicknames. Game IDs are required for prize delivery and are visible to the organiser only.",ja:"ニックネームはゲーム内の実名で。ゲームIDは賞品支給に必須で、運営者のみ確認できます。",zh:"請填寫遊戲內實際暱稱。遊戲ID為發獎必需，僅管理員可見。"},
+  r_reg3:{ko:"접수 마감 후에는 명단을 바꿀 수 없어요 (부득이한 경우만 운영자 승인).",en:"Rosters lock when sign-ups close (changes only with organiser approval).",ja:"受付締切後は名簿の変更不可（やむを得ない場合のみ運営承認）。",zh:"報名截止後名單鎖定（特殊情況需管理員同意）。"},
+  r_reg4:{ko:"예비 선수는 경기 중에는 못 바꾸고, 한 경기가 끝난 뒤에 바꿀 수 있어요.",en:"Subs cannot come in mid-game — swaps happen after a game ends.",ja:"補欠は試合の途中では交代できず、1試合が終わった後に交代できます。",zh:"替補不能在比賽中途上場，須等一場結束後才能更換。"},
+  r_set:{ko:"경기 설정",en:"Match setup",ja:"試合設定",zh:"比賽設定"},
+  r_set1:{ko:"게임 안 토너먼트 모드로 진행해요.",en:"Matches run in the in-game tournament mode.",ja:"ゲーム内のトーナメントモードで進行します。",zh:"使用遊戲內的錦標賽模式進行。"},
+  r_set2:{ko:"맵 랜덤 · 봇 없음. 한 팀이 방을 만들어 상대 팀 선수 1명을 초대하는 방식이에요. (어느 팀이 방을 만들지는 대진표와 함께 안내)",en:"Random map, no bots. One team hosts the room and invites a player from the other team (who hosts will be announced with the bracket).",ja:"マップはランダム・ボットなし。片方のチームが部屋を作り、相手の1人を招待する方式です。（どちらが作るかは対戦表と一緒に案内）",zh:"地圖隨機・無機器人。由一隊開房並邀請對方1名玩家（由哪隊開房將隨賽程表公布）。"},
+  r_set3:{ko:"경기가 끝나면 방장이 매치 코드를 운영자에게 보고해요 — 보고 없는 경기는 인정되지 않아요.",en:"After each match the host reports the match code to the organiser — unreported matches don't count.",ja:"試合後、ホストはマッチコードを運営に報告 — 未報告の試合は無効です。",zh:"每場結束後房主須向管理員回報比賽代碼 — 未回報的比賽不計成績。"},
+  r_time:{ko:"출석 · 시간",en:"Attendance & timing",ja:"出席・時間",zh:"出席・時間"},
+  r_time1:{ko:"집합 시각에서 15분이 지나도 3명이 안 모이면 몰수패예요. 대회 중에도 자기 경기 시작에 5분 넘게 늦으면 몰수패가 될 수 있어요.",en:"15 minutes after call time with fewer than 3 players = forfeit. During the day, being 5+ minutes late for your own match can also count as a forfeit.",ja:"集合時刻から15分過ぎて3人未満なら没収負け。大会中も自分の試合開始に5分以上遅れると没収負けになることがあります。",zh:"集合後15分鐘未滿3人即判負。當天若自己的比賽開始超過5分鐘未到，也可能被判負。"},
+  r_time2:{ko:"대회는 하루에 끝나요 — 8팀 기준 약 3~4시간.",en:"The whole cup runs in one day — about 3–4 hours with 8 teams.",ja:"大会は1日で完結 — 8チームで約3〜4時間。",zh:"比賽一天內結束 — 8隊約3～4小時。"},
+  r_time3:{ko:"서버 문제로 경기가 끊기면 운영자가 재경기 또는 스코어 인정을 판단해요.",en:"If the server drops a match, the organiser decides: replay it or keep the score.",ja:"サーバー障害で中断した場合、再試合かスコア継続かは運営が判断。",zh:"若因伺服器中斷，由管理員決定重賽或承認比分。"},
+  r_dq:{ko:"매너 · 실격",en:"Conduct & DQ",ja:"マナー・失格",zh:"行為・取消資格"},
+  r_dq_sum:{ko:"아래 행동은 실격이에요 — 실격 팀은 상품을 받을 수 없어요:",en:"These get a team disqualified — no prizes for DQ'd teams:",ja:"以下の行為は失格 — 失格チームは賞品対象外：",zh:"以下行為將被取消資格 — 取消資格的隊伍無法獲獎："},
+  r_dq1:{ko:"노쇼 · 지각",en:"No-show / lateness",ja:"無断欠席・遅刻",zh:"缺席・遲到"},
+  r_dq2:{ko:"고의 트롤 · 던지기 (리플레이로 판정)",en:"Trolling / throwing (judged by replay)",ja:"故意のトロール・投げ（リプレイで判定）",zh:"故意擺爛（依重播判定）"},
+  r_dq3:{ko:"거짓 결과 제출",en:"Submitting false results",ja:"虚偽の結果報告",zh:"謊報比賽結果"},
+  r_dq4:{ko:"미등록 선수 · 대리 플레이",en:"Unregistered players / smurfing",ja:"未登録選手・代理プレイ",zh:"未註冊選手・代打"},
+  r_dq5:{ko:"욕설 · 비하 (경고 1회 후 실격)",en:"Toxicity (one warning, then DQ)",ja:"暴言・侮辱（警告1回で失格）",zh:"辱罵（警告一次後取消資格）"},
+  r_dq_j:{ko:"분쟁은 운영자가 매치 코드 리플레이를 보고 판정하고, 판정은 최종이에요.",en:"Disputes are settled by the organiser from match-code replays; decisions are final.",ja:"紛争はマッチコードのリプレイで運営が判定し、判定は最終です。",zh:"爭議由管理員根據比賽代碼重播裁定，裁定為最終決定。"},
+  r_prz:{ko:"상품",en:"Prizes",ja:"賞品",zh:"獎品"},
+  r_prz_note:{ko:"수량과 분배는 참가 팀 수가 확정되면 개발사와 함께 공지해요 — 팀이 많을수록 상품이 커집니다.",en:"Amounts and split will be announced with the devs once team numbers are final — more teams, bigger prizes.",ja:"数量と配分は参加チーム数の確定後、開発元と共に発表します — チームが多いほど賞品も大きく。",zh:"數量與分配將於隊數確定後與開發商共同公布 — 隊伍越多，獎品越大。"},
+  r_hall:{ko:"우승팀과 MVP는 팬사이트 명예의 전당에 영구 기록됩니다.",en:"Winners and the MVP are recorded forever in the site's Hall of Fame.",ja:"優勝チームとMVPはサイトの殿堂に永久掲載されます。",zh:"冠軍與MVP將永久留名於本站名人堂。"},
+  r_ask:{ko:"궁금한 건 소통 → 피드백이나 디스코드로 물어보세요.",en:"Questions? Ask in Chat → Feedback or on Discord.",ja:"質問は「交流 → フィードバック」またはDiscordへどうぞ。",zh:"有問題請至 交流 → 意見回饋 或 Discord 詢問。"},
+  r_note_head:{ko:"운영자 공지",en:"Organiser's note",ja:"運営からのお知らせ",zh:"管理員公告"}
+};
+const CUPR = k => { const o=CUP_R[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
+
+/* 팀 엠블럼: 게임 추출 꾸미기 아이콘(cosimg) 중 상징성 있는 50장. 저장값 = 파일 id 문자열.
+   ⚠️ 배포 시 cosimg/ 폴더가 함께 올라가는지 확인할 것 — 이 50장이 없으면 엠블럼이 깨진 그림으로 보인다. */
+const CUP_EMBS = ["101398712","101398723","102767881","102767891","103916805","103916919","106586803","107451901","110721721","110721745","117811484","117811542","117811691","117811800","57462932","57463036","57463084","57463153","57463160","57463169","57463181","57870415","57870428","57870506","57870526","57870545","57870565","57870582","57932276","58629080","58629130","58629156","58629179","58629195","58629222","58629238","58629258","58629274","58629295","58629311","58629340","58629366","58629398","58629414","58629710","58629934","58807804","58807858","58808090","58808114","58810032","58810221","58810693","60400816","60400848","61166846","72655309","72655320","72655333","78453703","78453713","82817797","82817884","82817909","91209940","91329038","94181022","95348725","97278406","97278437","99162074","99162076","99162096","99162110"];
+window.CUP_EMB_SEL = CUP_EMBS[0];
+/* 편집 모드: 내 게임 ID 프리필(비공개 노드에서 본인 것만 읽힘) */
+async function trLoadMyIds(){
+  try{
+    if(typeof MY_UID === "undefined" || !MY_UID) return;
+    const snap = await FB.get(FB.ref(FB.db, "tourney/ids/" + MY_UID));
+    const d = snap.val() || {};
+    const put = (id,v) => { const el = document.getElementById(id); if(el && !el.value) el.value = v || ""; };
+    put("trId1", d.i1); put("trId2", d.i2); put("trId3", d.i3); put("trIdS", d.is);
+  }catch(e){}
+}
+/* 관리자: 팀별 게임 ID 열람(상품 지급용) */
+async function trLoadTeamIds(){
+  for(const el of document.querySelectorAll("[data-trids]")){
+    const uid = el.getAttribute("data-trids");
+    try{
+      const s2 = await FB.get(FB.ref(FB.db, "tourney/ids/" + uid));
+      const d = s2.val() || {};
+      const parts = [d.i1, d.i2, d.i3, d.is].filter(Boolean);
+      el.textContent = parts.length ? parts.join(" · ") : "—";
+    }catch(e){ el.textContent = "—"; }
+  }
+}
+/* 움직이는 엠블럼(게임 원본 스프라이트 시트): id → [가로칸,세로칸]. CSS가 프레임을 차례로 넘긴다. */
+const CUP_ANIM = { "101398712":[3,3], "106586803":[3,3], "110721721":[3,3], "94181022":[3,3], "91209940":[2,2] };
+const cupEmbCell = id => CUP_ANIM[id]
+  ? `<span class="cupAf ${CUP_ANIM[id][0]===3?"cupA9":"cupA4"}" style="width:100%;height:100%;background-image:url(cosimg/${id}.webp)"></span>`
+  : `<img src="cosimg/${id}.webp" alt="" loading="lazy" style="width:100%;height:100%;border-radius:6px;display:block;object-fit:cover">`;
+const cupEmbImg = (emb, size) => {
+  const id = CUP_EMBS.includes(String(emb)) ? String(emb) : CUP_EMBS[0];
+  return `<span class="cupEmb" style="width:${size}px;height:${size}px;padding:3px">${cupEmbCell(id)}</span>`;
+};
+/* 엠블럼 선택 (위임 방식 — 인라인 onclick 금지 규칙) */
+document.addEventListener('click', e => {
+  const sb = e.target.closest('[data-cupemb]');
+  if(!sb) return;
+  window.CUP_EMB_SEL = sb.getAttribute('data-cupemb');
+  document.querySelectorAll('[data-cupemb]').forEach(b=>b.classList.toggle('sel', b.getAttribute('data-cupemb')===window.CUP_EMB_SEL));
+  const pv = document.getElementById('cupEmbPrev');
+  if(pv) pv.innerHTML = cupEmbImg(window.CUP_EMB_SEL, 48);
+});
+/* 매치 코드 칩 — 탭하면 복사 + 토스트 */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-cupcode]');
+  if(!b) return;
+  const code = b.getAttribute('data-cupcode');
+  const toast = () => {
+    const t=document.createElement('div'); t.className='bo-copied';
+    t.textContent=(LANG==="ko"?"매치 코드 복사됨 · ":LANG==="ja"?"コードをコピー · ":LANG==="zh"?"已複製比賽代碼 · ":"Match code copied · ")+code;
+    document.body.appendChild(t); setTimeout(()=>{ t.remove(); },1500);
+  };
+  const fb = () => { const i=document.createElement('input'); i.value=code; i.style.cssText='position:fixed;opacity:0'; document.body.appendChild(i); i.select(); try{document.execCommand('copy');}catch(_e){} i.remove(); toast(); };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(toast, fb); } else fb();
+});
+
 const TR_FILL = (t,m) => String(t).replace(/\{(\w+)\}/g,(_,k)=> m[k]!==undefined?String(m[k]):"");
 
 let trMeta = null, trTeams = [], trMyContact = null, trInterest = [];
@@ -5544,6 +5905,83 @@ function renderTourney(){
     return;
   }
 
+  /* ── 🏆 1안 「골드 페스티벌」 — 접수(signup) 전용 화면. 2026-08-24 확정 디자인.
+        ⚠️ 게임 ID(trId1~3·trIdS)·엠블럼(emb) 저장 연결은 규칙 v31 게시와 함께. ID는 비공개 노드(운영자만), 엠블럼은 공개(teams.emb). ── */
+  if(state === "signup"){
+    const nT = trTeams.filter(t=>!t.solo).length, nS = trTeams.filter(t=>t.solo).length;
+    head.innerHTML =
+        `<div class="cupHero"><div class="cupRaysEl"></div><div class="cupGlow"></div>`
+      + `<div class="cupEyebrow">RICOCHET SQUAD</div>`
+      + `<svg style="position:relative;margin-top:10px" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M7 5H4.2a3.2 3.2 0 0 0 3 4.2M17 5h2.8a3.2 3.2 0 0 1-3 4.2"></path><path d="M12 13.5V16M8.5 21h7M10 18.5h4v2.5h-4z"></path><path d="M10.3 6.2l1.7-1.2 1.7 1.2-.6 2h-2.2z" fill="rgba(255,176,46,.25)"></path></svg>`
+      + `<div class="cupTitle">${esc(m.title || "COMMUNITY CUP")}</div>`
+      + `<div class="cupSub"><i></i><span>${CUPL("cp_sub")}${m.date?` · ${esc(m.date)}`:""}</span><i></i></div>`
+      + `<div class="cupOpen"><i></i>${CUPL("cp_open")}</div>`
+      + (m.note?`<div class="rnote" style="position:relative;margin-top:10px">${esc(m.note)}</div>`:"")
+      + `</div>`;
+    const B = [];
+    B.push(`<div class="cupSecHead"><b>${CUPL("cp_prz_head")}</b><span class="cupTag">${CUPL("cp_prz_sure")}</span><i></i></div>`
+      + `<div class="cupPrz">`
+      + `<div class="cupPrzCard"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4l9 5V5z"></path><path d="M12 7c4 0 7-2 9-2v14c-2 0-5-2-9-2"></path></svg><span>${CUPL("cp_prz1")}</span></div>`
+      + `<div class="cupPrzCard"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3 5-9 13L3 8z"></path><path d="M3 8h18M9.5 8L12 21l2.5-13"></path></svg><span>${CUPL("cp_prz2")}</span></div>`
+      + `<div class="cupPrzCard"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"></circle><path d="M8.5 13.5L7 21l5-2.6L17 21l-1.5-7.5"></path></svg><span>${CUPL("cp_prz3")}</span></div>`
+      + `</div>`);
+    const barH = Math.max(14, Math.min(100, Math.round(nT / 8 * 100)));
+    B.push(`<div class="cupLad">`
+      + `<div class="cupLadT">${CUPL("cp_lad_head")}</div><div class="cupLadS">${CUPL("cp_lad_sub")}</div>`
+      + `<div class="cupLadBars">`
+      + `<div class="cupLadCol"><span class="on">${TR_FILL(CUPL("cp_lad1"),{n:nT})}</span><div class="cupLadBar1" style="height:${barH}%"></div></div>`
+      + `<div class="cupLadCol"><span class="off">${CUPL("cp_lad2")}</span><div class="cupLadBar0" style="height:56%"></div></div>`
+      + `<div class="cupLadCol"><span class="off">${CUPL("cp_lad3")}</span><div class="cupLadBar0" style="height:100%"></div></div>`
+      + `</div>`
+      + `<div class="cupLadNote">${CUPL("cp_lad_note")}</div>`
+      + `</div>`);
+    const v = mine || {};
+    if(v.emb && CUP_EMBS.includes(String(v.emb))) window.CUP_EMB_SEL = String(v.emb);
+    const selEmb = window.CUP_EMB_SEL;
+    B.push(`<div class="rptcard" style="margin-top:14px"><h3>${TRL("f_head")}</h3>`
+      + `<div class="rnote">${TRL("f_pub_note")}</div>`
+      + `<input class="cmtname trin" id="trTeam" maxlength="24" placeholder="${TRL("f_team")}" value="${esc(v.name||"")}">`
+      + `<div class="rnote" style="margin-top:8px">${CUPL("cp_emb")}</div>`
+      + `<div class="cupEmbWrap"><span id="cupEmbPrev">${cupEmbImg(selEmb,48)}</span>`
+      +   `<div class="cupEmbGrid">`
+      +   CUP_EMBS.map(k=>`<button type="button" class="cupEmbBtn${k===selEmb?" sel":""}" data-cupemb="${k}">${cupEmbCell(k)}</button>`).join("")
+      +   `</div></div>`
+      + `<div class="cupRow" style="margin-top:10px"><input class="cmtname trin" id="trM1" maxlength="20" placeholder="${TRL("f_m1")}" value="${esc(v.m1||"")}"><input class="cmtname trin cupIdIn" id="trId1" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow"><input class="cmtname trin" id="trM2" maxlength="20" placeholder="${TRL("f_m2")}" value="${esc(v.m2||"")}"><input class="cmtname trin cupIdIn" id="trId2" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow"><input class="cmtname trin" id="trM3" maxlength="20" placeholder="${TRL("f_m3")}" value="${esc(v.m3||"")}"><input class="cmtname trin cupIdIn" id="trId3" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow"><input class="cmtname trin" id="trSub" maxlength="20" placeholder="${TRL("f_sub")}" value="${esc(v.sub||"")}"><input class="cmtname trin cupIdIn" id="trIdS" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
+      + `<div class="cupGuide"><svg style="flex-shrink:0;margin-top:1px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg><div>${CUPL("cp_id_guide")}</div></div>`
+      + `<label class="trck"><input type="checkbox" id="trSolo"${v.solo?" checked":""}> ${TRL("f_solo")}</label>`
+      + `<div class="rnote" style="margin-top:10px">${TRL("f_contact_note")}</div>`
+      + `<input class="cmtname trin" id="trKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}">`
+      + `<input class="cmtname trin" id="trDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}">`
+      + `<div class="trbtns" style="margin-top:12px"><button id="trGo" class="cupGo">${mine?TRL("f_edit"):TRL("f_go")}</button>`
+      + (mine?`<button id="trCancel" class="cmtbtn">${TRL("f_cancel")}</button>`:"")
+      + `</div>`
+      + `<div class="rnote" style="margin-top:8px;text-align:center">${CUPL("cp_edit_note")}</div></div>`);
+    B.push(`<div class="cupSecHead" style="margin-top:18px"><b>${TRL("list")}</b><span style="font-size:12px;color:#ffb02e;font-weight:700">${TR_FILL(CUPL("cp_count"),{t:nT,s:nS})}</span><i></i></div>`);
+    if(!trTeams.length){
+      B.push(`<div class="rnote">${TRL("none")}</div>`);
+    }else{
+      B.push(trTeams.map((t,i)=>{
+        const mem = [t.m1,t.m2,t.m3].filter(Boolean).map(x=>esc(x)).join(" · ");
+        const adm = IS_ADMIN?`<div class="rwl rnote">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span> · ID: <span data-trids="${esc(t.uid)}">…</span> <button class="cmtbtn" data-trdel="${esc(t.uid)}">${TRL("a_del")}</button></div>`:"";
+        if(t.solo){
+          return `<div class="cupSolo"><span class="cupSoloTag">${TRL("solo_tag")}</span><span><b style="color:#fff">${esc(t.m1||t.name)}</b> — ${CUPL("cp_solo_wait")}${adm}</span></div>`;
+        }
+        return `<div class="cupTeam">${cupEmbImg(t.emb, 44)}`
+          + `<div style="min-width:0;flex-grow:1"><span class="cupTeamN">${String(i+1).padStart(2,"0")}</span> <b>${esc(t.name)}</b>`
+          + (mem?`<div class="rwl" style="margin-top:3px">${mem}${t.sub?` <span class="rnote" style="display:inline">(+${esc(t.sub)})</span>`:""}</div>`:"") + adm + `</div></div>`;
+      }).join(""));
+    }
+    B.push(`<div class="cupFoot">${CUPL("cp_foot")}</div>`);
+    body.innerHTML = B.join("");
+    if(mine) trLoadMyIds();
+    if(IS_ADMIN){ trLoadContacts(); trLoadTeamIds(); }
+    renderTrAdmin();
+    return;
+  }
+
   /* ── 접수 폼 ── */
   H.push(`<div class="rptcard"><h3>${TRL("f_head")}</h3>`);
   if(!canEnter && !mine){
@@ -5635,7 +6073,39 @@ function trRulesText(){
 function renderTrRules(){
   const box=document.getElementById("trRules"); if(!box) return;
   const t = trRulesText();
-  box.innerHTML = `<div class="rptcard"><h3>${TRL("r_head")}</h3>` + (t ? trFmt(t) : `<div class="rnote">${TRL("r_none")}</div>`) + `</div>`;
+  /* 🏆 규칙 — 1안 골드 페스티벌과 같은 결. 관리자 텍스트(trRules)는 "운영자 공지" 카드로 위에 얹는다. */
+  const ic = p => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const sec = (icon, title, inner) => `<div class="cupRuleCard"><div class="cupRuleH">${ic(icon)}<b>${title}</b><i></i></div>${inner}</div>`;
+  const li = arr => `<ul class="cupRuleUl">` + arr.map(k=>`<li>${CUPR(k)}</li>`).join("") + `</ul>`;
+  box.innerHTML =
+      `<div class="cupChips"><span>${CUPR("r_chip1")}</span><span>${CUPR("r_chip2")}</span><span>${CUPR("r_chip3")}</span><span>${CUPR("r_chip4")}</span><span>${CUPR("r_chip5")}</span></div>`
+    + `<div class="cupDate">${ic('<rect x="4" y="6" width="16" height="15" rx="2"></rect><path d="M4 10h16M8 3v5M16 3v5"></path>')}<span>${CUPR("r_date")}</span></div>`
+    + (t ? `<div class="cupRuleCard" style="border-color:rgba(255,176,46,.45)"><div class="cupRuleH">${ic('<path d="M6 8a6 6 0 0 1 12 0v5l2 3H4l2-3z"></path><path d="M10 19a2 2 0 0 0 4 0"></path>')}<b>${CUPR("r_note_head")}</b><i></i></div><div class="cupRuleTx">${trFmt(t)}</div></div>` : "")
+    + sec('<circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle>', CUPR("r_how"),
+        `<div class="cupRuleTx">${CUPR("r_how_sum")}</div>`
+      + `<div class="cupFlow">`
+      +   `<div class="cupFlowBox on"><b>${CUPR("r_sw")}</b><span>${CUPR("r_sw2")}</span></div>`
+      +   `<div class="cupFlowArr">▼ ${CUPR("r_split")}</div>`
+      +   `<div class="cupFlowRow">`
+      +     `<div class="cupFlowBox"><b>🏆 ${CUPR("r_cup")}</b><span>${CUPR("r_bo3")}</span></div>`
+      +     `<div class="cupFlowBox"><b>🛡️ ${CUPR("r_plate")}</b><span>${CUPR("r_bo3")}</span></div>`
+      +   `</div>`
+      + `</div>`)
+    + sec('<circle cx="9" cy="8" r="3.5"></circle><path d="M3.5 20c.5-3.5 2.7-5.5 5.5-5.5S14 16.5 14.5 20"></path><path d="M16 8h5M18.5 5.5v5"></path>', CUPR("r_reg"), li(["r_reg1","r_reg2","r_reg3","r_reg4"]))
+    + sec('<path d="M8 5h8v4a4 4 0 0 1-8 0z"></path><path d="M12 12v3M9 20h6M10 17h4v3h-4z"></path>', CUPR("r_set"), li(["r_set1","r_set2","r_set3"]))
+    + sec('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path>', CUPR("r_time"), li(["r_time1","r_time2","r_time3"]))
+    + sec('<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path>', CUPR("r_dq"),
+        `<div class="cupRuleTx">${CUPR("r_dq_sum")}</div>` + li(["r_dq1","r_dq2","r_dq3","r_dq4","r_dq5"])
+      + `<div class="cupRuleTx" style="margin-top:8px;color:#ffd257">${CUPR("r_dq_j")}</div>`)
+    + sec('<path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M12 13.5V16M8.5 21h7"></path>', CUPR("r_prz"),
+        `<div class="cupPrz" style="margin-bottom:10px">`
+      +   `<div class="cupPrzCard">${ic('<path d="M3 10v4l9 5V5z"></path><path d="M12 7c4 0 7-2 9-2v14c-2 0-5-2-9-2"></path>')}<span>${CUPL("cp_prz1")}</span></div>`
+      +   `<div class="cupPrzCard">${ic('<path d="M6 3h12l3 5-9 13L3 8z"></path><path d="M3 8h18M9.5 8L12 21l2.5-13"></path>')}<span>${CUPL("cp_prz2")}</span></div>`
+      +   `<div class="cupPrzCard">${ic('<circle cx="12" cy="9" r="5.5"></circle><path d="M8.5 13.5L7 21l5-2.6L17 21l-1.5-7.5"></path>')}<span>${CUPL("cp_prz3")}</span></div>`
+      + `</div>`
+      + `<div class="cupRuleTx"><b style="color:#ffd257">${CUPR("r_prz_note")}</b></div>`
+      + `<div class="cupRuleTx" style="margin-top:6px">${CUPR("r_hall")}</div>`)
+    + `<div class="cupFoot">${CUPR("r_ask")}</div>`;
   const ad=document.getElementById("trRulesAdmin"); if(!ad) return;
   if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
   const r = trRules || {};
@@ -5647,22 +6117,140 @@ function renderTrRules(){
 }
 function renderTrBracket(){
   const box=document.getElementById("trBracket"); if(!box) return;
-  const H=[`<div class="rptcard"><h3>${TRL("b_head")}</h3>`];
-  if(!trMatches.length){ H.push(`<div class="rnote">${TRL("b_none")}</div>`); }
+  /* 🏆 대진표 v4 — 한 가지 카드 문법(가로 VS), 위계는 크기·금색 강도로. 순서: 결선 → 순위 → 예선. */
+  const H=[];
+  if(!trMatches.length){ H.push(`<div class="rptcard"><h3>${TRL("b_head")}</h3><div class="rnote">${TRL("b_none")}</div></div>`); }
   else{
-    const rounds=[]; for(const m of trMatches){ if(!rounds.includes(m.round)) rounds.push(m.round); }
-    for(const rd of rounds){
-      H.push(`<h4 style="margin:12px 0 4px">${esc(rd)}</h4>`);
-      for(const m of trMatches.filter(x=>x.round===rd)){
-        H.push(`<div class="rptev"><span><b>${esc(m.a)}</b> <span class="rnote" style="display:inline">vs</span> <b>${esc(m.b)}</b>`
-          + ` <span class="rptchip">${m.score?esc(m.score):TRL("b_upcoming")}</span>`
-          + (m.code?`<div class="rwl rnote">${TRL("b_code")}: ${esc(m.code)}</div>`:"")
-          + (IS_ADMIN?`<div class="rwl"><button class="cmtbtn" data-trmdel="${esc(m.id)}">${TRL("a_del")}</button></div>`:"")
-          + `</span></div>`);
+    const embOf = n => { const t = trTeams.find(x => x.name===n || (x.solo && x.m1===n)); return t ? t.emb : null; };
+    const shSvg = sz => `<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="#5f6a80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg>`;
+    const av = (n,sz) => { const e=embOf(n); return (e!==null&&e!==undefined) ? cupEmbImg(e,sz)
+      : `<span class="cupEmb" style="width:${sz}px;height:${sz}px;border-color:#3a4660">${shSvg(Math.round(sz*.55))}</span>`; };
+    const parseSc = m => String(m.score||"").match(/(\d+)\s*[:\-]\s*(\d+)/);
+    const IC_CUP='<path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M12 13.5V16M8.5 21h7"></path>';
+    const IC_PL='<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path>';
+    const IC_RD='<circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle>';
+    const secHead = (icn, txt) => `<div class="cupSecHead" style="margin-top:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icn}</svg><b>${esc(txt)}</b><i></i></div>`;
+    const meta = m => (m.code?`<div class="cupMtCode">${TRL("b_code")}: <span>${esc(m.code)}</span></div>`:"")
+      + (IS_ADMIN?`<div class="cupMtCode"><button class="cmtbtn" data-trmdel="${esc(m.id)}">${TRL("a_del")}</button></div>`:"");
+    /* 예선용 VS 카드 */
+    const tcell = (n, win) => `<div class="cupMtT${win?" win":""}">${av(n,40)}<span class="cupMtN">${esc(n)}</span></div>`;
+    const bigCard = m => {
+      const sc = parseSc(m); const wA = sc && +sc[1]>+sc[2], wB = sc && +sc[2]>+sc[1];
+      return `<div class="cupMt"><div class="cupMtRow">` + tcell(m.a, wA)
+        + (m.score ? `<div class="cupMtVs"><b>${sc?`${sc[1]} : ${sc[2]}`:esc(m.score)}</b></div>`
+                   : `<div class="cupMtVs up"><b>VS</b><span>${TRL("b_upcoming")}</span></div>`)
+        + tcell(m.b, wB) + `</div>` + meta(m) + `</div>`;
+    };
+    /* ── v5 결선 「온에어 스코어밴드」 — 방송 하단바 문법 + 사선 침공(--split) + 예광탄 커넥터 ── */
+    const boEmb = n => {
+      const e = embOf(n);
+      if(e===null||e===undefined) return `<span class="bo-emblem bo-embFb">${shSvg(24)}</span>`;
+      const an = CUP_ANIM[e];
+      return an ? `<div class="bo-emblem is-sprite ${an[0]===3?"cupA9":"cupA4"}" style="background-image:url(cosimg/${e}.webp)"></div>`
+                : `<img class="bo-emblem" src="cosimg/${e}.webp" alt="">`;
+    };
+    const boChips = m => (m.code?`<button type="button" class="bo-code" data-cupcode="${esc(m.code)}" aria-label="${TRL("b_code")} ${esc(m.code)}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg></button>`:"")
+      + (IS_ADMIN?`<button type="button" class="bo-del" data-trmdel="${esc(m.id)}" aria-label="${TRL("a_del")}">×</button>`:"");
+    const boScore = (sc, m) => sc ? `${+sc[1]>+sc[2]?`<b>${sc[1]}</b>`:sc[1]} : ${+sc[2]>+sc[1]?`<b>${sc[2]}</b>`:sc[2]}` : (m.score?esc(m.score):"VS");
+    const band = (m, tag) => {
+      const sc = parseSc(m); const wA = sc&&+sc[1]>+sc[2], wB = sc&&+sc[2]>+sc[1];
+      const st = sc ? `is-done ${wA?"is-win-l":wB?"is-win-r":""}` : "is-upcoming";
+      return `<article class="bo-match ${st}" aria-label="${esc(m.round||"")}: ${esc(m.a)} ${sc?sc[1]+" : "+sc[2]:"vs"} ${esc(m.b)}">`
+        + `<span class="bo-tag">${tag}</span>`
+        + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span><i class="bo-ticket">${CUPL("cp_adv")}</i></div>`
+        + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span><i class="bo-ticket">${CUPL("cp_adv")}</i></div>`
+        + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
+        + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
+        + boChips(m) + `</article>`;
+    };
+    const finalBand = m => {
+      const sc = parseSc(m); const wA = sc&&+sc[1]>+sc[2], wB = sc&&+sc[2]>+sc[1];
+      const champ = wA?m.a:wB?m.b:null;
+      const st = sc ? `is-done is-champion ${wA?"is-win-l":"is-win-r"}` : "is-upcoming";
+      return `<article class="bo-match bo-final ${st}" aria-label="FINAL: ${esc(m.a)} ${sc?sc[1]+" : "+sc[2]:"vs"} ${esc(m.b)}${champ?` — ${esc(champ)} ${CUPL("cp_win")}`:""}">`
+        + `<div class="bo-final__in">`
+        + `<span class="bo-tag">FINAL</span>`
+        + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span></div>`
+        + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span></div>`
+        + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
+        + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
+        + (champ?`<div class="bo-champ">${CUPL("cp_win")} · ${esc(champ)}</div>`:"")
+        + boChips(m) + `</div></article>`;
+    };
+    const finalTbd = `<article class="bo-match bo-final is-upcoming"><div class="bo-final__in"><span class="bo-tag">FINAL</span>`
+      + `<div class="bo-side bo-side--l"><span class="bo-emblem bo-embFb">${shSvg(24)}</span><span class="bo-name" style="color:#5f6a80">?</span></div>`
+      + `<div class="bo-side bo-side--r"><span class="bo-emblem bo-embFb">${shSvg(24)}</span><span class="bo-name" style="color:#5f6a80">?</span></div>`
+      + `<div class="bo-plate"><span class="bo-score">VS</span></div><span class="bo-when">${TRL("b_upcoming")}</span></div></article>`;
+    /* 결선 분류 */
+    const isPl = r=>/플레이트|plate/i.test(r||""), isCp = r=>/컵|cup/i.test(r||"") && !isPl(r);
+    const isSemi = r=>/4강|준결승|semi/i.test(r||""), isFin = r=>/결승|final/i.test(r||"") && !isSemi(r);
+    const fam = { cup:{semi:[],fin:[]}, plate:{semi:[],fin:[]} };
+    const rest = [];
+    for(const m of trMatches){
+      const r=m.round||"", f = isCp(r)?"cup":isPl(r)?"plate":null;
+      if(f && (isSemi(r)||isFin(r))){ (isSemi(r)?fam[f].semi:fam[f].fin).push(m); }
+      else rest.push(m);
+    }
+    const stage = (f, key, title) => {
+      if(!f.semi.length && !f.fin.length) return;
+      const S=[`<section class="bo-stage" data-bracket="${key}">`, `<h3 class="bo-round">${esc(title)}</h3>`];
+      f.semi.slice(0,2).forEach((m,i)=>{
+        S.push(band(m, `${esc(m.round)}${f.semi.length>1?` · ${i+1}`:""}`));
+      });
+      if(f.fin.length){ for(const m of f.fin) S.push(finalBand(m)); }
+      else if(f.semi.length) S.push(finalTbd);
+      S.push(`</section>`);
+      H.push(S.join(""));
+    };
+    stage(fam.cup, "cup", LANG==="ko"?"컵 · 결선":LANG==="ja"?"カップ決勝":LANG==="zh"?"盃賽決賽":"CUP FINALS");
+    stage(fam.plate, "plate", LANG==="ko"?"플레이트 · 결선":LANG==="ja"?"プレート決勝":LANG==="zh"?"銀盤決賽":"PLATE FINALS");
+    /* 예선 순위 — 방송 순위 보드: 상단 금색권 / 하단 청은권 / 사이에 "결선 진출 컷" 라인 */
+    if(rest.length){
+      const W={},L={};
+      for(const m of rest){ const sc=parseSc(m); if(!sc) continue;
+        const aw=+sc[1]>+sc[2];
+        W[m.a]=(W[m.a]||0)+(aw?1:0); L[m.a]=(L[m.a]||0)+(aw?0:1);
+        W[m.b]=(W[m.b]||0)+(aw?0:1); L[m.b]=(L[m.b]||0)+(aw?1:0);
+      }
+      const names=[...new Set(rest.flatMap(m=>[m.a,m.b]))];
+      if(names.length>=4 && Object.keys(W).length){
+        names.sort((x,y)=>(W[y]||0)-(W[x]||0));
+        const inCup = new Set(fam.cup.semi.concat(fam.cup.fin).flatMap(m=>[m.a,m.b]));
+        const inPl  = new Set(fam.plate.semi.concat(fam.plate.fin).flatMap(m=>[m.a,m.b]));
+        const cut = inCup.size ? names.filter(n=>inCup.has(n)).length : Math.ceil(names.length/2);
+        const wl = LANG==="ko"?["승","패"]:LANG==="ja"?["勝","敗"]:LANG==="zh"?["勝","敗"]:["W","L"];
+        H.push(`<div class="bo-qhead"><i></i><span>${LANG==="ko"?"예선 순위":LANG==="ja"?"予選順位":LANG==="zh"?"預賽排名":"STANDINGS"}</span><i></i></div>`);
+        const rows=[];
+        names.forEach((n,ix)=>{
+          if(ix===cut && cut>0 && cut<names.length)
+            rows.push(`<div class="bo-stcut" aria-hidden="true"><i class="ln"></i><span>${LANG==="ko"?"결선 진출 컷":LANG==="ja"?"決勝進出ライン":LANG==="zh"?"晉級線":"FINALS CUTOFF"}</span><i class="ln"></i></div>`);
+          const tag = inCup.has(n)
+            ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC_CUP}</svg>`
+            : inPl.has(n)
+            ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5da9ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC_PL}</svg>` : "";
+          rows.push(`<div class="bo-strow ${ix<cut?"top":"bot"}${ix===0?" r1":""}"><span class="bo-strk">${ix+1}</span>${boEmb(n)}<span class="bo-stname">${esc(n)}</span><span class="bo-stwl">${W[n]||0}${wl[0]} ${L[n]||0}${wl[1]}</span>${tag}</div>`);
+        });
+        H.push(`<div class="bo-stand">`+rows.join("")+`</div>`);
       }
     }
+    /* 예선 라운드 — 슬림 방송 밴드 (결선과 같은 문법, 낮은 강도) */
+    const qband = m => {
+      const sc = parseSc(m); const wA=sc&&+sc[1]>+sc[2], wB=sc&&+sc[2]>+sc[1];
+      const st = sc?`is-done ${wA?"is-win-l":wB?"is-win-r":""}`:"is-upcoming";
+      return `<article class="bo-match bo-q ${st}" aria-label="${esc(m.round||"")}: ${esc(m.a)} ${sc?sc[1]+" : "+sc[2]:"vs"} ${esc(m.b)}">`
+        + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span></div>`
+        + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span></div>`
+        + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
+        + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
+        + boChips(m) + `</article>`;
+    };
+    const rounds=[]; for(const m of rest){ if(!rounds.includes(m.round)) rounds.push(m.round); }
+    for(const rd of rounds){
+      H.push(`<div class="bo-qhead"><i></i><span>${esc(rd)}</span><i></i></div>`);
+      for(const m of rest.filter(x=>x.round===rd)) H.push(qband(m));
+    }
   }
-  H.push(`</div>`); box.innerHTML=H.join("");
+  box.innerHTML=H.join("");
   const ad=document.getElementById("trBracketAdmin"); if(!ad) return;
   if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
   ad.style.display="block";
@@ -5676,16 +6264,36 @@ function renderTrBracket(){
 }
 function renderTrHall(){
   const box=document.getElementById("trHall"); if(!box) return;
+  /* 🏆 명예의 전당 — 2안 「첫 챔피언」 명패 디자인. 비어 있으면(관리자 전용 노출) "? ? ?" 빈 명패. */
   const H=[`<div class="rptcard"><h3>${TRL("h_head")}</h3><div class="rnote">${TRL("h_sub")}</div></div>`];
-  if(!trHall.length){ H.push(`<div class="rptcard"><div class="rnote">${TRL("h_none")}</div></div>`); }
+  const hallEmbOf = n => { const t = (typeof trTeams!=="undefined"?trTeams:[]).find(x => x.name && n && String(n).indexOf(x.name)===0); return t ? t.emb : null; };
+  if(!trHall.length){
+    H.push(`<div class="cupHallPlq"><div class="cupHallIn">`
+      + `<div class="cupHallCup">COMMUNITY CUP · SEASON 1</div>`
+      + `<div class="cupHallQ">? ? ?</div>`
+      + `<div class="cupHallCup" style="color:#8b96ab">CHAMPIONS</div>`
+      + `</div></div>`
+      + `<div class="cupHallSub" style="text-align:center">${CUPL("ch_empty")}</div>`);
+  }
   else{
-    for(const h of [...trHall].reverse()){   // 최신 회차가 위
-      H.push(`<div class="rptcard"><h3 style="margin:0 0 6px">🏆 ${esc(h.cup)}</h3>`
-        + `<div class="trrow"><b>${TRL("h_win")}</b><span>${esc(h.winner)}</span></div>`
-        + (h.plate?`<div class="trrow"><b>${TRL("h_plate")}</b><span>${esc(h.plate)}</span></div>`:"")
-        + (h.mvp?`<div class="trrow"><b>${TRL("h_mvp")}</b><span>${esc(h.mvp)}</span></div>`:"")
+    for(const h of [...trHall].reverse()){
+      const wt = String(h.winner||""); const sep = wt.indexOf(" — ")>=0 ? " — " : wt.indexOf(" - ")>=0 ? " - " : null;
+      const wName = sep ? wt.slice(0, wt.indexOf(sep)) : wt;
+      const wRest = sep ? wt.slice(wt.indexOf(sep)+sep.length) : "";
+      const e = hallEmbOf(wName);
+      H.push(`<div class="cupHallPlq"><div class="cupHallIn">`
+        + `<div class="cupHallCup">${esc(h.cup)}</div>`
+        + (e!==null&&e!==undefined ? `<span style="margin:4px 0">${cupEmbImg(e,52)}</span>`
+           : `<svg style="margin:4px 0" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M7 5H4.2a3.2 3.2 0 0 0 3 4.2M17 5h2.8a3.2 3.2 0 0 1-3 4.2"></path><path d="M12 13.5V16M8.5 21h7M10 18.5h4v2.5h-4z"></path></svg>`)
+        + `<div class="cupHallName">${esc(wName)}</div>`
+        + (wRest?`<div class="cupHallSub">${esc(wRest)}</div>`:"")
+        + `<div class="cupHallCup" style="color:#8b96ab">CHAMPIONS</div>`
+        + `<div class="cupHallRows">`
+        + (h.plate?`<div class="cupHallRow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5da9ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg><span><b>${TRL("h_plate")}</b> · ${esc(h.plate)}</span></div>`:"")
+        + (h.mvp?`<div class="cupHallRow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9-5.3-3-5.3 3 1.2-5.9L3.4 9.3l6-.7z"></path></svg><span><b>${TRL("h_mvp")}</b> · ${esc(h.mvp)}</span></div>`:"")
+        + `</div>`
         + (IS_ADMIN?`<div class="trbtns"><button class="cmtbtn" data-trhdel="${esc(h.id)}">${TRL("a_del")}</button></div>`:"")
-        + `</div>`);
+        + `</div></div>`);
     }
   }
   box.innerHTML=H.join("");
@@ -5729,10 +6337,19 @@ document.addEventListener("click", async e => {
     const solo = !!(G("trSolo") && G("trSolo").checked);
     const had = !!trMine();
     try{
+      /* 🆔 게임 ID(상품 지급용·비공개 노드). 본인 필수, 닉네임 적은 팀원 칸도 필수. 영숫자 6~16자. */
+      const idClean = x => String(x||"").replace(/\s+/g,"");
+      const idFmt = x => /^[A-Za-z0-9]{6,16}$/.test(x);
+      const i1 = idClean(val("trId1")), i2 = idClean(val("trId2")), i3 = idClean(val("trId3")), i4 = idClean(val("trIdS"));
+      if(!idFmt(i1) || (val("trM2") && !idFmt(i2)) || (val("trM3") && !idFmt(i3)) || (i2 && !idFmt(i2)) || (i3 && !idFmt(i3)) || (i4 && !idFmt(i4))){
+        toast(CUPL("cp_id_bad")); return;
+      }
+      const emb = String(window.CUP_EMB_SEL || "");
       await FB.set(FB.ref(FB.db, "tourney/teams/" + MY_UID), {
         name, m1, m2: val("trM2"), m3: val("trM3"), sub: val("trSub"),
-        solo, ts: FB.serverTimestamp()
+        solo, emb, ts: FB.serverTimestamp()
       });
+      try{ await FB.set(FB.ref(FB.db, "tourney/ids/" + MY_UID), { i1, i2, i3, is: i4 }); }catch(eIds){}
       const kakao = val("trKakao"), discord = val("trDisc");
       if(kakao || discord){
         try{ await FB.set(FB.ref(FB.db, "tourney/contact/" + MY_UID), { kakao, discord }); }catch(e2){}
