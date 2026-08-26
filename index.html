@@ -4261,7 +4261,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.26-a";
+const SITE_VERSION = "2026.08.26-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5533,6 +5533,9 @@ const TR_L = {
   st_interest:{ko:"참가 의향 조사 중",en:"Interest check",ja:"参加意向を調査中",zh:"意願調查中"},
   /* 서브탭 이름(상태별) — "참가"라고만 쓰면 의향 조사 중에도 신청처럼 읽힌다(2026-08-19 MAMMON 지적) */
   sl_interest:{ko:"의향 조사",en:"Interest check",ja:"意向調査",zh:"意願調查"},
+  /* 🩹 2026-08-26: 서버 설정이 오기 전 잠깐 쓰는 중립 이름·문구(깜빡임 수정) */
+  sl_load:{ko:"참가",en:"Enter",ja:"参加",zh:"參賽"},
+  tr_loading:{ko:"대회 정보를 불러오는 중…",en:"Loading tournament info…",ja:"大会情報を読み込み中…",zh:"正在載入賽事資訊…"},
   sl_signup:{ko:"참가 신청",en:"Enter",ja:"参加申込",zh:"報名"},
   sl_teams:{ko:"참가 팀",en:"Teams",ja:"参加チーム",zh:"參賽隊伍"},
   st_signup:{ko:"접수 중",en:"Sign-ups open",ja:"受付中",zh:"報名中"},
@@ -5808,6 +5811,13 @@ document.addEventListener('click', e => {
 const TR_FILL = (t,m) => String(t).replace(/\{(\w+)\}/g,(_,k)=> m[k]!==undefined?String(m[k]):"");
 
 let trMeta = null, trTeams = [], trMyContact = null, trInterest = [];
+/* 🩹 2026-08-26 깜빡임 수정: 서버의 tourney/meta 가 도착하기 전(0.1~0.5초)에는 단계를 알 수 없는데
+   예전 코드는 그 순간을 "의향 조사"로 단정해서, 접수 중인데도 의향 조사 화면이 먼저 번쩍였다.
+   (1) trMetaLoaded = 서버 응답이 실제로 왔는지. "아직 안 옴"과 "와 봤더니 설정이 없음"을 구분한다.
+   (2) 마지막으로 받은 설정을 localStorage 에 기억해 두고 첫 그림부터 그 값으로 그린다 → 재방문자는 깜빡임 0.
+       (기억한 값이 낡았어도 서버 응답이 오는 즉시 덮어써지므로 최대 0.5초짜리 차이일 뿐이다.) */
+let trMetaLoaded = false;
+try{ const _c = JSON.parse(localStorage.getItem("rs_trmeta") || "null"); if(_c && typeof _c === "object") trMeta = _c; }catch(e){}
 let trRules = null, trMatches = [], trHall = [];      // 규칙 v31: tourney/rules · tourney/matches · tourney/hall
 /* 대회 상태 순서: 의향 조사 → 접수 → 마감 → 진행 → 종료. interest 는 2026-08-19 추가(규칙 v30). */
 const TR_STATES = ["interest","signup","closed","live","done"];
@@ -5818,9 +5828,11 @@ window.rsTrVisible = () => (trMeta ? !!trMeta.on : true) || !!IS_ADMIN;
 window.rsTrBracketVisible = () => (window.rsTrVisible() && trMatches.length > 0) || !!IS_ADMIN;
 window.rsTrHallVisible    = () => trHall.length > 0 || !!IS_ADMIN;   // 명예의 전당은 대회가 꺼져 있어도 남는다(그게 목적)
 /* 상단 컵 배너용 상태 (클래식 스코프 rsCupBannerSync 가 읽는다) */
-window.rsTrBannerState = () => trMeta ? { on: !!trMeta.on, state: trMeta.state || "interest", title: trMeta.title || "" } : { on: true, state: "interest", title: "" };
+window.rsTrBannerState = () => trMeta ? { on: !!trMeta.on, state: trMeta.state || "interest", title: trMeta.title || "" }
+  : (trMetaLoaded ? { on: true, state: "interest", title: "" } : null);   /* 🩹 아직 모르는 동안은 배너 자체를 띄우지 않는다(틀린 문구 번쩍임 방지) */
 /* 서브탭 "참가"의 상태별 이름 (renderSubnav 가 부른다) */
 window.rsTrSubLabel = () => {
+  if(!trMeta && !trMetaLoaded) return TRL("sl_load");        /* 🩹 아직 모르는 동안은 중립 이름(틀린 단계 이름 번쩍임 방지) */
   const st = trMeta && trMeta.state;
   return TRL(st === "signup" ? "sl_signup" : (st === "closed" || st === "live" || st === "done") ? "sl_teams" : "sl_interest");
 };
@@ -5843,6 +5855,14 @@ function renderTourney(){
   renderTrRules(); renderTrBracket(); renderTrHall();
   if(window.rsCupBannerSync) window.rsCupBannerSync();
   const head = document.getElementById("trHead"); if(!head) return;
+  /* 🩹 2026-08-26: 서버 응답 전이고 기억해 둔 설정도 없다(=이 기기 첫 방문). 틀린 단계를 자신 있게 보여주느니
+     짧게 "불러오는 중"으로 기다린다. 응답이 오면 곧바로 아래의 진짜 화면으로 다시 그려진다. */
+  if(!trMeta && !trMetaLoaded){
+    head.innerHTML = `<div class="rptcard"><h2 style="margin:0 0 4px">🏆 ${esc(TRL("head"))}</h2>`
+      + `<div class="rnote">${TRL("tr_loading")}</div></div>`;
+    const _b = document.getElementById("trBody"); if(_b) _b.innerHTML = "";
+    return;
+  }
   const m = trMeta || {};
   const state = TR_STATES.includes(m.state) ? m.state : "interest";
   const isInt = state === "interest";
@@ -6470,8 +6490,13 @@ document.addEventListener("click", async e => {
 FB.onValue(FB.ref(FB.db, "tourney/meta"), snap => {
   const v = snap.val();
   trMeta = (v && typeof v === "object") ? v : null;
+  trMetaLoaded = true;                                        /* 🩹 응답이 실제로 왔다 */
+  try{                                                        /* 🩹 다음 방문 때 첫 그림부터 맞게 그리도록 기억 */
+    if(trMeta) localStorage.setItem("rs_trmeta", JSON.stringify(trMeta));
+    else localStorage.removeItem("rs_trmeta");
+  }catch(e){}
   renderTourney(); if(window.renderSubnav) window.renderSubnav();
-}, () => { trMeta = null; renderTourney(); });
+}, () => { trMeta = null; trMetaLoaded = true; renderTourney(); if(window.renderSubnav) window.renderSubnav(); });
 
 FB.onValue(FB.ref(FB.db, "tourney/teams"), snap => {
   const v = snap.val() || {};
