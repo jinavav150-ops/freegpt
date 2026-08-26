@@ -1049,11 +1049,40 @@
 .cupRow .cmtname{margin:0}
 .cupGuide{display:flex;gap:10px;padding:12px;border-radius:10px;background:rgba(255,176,46,.07);border:1px solid rgba(255,176,46,.3);font-size:12px;color:#e8ecf4;line-height:1.6;margin-top:10px}
 .cupGo{width:100%;height:50px;border:0;border-radius:12px;background:linear-gradient(100deg,#ffb02e,#ffd257);color:#1a1300;font-size:15px;font-weight:700;font-family:inherit;box-shadow:0 6px 22px rgba(255,176,46,.3);cursor:pointer}
-.cupTeam{position:relative;display:flex;align-items:center;gap:12px;padding:12px 13px 12px 17px;background:#151b2a;border-radius:12px;overflow:hidden;margin-top:8px}
+.cupTeam{position:relative;display:flex;align-items:flex-start;gap:12px;padding:13px 13px 12px 17px;background:#151b2a;border-radius:12px;overflow:hidden;margin-top:8px}
+/* 🎨 2026-08-26 MAMMON 확정: 팀 이름과 팀원이 한 덩어리로 읽히던 것 → 이름은 큰 제목 한 줄, 팀원은 한 명씩 알약으로 분리 */
+.cupTeamMid{min-width:0;flex-grow:1}
+.cupTeamTop{display:flex;align-items:baseline;gap:7px}
+.cupTeamName{font-family:'Black Han Sans',sans-serif;font-size:17px;font-weight:400;color:#fff;letter-spacing:.01em;line-height:1.25;word-break:keep-all;min-width:0}
+.cupTeamRule{height:1px;background:linear-gradient(90deg,#2a3347,rgba(42,51,71,0));margin:8px 0}
+.cupTeamMem{display:flex;flex-wrap:wrap;gap:5px}
+.cupP{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#d6dcea;background:#1d2432;border:1px solid #2a3347;border-radius:999px;padding:3px 9px 3px 7px;max-width:100%}
+.cupP b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cupPd{width:5px;height:5px;border-radius:50%;background:#ffb02e;flex-shrink:0}
+.cupP.sub{background:rgba(93,169,255,.07);border-color:rgba(93,169,255,.3);color:#a9c6e8}
+.cupP.sub .cupPd{background:#5da9ff}
+/* 🆔 관리자 전용: 팀원 이름 ↔ 게임 ID 짝 (상품 지급용) */
+.cupAdm{margin-top:9px;padding-top:8px;border-top:1px dashed #2a3347}
+/* 팀 카드는 .rptcard 밖이라 .rptcard .rnote 의 11px 이 안 먹는다 — 관리자 줄 글씨를 직접 작게 */
+.cupAdm .rnote{font-size:11px;color:var(--sub);line-height:1.5}
+.cupIds{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.cupIdPair{display:inline-flex;align-items:center;gap:5px;font-size:11px;background:rgba(17,23,36,.6);border:1px dashed #2a3347;border-radius:6px;padding:2px 7px;color:#9aa6ba;max-width:100%}
+.cupIdPair b{color:#d6dcea;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cupIdPair code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#ffd257;font-size:11px;letter-spacing:.02em}
+.cupPl{font-size:10px;color:var(--sub);letter-spacing:.04em;flex-shrink:0}
 .cupTeam:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#ffb02e,#b87708)}
-.cupTeamN{font-family:'Black Han Sans',sans-serif;font-size:14px;color:#ffd257}
-.cupSolo{display:flex;align-items:center;gap:10px;padding:11px 13px;background:rgba(255,93,93,.06);border:1px dashed rgba(255,93,93,.4);border-radius:12px;margin-top:8px;font-size:12.5px;color:#c8d0de}
-.cupSoloTag{font-size:11px;padding:3px 8px;border-radius:5px;background:rgba(255,93,93,.15);color:#ff8a8a;font-weight:700;flex-shrink:0}
+.cupTeamN{font-family:'Black Han Sans',sans-serif;font-size:13px;color:#ffd257;flex-shrink:0}
+/* 🎨 2026-08-26 MAMMON: 예전엔 빨간 점선 상자라 "오류·경고"처럼 읽히고 목록에서 혼자 겉돌았다("불쌍해 보인다").
+   → 팀 카드와 같은 형태로 맞추고 색만 파란 계열로. 파랑은 경고가 아니라 안내로 읽힌다. */
+.cupSolo{position:relative;display:flex;align-items:flex-start;gap:12px;padding:13px 13px 12px 17px;background:#141b28;border-radius:12px;overflow:hidden;margin-top:8px}
+.cupSolo:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#5da9ff,#2f6ea8)}
+.cupSoloMid{min-width:0;flex-grow:1}
+.cupSoloTop{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.cupSoloName{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#fff;letter-spacing:.01em;line-height:1.25;word-break:keep-all;min-width:0}
+.cupSoloTag{font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(93,169,255,.14);color:#8ec5ff;font-weight:700;flex-shrink:0;border:1px solid rgba(93,169,255,.3)}
+.cupSoloWait{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sub);margin-top:7px}
+.cupSoloWait:before{content:"";width:5px;height:5px;border-radius:50%;background:#5da9ff;flex-shrink:0}
+.cupEmb.solo{border-color:#5da9ff}
 .cupFoot{text-align:center;font-size:11px;color:#5f6a80;line-height:1.7;padding:14px 0 4px}
 .cupEmbWrap{display:flex;gap:12px;align-items:flex-start;margin-top:6px}
 .cupEmb{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:#0e1320;border:1.5px solid #ffb02e;flex-shrink:0}
@@ -4261,7 +4290,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.26-d";
+const SITE_VERSION = "2026.08.26-e";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5681,13 +5710,18 @@ const TRL = k => { const o=TR_L[k]||{}; const v=o[LANG]; return v!==undefined?v:
 const TR_CUP = {
   cp_sub:{ko:"3v3 · 개발사 후원 상품 · 온라인",en:"3v3 · Dev-sponsored prizes · Online",ja:"3v3・開発元提供の賞品・オンライン",zh:"3v3・開發商贊助獎品・線上"},
   cp_open:{ko:"지금 팀 접수 중",en:"Team sign-ups open now",ja:"チーム受付中",zh:"隊伍報名進行中"},
+  /* 🇰🇷 2026-08-26: 마감·일시를 서버 한 줄(모든 언어 공통)로 두니 영어를 섞어야 했다 → 코드에 언어별로 둔다. 한국인은 한국어만 본다. */
+  cp_subtag:{ko:"예비",en:"SUB",ja:"補欠",zh:"替補"},
+  cp_deadline:{ko:"⏳ 접수 마감 9월 14일 (월)",en:"⏳ Sign-ups close September 14 (Mon)",ja:"⏳ 受付締切 9月14日 (月)",zh:"⏳ 報名截止 9月14日 (一)"},
+  cp_when:{ko:"9월 19일 (토) 저녁 8시",en:"Saturday, September 19 · 20:00",ja:"9月19日 (土) 20時",zh:"9月19日 (六) 20:00"},
   cp_prz_head:{ko:"우승팀 상품",en:"Winners' prizes",ja:"優勝チームの賞品",zh:"冠軍隊伍獎品"},
   cp_prz_sure:{ko:"개발사 확정",en:"Confirmed by the devs",ja:"開発元公認",zh:"開發商確認"},
   cp_prz1:{ko:"공식 디스코드<br>우승 공지",en:"Victory post on<br>official Discord",ja:"公式Discordで<br>優勝発表",zh:"官方Discord<br>冠軍公告"},
   cp_prz2:{ko:"프로모 코드<br>(젬 · 직접 지급)",en:"Promo codes<br>(gems, direct)",ja:"プロモコード<br>（ジェム・直接支給）",zh:"兌換碼<br>（寶石・直接發放）"},
   cp_prz3:{ko:"우승팀 전용<br>게임 내 칭호",en:"Exclusive in-game<br>title",ja:"優勝チーム限定<br>ゲーム内称号",zh:"冠軍專屬<br>遊戲稱號"},
   cp_lad_head:{ko:"팀이 모일수록 상품이 커집니다",en:"More teams, bigger prizes",ja:"チームが増えるほど賞品が大きくなります",zh:"隊伍越多，獎品越大"},
-  cp_lad_sub:{ko:"개발사가 직접 한 약속 — \"More players = more rewards\"",en:"The devs' own promise — \"More players = more rewards\"",ja:"開発元の約束 — \"More players = more rewards\"",zh:"開發商的承諾 — \"More players = more rewards\""},
+  /* 🇰🇷 2026-08-26 MAMMON: 한국어 화면에 영어 원문이 그대로 있어 뜻이 안 통했다 → 각 언어로 번역(뜻은 개발사 약속 그대로) */
+  cp_lad_sub:{ko:"개발사가 직접 한 약속 — \"참가 팀이 많을수록 상품이 커집니다\"",en:"The devs' own promise — \"More players = more rewards\"",ja:"開発元の約束 — 「参加チームが多いほど賞品が大きくなります」",zh:"開發商的承諾 —「參賽隊伍越多，獎品越大」"},
   cp_lad1:{ko:"지금 {n}팀",en:"{n} teams now",ja:"現在{n}チーム",zh:"目前{n}隊"},
   cp_lad2:{ko:"4팀 · 개최 확정",en:"4 teams · Confirmed",ja:"4チーム・開催確定",zh:"4隊・確定舉辦"},
   cp_lad3:{ko:"8팀 · 풀 대진표",en:"8 teams · Full bracket",ja:"8チーム・フル対戦表",zh:"8隊・完整賽程"},
@@ -5771,8 +5805,14 @@ async function trLoadTeamIds(){
     try{
       const s2 = await FB.get(FB.ref(FB.db, "tourney/ids/" + uid));
       const d = s2.val() || {};
-      const parts = [d.i1, d.i2, d.i3, d.is].filter(Boolean);
-      el.textContent = parts.length ? parts.join(" · ") : "—";
+      /* 🆔 2026-08-26 MAMMON: 예전엔 ID만 "AAA · BBB · CCC"로 나열해 누구 것인지 알 수 없었다.
+         상품 지급 때 잘못 주면 되돌리기 어려우므로 이름과 ID를 반드시 짝지어 보여준다. */
+      const t = (typeof trTeams !== "undefined" ? trTeams.find(x => x.uid === uid) : null) || {};
+      const rows = [[t.m1, d.i1, ""], [t.m2, d.i2, ""], [t.m3, d.i3, ""], [t.sub, d.is, CUPL("cp_subtag")]]
+        .filter(([n, v]) => n || v)
+        .map(([n, v, tag]) => `<span class="cupIdPair">${tag?`<span class="cupPl">${esc(tag)}</span>`:""}`
+          + `<b>${esc(n || "?")}</b><code>${esc(v || "—")}</code></span>`);
+      el.innerHTML = rows.length ? rows.join("") : "—";
     }catch(e){ el.textContent = "—"; }
   }
 }
@@ -5781,9 +5821,9 @@ const CUP_ANIM = { "101398712":[3,3], "106586803":[3,3], "110721721":[3,3], "941
 const cupEmbCell = id => CUP_ANIM[id]
   ? `<span class="cupAf ${CUP_ANIM[id][0]===3?"cupA9":"cupA4"}" style="width:100%;height:100%;background-image:url(cosimg/${id}.webp)"></span>`
   : `<img src="cosimg/${id}.webp" alt="" loading="lazy" style="width:100%;height:100%;border-radius:6px;display:block;object-fit:cover">`;
-const cupEmbImg = (emb, size) => {
+const cupEmbImg = (emb, size, cls) => {
   const id = CUP_EMBS.includes(String(emb)) ? String(emb) : CUP_EMBS[0];
-  return `<span class="cupEmb" style="width:${size}px;height:${size}px;padding:3px">${cupEmbCell(id)}</span>`;
+  return `<span class="cupEmb${cls?" "+cls:""}" style="width:${size}px;height:${size}px;padding:3px">${cupEmbCell(id)}</span>`;
 };
 /* 엠블럼 선택 (위임 방식 — 인라인 onclick 금지 규칙) */
 document.addEventListener('click', e => {
@@ -5934,9 +5974,10 @@ function renderTourney(){
       + `<div class="cupEyebrow">RICOCHET SQUAD</div>`
       + `<svg style="position:relative;margin-top:10px" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M7 5H4.2a3.2 3.2 0 0 0 3 4.2M17 5h2.8a3.2 3.2 0 0 1-3 4.2"></path><path d="M12 13.5V16M8.5 21h7M10 18.5h4v2.5h-4z"></path><path d="M10.3 6.2l1.7-1.2 1.7 1.2-.6 2h-2.2z" fill="rgba(255,176,46,.25)"></path></svg>`
       + `<div class="cupTitle">${esc(m.title || "COMMUNITY CUP")}</div>`
-      + `<div class="cupSub"><i></i><span>${CUPL("cp_sub")}${m.date?` · ${esc(m.date)}`:""}</span><i></i></div>`
+      + `<div class="cupSub"><i></i><span>${CUPL("cp_sub")} · ${CUPL("cp_when")}${m.tz?` (${esc(m.tz)})`:""}</span><i></i></div>`
       + `<div class="cupOpen"><i></i>${CUPL("cp_open")}</div>`
-      + (m.note?`<div class="rnote" style="position:relative;margin-top:10px">${esc(m.note)}</div>`:"")
+      + `<div class="rnote" style="position:relative;margin-top:10px">${CUPL("cp_deadline")}</div>`
+      + (m.note?`<div class="rnote" style="position:relative;margin-top:6px">${esc(m.note)}</div>`:"")   /* note 는 임시 공지용으로 남겨둠(평소 비어 있음) */
       + `</div>`;
     const B = [];
     B.push(`<div class="cupSecHead"><b>${CUPL("cp_prz_head")}</b><span class="cupTag">${CUPL("cp_prz_sure")}</span><i></i></div>`
@@ -5983,15 +6024,31 @@ function renderTourney(){
     if(!trTeams.length){
       B.push(`<div class="rnote">${TRL("none")}</div>`);
     }else{
+      /* 🔢 2026-08-26: 번호가 01·03·04 로 건너뛰던 버그 — 솔로 참가자도 순번을 먹고 있었다. 팀만 센다. */
+      let teamNo = 0;
       B.push(trTeams.map((t,i)=>{
-        const mem = [t.m1,t.m2,t.m3].filter(Boolean).map(x=>esc(x)).join(" · ");
-        const adm = IS_ADMIN?`<div class="rwl rnote">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span> · ID: <span data-trids="${esc(t.uid)}">…</span> <button class="cmtbtn" data-trdel="${esc(t.uid)}">${TRL("a_del")}</button></div>`:"";
+        /* 🎨 팀원을 한 명씩 알약으로 — 이름 경계가 분명해진다. 예비는 파란색 + 딱지 */
+        const mem = [t.m1,t.m2,t.m3].filter(Boolean)
+            .map(x=>`<span class="cupP"><i class="cupPd"></i><b>${esc(x)}</b></span>`).join("")
+          + (t.sub?`<span class="cupP sub"><i class="cupPd"></i><span class="cupPl">${CUPL("cp_subtag")}</span><b>${esc(t.sub)}</b></span>`:"");
+        const adm = IS_ADMIN?`<div class="cupAdm"><div class="rnote" style="margin:0">${TRL("a_contact")}: <span data-trct="${esc(t.uid)}">…</span></div>`
+          + `<div class="cupIds" data-trids="${esc(t.uid)}">…</div>`
+          + `<div style="margin-top:6px"><button class="cmtbtn" data-trdel="${esc(t.uid)}">${TRL("a_del")}</button></div></div>`:"";
         if(t.solo){
-          return `<div class="cupSolo"><span class="cupSoloTag">${TRL("solo_tag")}</span><span><b style="color:#fff">${esc(t.m1||t.name)}</b> — ${CUPL("cp_solo_wait")}${adm}</span></div>`;
+          return `<div class="cupSolo">${cupEmbImg(t.emb, 46, "solo")}`
+            + `<div class="cupSoloMid">`
+            +   `<div class="cupSoloTop"><span class="cupSoloName">${esc(t.m1||t.name)}</span><span class="cupSoloTag">${TRL("solo_tag")}</span></div>`
+            +   `<div class="cupSoloWait">${CUPL("cp_solo_wait")}</div>`
+            +   adm
+            + `</div></div>`;
         }
-        return `<div class="cupTeam">${cupEmbImg(t.emb, 44)}`
-          + `<div style="min-width:0;flex-grow:1"><span class="cupTeamN">${String(i+1).padStart(2,"0")}</span> <b>${esc(t.name)}</b>`
-          + (mem?`<div class="rwl" style="margin-top:3px">${mem}${t.sub?` <span class="rnote" style="display:inline">(+${esc(t.sub)})</span>`:""}</div>`:"") + adm + `</div></div>`;
+        teamNo++;
+        return `<div class="cupTeam">${cupEmbImg(t.emb, 46)}`
+          + `<div class="cupTeamMid">`
+          +   `<div class="cupTeamTop"><span class="cupTeamN">${String(teamNo).padStart(2,"0")}</span><span class="cupTeamName">${esc(t.name)}</span></div>`
+          +   (mem?`<div class="cupTeamRule"></div><div class="cupTeamMem">${mem}</div>`:"")
+          +   adm
+          + `</div></div>`;
       }).join(""));
     }
     B.push(`<div class="cupFoot">${CUPL("cp_foot")}</div>`);
