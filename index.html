@@ -4261,7 +4261,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.26-c";
+const SITE_VERSION = "2026.08.26-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6507,7 +6507,9 @@ FB.onValue(FB.ref(FB.db, "tourney/teams"), snap => {
   const v = snap.val() || {};
   trTeams = Object.entries(v).map(([uid,t])=>({
       uid, name:(t&&t.name)||"", m1:(t&&t.m1)||"", m2:(t&&t.m2)||"", m3:(t&&t.m3)||"",
-      sub:(t&&t.sub)||"", solo:!!(t&&t.solo), ts:(t&&t.ts)||0
+      sub:(t&&t.sub)||"", solo:!!(t&&t.solo), ts:(t&&t.ts)||0,
+      emb:(t&&t.emb)||""   /* 🚑 2026-08-26: emb를 빼먹어 모든 팀이 기본(금장)으로 보였다 — 저장은 정상, 표시·편집 프리필만 오류.
+         편집 화면도 금장이 선택된 걸로 떠서, 그대로 재저장하면 진짜 선택이 금장으로 덮어써지는 위험까지 있었다(유저 신고: R 마크 → 금장). */
     }))
     .filter(t => typeof t.name === "string" && t.name)
     .sort((a,b)=>(a.ts||0)-(b.ts||0));     // 신청 순서 고정 = 순위 아님
