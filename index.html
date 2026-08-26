@@ -4261,7 +4261,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.26-b";
+const SITE_VERSION = "2026.08.26-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6354,7 +6354,10 @@ document.addEventListener("click", async e => {
   const val = id => (G(id) ? G(id).value.trim() : "");
 
   if(e.target.id === "trGo"){
-    if(!getNick()){ toast(TRL("f_need_nick")); return; }
+    /* 🚑 2026-08-26 긴급: 여기서 "먼저 사이트 닉네임을 정해주세요"로 신청을 막고 있었다(유저 신고).
+       사이트 닉네임은 이 폼 어디에도 쓰이지 않고(팀원 이름은 trM1 칸에 직접 받는다),
+       DB 규칙도 로그인(auth)만 요구하지 닉네임은 요구하지 않는다 = 순전히 불필요한 문턱이었다.
+       게다가 안내만 띄우고 닉네임 창을 열어주지도 않아 유저가 빠져나갈 길이 없었다. → 조건 삭제. */
     const name = val("trTeam"), m1 = val("trM1");
     if(!name || !m1){ toast(TRL("f_need_team")); return; }
     const solo = !!(G("trSolo") && G("trSolo").checked);
@@ -6482,6 +6485,8 @@ document.addEventListener("click", async e => {
     try{
       await FB.remove(FB.ref(FB.db, "tourney/teams/" + uid));
       try{ await FB.remove(FB.ref(FB.db, "tourney/contact/" + uid)); }catch(e2){}
+      try{ await FB.remove(FB.ref(FB.db, "tourney/ids/" + uid)); }catch(e3){}   /* 🚑 2026-08-26: 관리자 삭제도 게임 ID를 정리한다.
+         v2026.08.26-a 에서 "취소" 경로만 고치고 이 경로를 빠뜨려, 팀은 없는데 게임 ID만 남는 기록이 실제로 2건 생겼다(MAMMON·Orduric). */
     }catch(err){ toast(TRL("f_fail")); }
   }
 });
