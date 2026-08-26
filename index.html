@@ -1090,6 +1090,12 @@
 .cupEmbBtn{aspect-ratio:1/1;padding:3px;border-radius:9px;border:1px solid #2a3347;background:#0e1320;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .cupEmbBtn img{width:100%;height:100%;border-radius:6px;display:block;object-fit:cover}
 .cupEmbBtn.sel{border-color:#ffb02e;box-shadow:0 0 0 1px #ffb02e}
+/* 📱 2026-08-26: 폰(375px)에서 엠블럼 한 칸이 30×30px 이라 손가락으로 누르기 어려웠다(권장 44px).
+   열을 7→5 로 줄여 약 45px 확보. 높이는 한 줄이 반쯤 걸치도록 잡아 "아래에 더 있다"가 눈에 보이게 한다
+   (예전엔 196px 안에 399px 어치가 숨어 있고 더 있다는 신호가 없었다). */
+@media(max-width:420px){
+  .cupEmbGrid{grid-template-columns:repeat(5,minmax(0,1fr));max-height:234px}
+}
 .cupAf{display:inline-block;border-radius:7px;background-repeat:no-repeat}
 .cupA9{background-size:300% 300%;animation:cupA9 1.08s step-end infinite}
 .cupA4{background-size:200% 200%;animation:cupA4 .8s step-end infinite}
@@ -1674,7 +1680,9 @@
 </section>
 </main>
 
-<div id="toast"></div>
+<!-- ♿ 2026-08-26: role/aria-live 가 없어서 신청 성공·실패 안내가 화면을 못 보는 사용자에게 전혀 전달되지 않았다.
+     토스트는 신청 과정의 유일한 피드백 수단이라 반드시 읽혀야 한다. -->
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 <div class="nickmodal" id="tierModal" onclick="if(event.target===this)rsTierClose()">
   <div class="nickbox" style="max-width:380px">
     <button class="lbclose2" onclick="rsTierClose()">✕</button>
@@ -4290,7 +4298,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.26-e";
+const SITE_VERSION = "2026.08.26-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5712,6 +5720,8 @@ const TR_CUP = {
   cp_open:{ko:"지금 팀 접수 중",en:"Team sign-ups open now",ja:"チーム受付中",zh:"隊伍報名進行中"},
   /* 🇰🇷 2026-08-26: 마감·일시를 서버 한 줄(모든 언어 공통)로 두니 영어를 섞어야 했다 → 코드에 언어별로 둔다. 한국인은 한국어만 본다. */
   cp_subtag:{ko:"예비",en:"SUB",ja:"補欠",zh:"替補"},
+  /* ♿ 화면을 못 보는 사용자용 엠블럼 버튼 이름 — 엠블럼에 고유 이름 데이터가 없어 순번으로 구분한다 */
+  cp_emb_n:{ko:"엠블럼 {n}번",en:"Emblem {n}",ja:"エンブレム {n}",zh:"隊徽 {n}"},
   cp_deadline:{ko:"⏳ 접수 마감 9월 14일 (월)",en:"⏳ Sign-ups close September 14 (Mon)",ja:"⏳ 受付締切 9月14日 (月)",zh:"⏳ 報名截止 9月14日 (一)"},
   cp_when:{ko:"9월 19일 (토) 저녁 8시",en:"Saturday, September 19 · 20:00",ja:"9月19日 (土) 20時",zh:"9月19日 (六) 20:00"},
   cp_prz_head:{ko:"우승팀 상품",en:"Winners' prizes",ja:"優勝チームの賞品",zh:"冠軍隊伍獎品"},
@@ -5753,7 +5763,7 @@ const CUP_R = {
   r_sw2:{ko:"비슷한 성적끼리 붙어요",en:"Similar records play each other",ja:"近い成績同士が対戦",zh:"戰績相近者對戰"},
   r_split:{ko:"성적에 따라 두 결선으로 나뉘어요",en:"Results decide which finals you enter",ja:"成績で2つの決勝に分かれます",zh:"依戰績進入不同決賽"},
   r_cup:{ko:"컵 결선",en:"Cup finals",ja:"カップ決勝",zh:"盃賽決賽"},
-  r_plate:{ko:"플레이트 결선",en:"Plate finals",ja:"プレート決勝",zh:"銀盤決賽"},
+  r_plate:{ko:"플레이트 결선",en:"Plate finals",ja:"プレート決勝",zh:"Plate 決賽"},
   r_bo3:{ko:"3판 2선승 · 우승팀 시상",en:"Best of 3 · winners get prizes",ja:"3本2先取・優勝チームに賞品",zh:"三戰兩勝・冠軍有獎"},
   r_reg:{ko:"팀 등록",en:"Entering",ja:"チーム登録",zh:"報名"},
   r_reg1:{ko:"팀 3명 + 예비 1명(선택)으로 신청해요. 혼자여도 괜찮아요 — 운영자가 시간대를 맞춰 팀을 묶어드립니다.",en:"Enter with 3 players + 1 optional sub. Solo? That's fine — the organiser will match you into a team.",ja:"3人＋補欠1名（任意）で登録。1人でもOK — 運営が時間帯を合わせてチームを組みます。",zh:"以3人＋替補1人（選填）報名。單人也可以 — 管理員會依時段幫你組隊。"},
@@ -5798,6 +5808,19 @@ async function trLoadMyIds(){
     put("trId1", d.i1); put("trId2", d.i2); put("trId3", d.i3); put("trIdS", d.is);
   }catch(e){}
 }
+/* 🚑 2026-08-26: 내 연락처 불러오기. 이게 없어서 수정 화면의 카톡·디스코드 칸이 항상 빈칸으로 떴고,
+   한쪽만 고쳐 저장하면 다른 쪽이 통째로 사라졌다(trMyContact 는 선언·읽기만 있고 값을 넣는 코드가 아예 없었음).
+   게임 ID와 똑같은 방식 — 사용자가 이미 뭔가 적었으면 덮어쓰지 않는다. */
+async function trLoadMyContact(){
+  try{
+    if(typeof MY_UID === "undefined" || !MY_UID) return;
+    const snap = await FB.get(FB.ref(FB.db, "tourney/contact/" + MY_UID));
+    trMyContact = snap.val() || null;
+    const put = (id,v) => { const el = document.getElementById(id); if(el && !el.value) el.value = v || ""; };
+    put("trKakao", trMyContact && trMyContact.kakao);
+    put("trDisc",  trMyContact && trMyContact.discord);
+  }catch(e){}
+}
 /* 관리자: 팀별 게임 ID 열람(상품 지급용) */
 async function trLoadTeamIds(){
   for(const el of document.querySelectorAll("[data-trids]")){
@@ -5830,7 +5853,10 @@ document.addEventListener('click', e => {
   const sb = e.target.closest('[data-cupemb]');
   if(!sb) return;
   window.CUP_EMB_SEL = sb.getAttribute('data-cupemb');
-  document.querySelectorAll('[data-cupemb]').forEach(b=>b.classList.toggle('sel', b.getAttribute('data-cupemb')===window.CUP_EMB_SEL));
+  document.querySelectorAll('[data-cupemb]').forEach(b=>{
+    const on = b.getAttribute('data-cupemb')===window.CUP_EMB_SEL;
+    b.classList.toggle('sel', on); b.setAttribute('aria-pressed', on?'true':'false');
+  });
   const pv = document.getElementById('cupEmbPrev');
   if(pv) pv.innerHTML = cupEmbImg(window.CUP_EMB_SEL, 48);
 });
@@ -5934,8 +5960,8 @@ function renderTourney(){
     const v = trMyInt() || {};
     H.push(`<div class="rptcard"><h3>${TRL("int_head")}</h3>`
       + `<div class="rnote">${TRL("int_pub_note")}</div>`
-      + `<input class="cmtname trin" id="trINick" maxlength="20" placeholder="${TRL("int_nick")}" value="${esc(v.nick || (localStorage.getItem("rs_gamenick")||"").trim() || getNick() || "")}">`
-      + `<input class="cmtname trin" id="trIWhen" maxlength="60" placeholder="${TRL("int_when")}" value="${esc(v.when||"")}">`
+      + `<input class="cmtname trin" id="trINick" maxlength="20" placeholder="${TRL("int_nick")}" value="${esc(v.nick || (localStorage.getItem("rs_gamenick")||"").trim() || getNick() || "")}" aria-label="${TRL("int_nick")}">`
+      + `<input class="cmtname trin" id="trIWhen" maxlength="60" placeholder="${TRL("int_when")}" value="${esc(v.when||"")}" aria-label="${TRL("int_when")}">`
       + `<div class="rnote" style="margin-top:8px">${TRL("int_hero_hint")}</div>`
       + `<div class="trbtns"><button id="trIGo" class="cmtbtn">${v.uid?TRL("int_edit"):TRL("int_go")}</button>`
       + (v.uid?`<button id="trICancel" class="cmtbtn">${TRL("int_cancel")}</button>`:"")
@@ -6001,21 +6027,21 @@ function renderTourney(){
     const selEmb = window.CUP_EMB_SEL;
     B.push(`<div class="rptcard" style="margin-top:14px"><h3>${TRL("f_head")}</h3>`
       + `<div class="rnote">${TRL("f_pub_note")}</div>`
-      + `<input class="cmtname trin" id="trTeam" maxlength="24" placeholder="${TRL("f_team")}" value="${esc(v.name||"")}">`
+      + `<input class="cmtname trin" id="trTeam" maxlength="24" placeholder="${TRL("f_team")}" value="${esc(v.name||"")}" aria-label="${TRL("f_team")}">`
       + `<div class="rnote" style="margin-top:8px">${CUPL("cp_emb")}</div>`
       + `<div class="cupEmbWrap"><span id="cupEmbPrev">${cupEmbImg(selEmb,48)}</span>`
       +   `<div class="cupEmbGrid">`
-      +   CUP_EMBS.map(k=>`<button type="button" class="cupEmbBtn${k===selEmb?" sel":""}" data-cupemb="${k}">${cupEmbCell(k)}</button>`).join("")
+      +   CUP_EMBS.map((k,ei)=>`<button type="button" class="cupEmbBtn${k===selEmb?" sel":""}" data-cupemb="${k}" aria-label="${esc(CUPL("cp_emb_n").replace("{n}", ei+1))}" aria-pressed="${k===selEmb?"true":"false"}">${cupEmbCell(k)}</button>`).join("")
       +   `</div></div>`
-      + `<div class="cupRow" style="margin-top:10px"><input class="cmtname trin" id="trM1" maxlength="20" placeholder="${TRL("f_m1")}" value="${esc(v.m1||"")}"><input class="cmtname trin cupIdIn" id="trId1" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
-      + `<div class="cupRow"><input class="cmtname trin" id="trM2" maxlength="20" placeholder="${TRL("f_m2")}" value="${esc(v.m2||"")}"><input class="cmtname trin cupIdIn" id="trId2" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
-      + `<div class="cupRow"><input class="cmtname trin" id="trM3" maxlength="20" placeholder="${TRL("f_m3")}" value="${esc(v.m3||"")}"><input class="cmtname trin cupIdIn" id="trId3" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
-      + `<div class="cupRow"><input class="cmtname trin" id="trSub" maxlength="20" placeholder="${TRL("f_sub")}" value="${esc(v.sub||"")}"><input class="cmtname trin cupIdIn" id="trIdS" maxlength="16" placeholder="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow" style="margin-top:10px"><input class="cmtname trin" id="trM1" maxlength="20" placeholder="${TRL("f_m1")}" value="${esc(v.m1||"")}" aria-label="${TRL("f_m1")}"><input class="cmtname trin cupIdIn" id="trId1" maxlength="16" placeholder="${CUPL("cp_id")}" aria-label="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow"><input class="cmtname trin" id="trM2" maxlength="20" placeholder="${TRL("f_m2")}" value="${esc(v.m2||"")}" aria-label="${TRL("f_m2")}"><input class="cmtname trin cupIdIn" id="trId2" maxlength="16" placeholder="${CUPL("cp_id")}" aria-label="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow"><input class="cmtname trin" id="trM3" maxlength="20" placeholder="${TRL("f_m3")}" value="${esc(v.m3||"")}" aria-label="${TRL("f_m3")}"><input class="cmtname trin cupIdIn" id="trId3" maxlength="16" placeholder="${CUPL("cp_id")}" aria-label="${CUPL("cp_id")}"></div>`
+      + `<div class="cupRow"><input class="cmtname trin" id="trSub" maxlength="20" placeholder="${TRL("f_sub")}" value="${esc(v.sub||"")}" aria-label="${TRL("f_sub")}"><input class="cmtname trin cupIdIn" id="trIdS" maxlength="16" placeholder="${CUPL("cp_id")}" aria-label="${CUPL("cp_id")}"></div>`
       + `<div class="cupGuide"><svg style="flex-shrink:0;margin-top:1px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg><div>${CUPL("cp_id_guide")}</div></div>`
       + `<label class="trck"><input type="checkbox" id="trSolo"${v.solo?" checked":""}> ${TRL("f_solo")}</label>`
       + `<div class="rnote" style="margin-top:10px">${TRL("f_contact_note")}</div>`
-      + `<input class="cmtname trin" id="trKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}">`
-      + `<input class="cmtname trin" id="trDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}">`
+      + `<input class="cmtname trin" id="trKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}" aria-label="${TRL("f_kakao")}">`
+      + `<input class="cmtname trin" id="trDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}" aria-label="${TRL("f_disc")}">`
       + `<div class="trbtns" style="margin-top:12px"><button id="trGo" class="cupGo">${mine?TRL("f_edit"):TRL("f_go")}</button>`
       + (mine?`<button id="trCancel" class="cmtbtn">${TRL("f_cancel")}</button>`:"")
       + `</div>`
@@ -6053,7 +6079,7 @@ function renderTourney(){
     }
     B.push(`<div class="cupFoot">${CUPL("cp_foot")}</div>`);
     body.innerHTML = B.join("");
-    if(mine) trLoadMyIds();
+    if(mine){ trLoadMyIds(); trLoadMyContact(); }
     if(IS_ADMIN){ trLoadContacts(); trLoadTeamIds(); }
     renderTrAdmin();
     return;
@@ -6066,15 +6092,15 @@ function renderTourney(){
   }else{
     const v = mine || {};
     H.push(`<div class="rnote">${TRL("f_pub_note")}</div>`
-      + `<input class="cmtname trin" id="trTeam" maxlength="24" placeholder="${TRL("f_team")}" value="${esc(v.name||"")}">`
-      + `<input class="cmtname trin" id="trM1" maxlength="20" placeholder="${TRL("f_m1")}" value="${esc(v.m1||"")}">`
-      + `<input class="cmtname trin" id="trM2" maxlength="20" placeholder="${TRL("f_m2")}" value="${esc(v.m2||"")}">`
-      + `<input class="cmtname trin" id="trM3" maxlength="20" placeholder="${TRL("f_m3")}" value="${esc(v.m3||"")}">`
-      + `<input class="cmtname trin" id="trSub" maxlength="20" placeholder="${TRL("f_sub")}" value="${esc(v.sub||"")}">`
+      + `<input class="cmtname trin" id="trTeam" maxlength="24" placeholder="${TRL("f_team")}" value="${esc(v.name||"")}" aria-label="${TRL("f_team")}">`
+      + `<input class="cmtname trin" id="trM1" maxlength="20" placeholder="${TRL("f_m1")}" value="${esc(v.m1||"")}" aria-label="${TRL("f_m1")}">`
+      + `<input class="cmtname trin" id="trM2" maxlength="20" placeholder="${TRL("f_m2")}" value="${esc(v.m2||"")}" aria-label="${TRL("f_m2")}">`
+      + `<input class="cmtname trin" id="trM3" maxlength="20" placeholder="${TRL("f_m3")}" value="${esc(v.m3||"")}" aria-label="${TRL("f_m3")}">`
+      + `<input class="cmtname trin" id="trSub" maxlength="20" placeholder="${TRL("f_sub")}" value="${esc(v.sub||"")}" aria-label="${TRL("f_sub")}">`
       + `<label class="trck"><input type="checkbox" id="trSolo"${v.solo?" checked":""}> ${TRL("f_solo")}</label>`
       + `<div class="rnote" style="margin-top:10px">${TRL("f_contact_note")}</div>`
-      + `<input class="cmtname trin" id="trKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}">`
-      + `<input class="cmtname trin" id="trDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}">`
+      + `<input class="cmtname trin" id="trKakao" maxlength="40" placeholder="${TRL("f_kakao")}" value="${esc((trMyContact&&trMyContact.kakao)||"")}" aria-label="${TRL("f_kakao")}">`
+      + `<input class="cmtname trin" id="trDisc" maxlength="40" placeholder="${TRL("f_disc")}" value="${esc((trMyContact&&trMyContact.discord)||"")}" aria-label="${TRL("f_disc")}">`
       + `<div class="trbtns"><button id="trGo" class="cmtbtn">${mine?TRL("f_edit"):TRL("f_go")}</button>`
       + (mine?`<button id="trCancel" class="cmtbtn">${TRL("f_cancel")}</button>`:"")
       + `</div>`);
@@ -6280,7 +6306,7 @@ function renderTrBracket(){
       H.push(S.join(""));
     };
     stage(fam.cup, "cup", LANG==="ko"?"컵 · 결선":LANG==="ja"?"カップ決勝":LANG==="zh"?"盃賽決賽":"CUP FINALS");
-    stage(fam.plate, "plate", LANG==="ko"?"플레이트 · 결선":LANG==="ja"?"プレート決勝":LANG==="zh"?"銀盤決賽":"PLATE FINALS");
+    stage(fam.plate, "plate", LANG==="ko"?"플레이트 · 결선":LANG==="ja"?"プレート決勝":LANG==="zh"?"Plate 決賽":"PLATE FINALS");
     /* 예선 순위 — 방송 순위 보드: 상단 금색권 / 하단 청은권 / 사이에 "결선 진출 컷" 라인 */
     if(rest.length){
       const W={},L={};
@@ -6332,11 +6358,11 @@ function renderTrBracket(){
   if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
   ad.style.display="block";
   ad.innerHTML = `<div class="rptcard"><h3>${TRL("b_a_head")}</h3>`
-    + `<input class="cmtname trin" id="trBRound" maxlength="40" placeholder="${TRL("b_a_round")}">`
-    + `<input class="cmtname trin" id="trBA" maxlength="24" placeholder="${TRL("b_a_a")}">`
-    + `<input class="cmtname trin" id="trBB" maxlength="24" placeholder="${TRL("b_a_b")}">`
-    + `<input class="cmtname trin" id="trBScore" maxlength="12" placeholder="${TRL("b_a_score")}">`
-    + `<input class="cmtname trin" id="trBCode" maxlength="60" placeholder="${TRL("b_a_code")}">`
+    + `<input class="cmtname trin" id="trBRound" maxlength="40" placeholder="${TRL("b_a_round")}" aria-label="${TRL("b_a_round")}">`
+    + `<input class="cmtname trin" id="trBA" maxlength="24" placeholder="${TRL("b_a_a")}" aria-label="${TRL("b_a_a")}">`
+    + `<input class="cmtname trin" id="trBB" maxlength="24" placeholder="${TRL("b_a_b")}" aria-label="${TRL("b_a_b")}">`
+    + `<input class="cmtname trin" id="trBScore" maxlength="12" placeholder="${TRL("b_a_score")}" aria-label="${TRL("b_a_score")}">`
+    + `<input class="cmtname trin" id="trBCode" maxlength="60" placeholder="${TRL("b_a_code")}" aria-label="${TRL("b_a_code")}">`
     + `<div class="trbtns"><button id="trBAdd" class="cmtbtn">${TRL("b_a_add")}</button></div></div>`;
 }
 function renderTrHall(){
@@ -6348,7 +6374,7 @@ function renderTrHall(){
     H.push(`<div class="cupHallPlq"><div class="cupHallIn">`
       + `<div class="cupHallCup">COMMUNITY CUP · SEASON 1</div>`
       + `<div class="cupHallQ">? ? ?</div>`
-      + `<div class="cupHallCup" style="color:#8b96ab">CHAMPIONS</div>`
+      + `<div class="cupHallCup" style="color:#8b96ab">${CUPL("cp_win")}</div>`
       + `</div></div>`
       + `<div class="cupHallSub" style="text-align:center">${CUPL("ch_empty")}</div>`);
   }
@@ -6364,7 +6390,7 @@ function renderTrHall(){
            : `<svg style="margin:4px 0" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M7 5H4.2a3.2 3.2 0 0 0 3 4.2M17 5h2.8a3.2 3.2 0 0 1-3 4.2"></path><path d="M12 13.5V16M8.5 21h7M10 18.5h4v2.5h-4z"></path></svg>`)
         + `<div class="cupHallName">${esc(wName)}</div>`
         + (wRest?`<div class="cupHallSub">${esc(wRest)}</div>`:"")
-        + `<div class="cupHallCup" style="color:#8b96ab">CHAMPIONS</div>`
+        + `<div class="cupHallCup" style="color:#8b96ab">${CUPL("cp_win")}</div>`
         + `<div class="cupHallRows">`
         + (h.plate?`<div class="cupHallRow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5da9ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg><span><b>${TRL("h_plate")}</b> · ${esc(h.plate)}</span></div>`:"")
         + (h.mvp?`<div class="cupHallRow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9-5.3-3-5.3 3 1.2-5.9L3.4 9.3l6-.7z"></path></svg><span><b>${TRL("h_mvp")}</b> · ${esc(h.mvp)}</span></div>`:"")
@@ -6378,10 +6404,10 @@ function renderTrHall(){
   if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
   ad.style.display="block";
   ad.innerHTML = `<div class="rptcard"><h3>${TRL("h_a_head")}</h3>`
-    + `<input class="cmtname trin" id="trHCup" maxlength="60" placeholder="${TRL("h_a_cup")}">`
-    + `<input class="cmtname trin" id="trHWin" maxlength="120" placeholder="${TRL("h_a_win")}">`
-    + `<input class="cmtname trin" id="trHPlate" maxlength="120" placeholder="${TRL("h_a_plate")}">`
-    + `<input class="cmtname trin" id="trHMvp" maxlength="60" placeholder="${TRL("h_a_mvp")}">`
+    + `<input class="cmtname trin" id="trHCup" maxlength="60" placeholder="${TRL("h_a_cup")}" aria-label="${TRL("h_a_cup")}">`
+    + `<input class="cmtname trin" id="trHWin" maxlength="120" placeholder="${TRL("h_a_win")}" aria-label="${TRL("h_a_win")}">`
+    + `<input class="cmtname trin" id="trHPlate" maxlength="120" placeholder="${TRL("h_a_plate")}" aria-label="${TRL("h_a_plate")}">`
+    + `<input class="cmtname trin" id="trHMvp" maxlength="60" placeholder="${TRL("h_a_mvp")}" aria-label="${TRL("h_a_mvp")}">`
     + `<div class="trbtns"><button id="trHAdd" class="cmtbtn">${TRL("b_a_add")}</button></div></div>`;
 }
 
@@ -6396,12 +6422,12 @@ function renderTrAdmin(){
   box.innerHTML = `<div class="rptcard"><h3>${TRL("a_head")}</h3>`
     + `<div class="rnote">${TRL("a_hint")}</div>`
     + `<label class="trck"><input type="checkbox" id="trAOn"${m.on?" checked":""}> ${TRL("a_on")}</label>`
-    + `<input class="cmtname trin" id="trATitle" maxlength="60" placeholder="${TRL("a_title")}" value="${esc(m.title||"")}">`
-    + `<input class="cmtname trin" id="trADate" maxlength="60" placeholder="${TRL("a_date")}" value="${esc(m.date||"")}">`
-    + `<input class="cmtname trin" id="trATz" maxlength="40" placeholder="${TRL("a_tz")}" value="${esc(m.tz||"")}">`
+    + `<input class="cmtname trin" id="trATitle" maxlength="60" placeholder="${TRL("a_title")}" value="${esc(m.title||"")}" aria-label="${TRL("a_title")}">`
+    + `<input class="cmtname trin" id="trADate" maxlength="60" placeholder="${TRL("a_date")}" value="${esc(m.date||"")}" aria-label="${TRL("a_date")}">`
+    + `<input class="cmtname trin" id="trATz" maxlength="40" placeholder="${TRL("a_tz")}" value="${esc(m.tz||"")}" aria-label="${TRL("a_tz")}">`
     + `<select class="cmtname trin" id="trAState">` + TR_STATES.map(s=>
         `<option value="${s}"${(m.state||"interest")===s?" selected":""}>${TR_STATE(s)}</option>`).join("") + `</select>`
-    + `<input class="cmtname trin" id="trANote" maxlength="500" placeholder="${TRL("a_note")}" value="${esc(m.note||"")}">`
+    + `<input class="cmtname trin" id="trANote" maxlength="500" placeholder="${TRL("a_note")}" value="${esc(m.note||"")}" aria-label="${TRL("a_note")}">`
     + `<div class="trbtns"><button id="trASave" class="cmtbtn">${TRL("a_save")}</button></div></div>`;
 }
 
@@ -6415,28 +6441,34 @@ document.addEventListener("click", async e => {
        사이트 닉네임은 이 폼 어디에도 쓰이지 않고(팀원 이름은 trM1 칸에 직접 받는다),
        DB 규칙도 로그인(auth)만 요구하지 닉네임은 요구하지 않는다 = 순전히 불필요한 문턱이었다.
        게다가 안내만 띄우고 닉네임 창을 열어주지도 않아 유저가 빠져나갈 길이 없었다. → 조건 삭제. */
-    const name = val("trTeam"), m1 = val("trM1");
-    if(!name || !m1){ toast(TRL("f_need_team")); return; }
+    /* 🚑 2026-08-26 (실측으로 발견): 입력칸 값은 **저장을 시작하기 전에 전부 읽어야 한다.**
+       예전엔 팀을 저장한 뒤(await) 연락처를 읽었는데, 팀이 저장되는 순간 구독이 화면을 다시 그려
+       입력칸이 새로 만들어지므로 그때 읽으면 **항상 빈 값**이었다. 그래서 연락처는 지금까지
+       단 한 번도 저장된 적이 없다(tourney/contact 가 통째로 비어 있었음). 순서만 바꾸면 해결된다. */
+    const name = val("trTeam"), m1 = val("trM1"),
+          m2 = val("trM2"), m3 = val("trM3"), sub = val("trSub"),
+          kakao = val("trKakao"), discord = val("trDisc");
+    const idClean = x => String(x||"").replace(/\s+/g,"");
+    const i1 = idClean(val("trId1")), i2 = idClean(val("trId2")), i3 = idClean(val("trId3")), i4 = idClean(val("trIdS"));
     const solo = !!(G("trSolo") && G("trSolo").checked);
+    const emb = String(window.CUP_EMB_SEL || "");
+    if(!name || !m1){ toast(TRL("f_need_team")); return; }
     const had = !!trMine();
     try{
       /* 🆔 게임 ID(상품 지급용·비공개 노드). 본인 필수, 닉네임 적은 팀원 칸도 필수. 영숫자 6~16자. */
-      const idClean = x => String(x||"").replace(/\s+/g,"");
       const idFmt = x => /^[A-Za-z0-9]{6,16}$/.test(x);
-      const i1 = idClean(val("trId1")), i2 = idClean(val("trId2")), i3 = idClean(val("trId3")), i4 = idClean(val("trIdS"));
-      if(!idFmt(i1) || (val("trM2") && !idFmt(i2)) || (val("trM3") && !idFmt(i3)) || (i2 && !idFmt(i2)) || (i3 && !idFmt(i3)) || (i4 && !idFmt(i4))){
+      if(!idFmt(i1) || (m2 && !idFmt(i2)) || (m3 && !idFmt(i3)) || (i2 && !idFmt(i2)) || (i3 && !idFmt(i3)) || (i4 && !idFmt(i4))){
         toast(CUPL("cp_id_bad")); return;
       }
-      const emb = String(window.CUP_EMB_SEL || "");
       await FB.set(FB.ref(FB.db, "tourney/teams/" + MY_UID), {
-        name, m1, m2: val("trM2"), m3: val("trM3"), sub: val("trSub"),
-        solo, emb, ts: FB.serverTimestamp()
+        name, m1, m2, m3, sub, solo, emb, ts: FB.serverTimestamp()
       });
       try{ await FB.set(FB.ref(FB.db, "tourney/ids/" + MY_UID), { i1, i2, i3, is: i4 }); }catch(eIds){}
-      const kakao = val("trKakao"), discord = val("trDisc");
-      if(kakao || discord){
-        try{ await FB.set(FB.ref(FB.db, "tourney/contact/" + MY_UID), { kakao, discord }); }catch(e2){}
-      }
+      /* 둘 다 비우면 실제로 지운다 — 예전엔 건너뛰어서 본인이 자기 연락처를 지울 방법이 없었다. */
+      try{
+        await FB.set(FB.ref(FB.db, "tourney/contact/" + MY_UID), (kakao || discord) ? { kakao, discord } : null);
+        trMyContact = (kakao || discord) ? { kakao, discord } : null;
+      }catch(e2){}
       toast(had ? TRL("f_updated") : TRL("f_done"));
     }catch(err){
       const perm = String(err && err.message || err).toLowerCase().includes("permission");
@@ -6480,10 +6512,16 @@ document.addEventListener("click", async e => {
   }
   if(e.target.id === "trCancel"){
     if(!confirm(TRL("f_cancel_ask"))) return;
+    /* 🚑 2026-08-26: 예전엔 팀·연락처·게임ID를 **세 번 나눠** 지우고 오류를 catch{} 로 삼켰다.
+       중간에 끊기면 팀만 사라지고 게임 ID·연락처가 주인 없이 남는다 — 실제로 8/26에 2건 발생했던 구조다.
+       update 한 번으로 바꾸면 Firebase 가 **전부 성공 또는 전부 실패**를 보장해 반쪽 삭제가 원천 불가능해진다. */
     try{
-      await FB.remove(FB.ref(FB.db, "tourney/teams/" + MY_UID));
-      try{ await FB.remove(FB.ref(FB.db, "tourney/contact/" + MY_UID)); }catch(e2){}
-      try{ await FB.remove(FB.ref(FB.db, "tourney/ids/" + MY_UID)); }catch(e3){}   /* 취소 시 게임 ID도 정리 (2026-08-26) */
+      await FB.update(FB.ref(FB.db, "tourney"), {
+        ["teams/"   + MY_UID]: null,
+        ["contact/" + MY_UID]: null,
+        ["ids/"     + MY_UID]: null
+      });
+      trMyContact = null;
       toast(TRL("f_cancelled"));
     }catch(err){ toast(TRL("f_fail")); }
     return;
@@ -6540,10 +6578,12 @@ document.addEventListener("click", async e => {
     if(!confirm(TRL("a_del_ask"))) return;
     const uid = dl.getAttribute("data-trdel");
     try{
-      await FB.remove(FB.ref(FB.db, "tourney/teams/" + uid));
-      try{ await FB.remove(FB.ref(FB.db, "tourney/contact/" + uid)); }catch(e2){}
-      try{ await FB.remove(FB.ref(FB.db, "tourney/ids/" + uid)); }catch(e3){}   /* 🚑 2026-08-26: 관리자 삭제도 게임 ID를 정리한다.
-         v2026.08.26-a 에서 "취소" 경로만 고치고 이 경로를 빠뜨려, 팀은 없는데 게임 ID만 남는 기록이 실제로 2건 생겼다(MAMMON·Orduric). */
+      /* 🚑 2026-08-26: 본인 취소와 같은 이유로 update 한 번으로. 반쪽 삭제 원천 차단. */
+      await FB.update(FB.ref(FB.db, "tourney"), {
+        ["teams/"   + uid]: null,
+        ["contact/" + uid]: null,
+        ["ids/"     + uid]: null
+      });
     }catch(err){ toast(TRL("f_fail")); }
   }
 });
