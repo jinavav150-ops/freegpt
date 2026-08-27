@@ -1067,6 +1067,15 @@
 .cupMineMid{min-width:0}
 .cupMineName{font-family:'Black Han Sans',sans-serif;font-size:15px;color:#fff;line-height:1.25;word-break:keep-all}
 .cupMineMem{font-size:12px;color:#c8d0de;margin-top:3px;line-height:1.5;word-break:keep-all}
+/* ⚖️ 소식 카드 안의 영웅별 밸런스 상세 */
+.npbalwrap{margin-top:12px;padding-top:11px;border-top:1px solid #232b3d}
+.npbalwrap h5{margin:0 0 5px;font-size:13px;color:#ffd257;font-weight:700}
+.npbalnote{margin:0 0 9px;font-size:11.5px;color:var(--sub);line-height:1.6}
+.npbal{margin-top:8px;padding:9px 11px;background:rgba(20,27,40,.65);border:1px solid #232b3d;border-radius:9px}
+.npbalh{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.npbalh b{font-size:13px;color:#fff}
+.npballist{margin:6px 0 0;padding-left:16px}
+.npballist li{font-size:11.5px;color:#c8d0de;line-height:1.65;margin:1px 0}
 .cupAdm{margin-top:9px;padding-top:8px;border-top:1px dashed #2a3347}
 /* 팀 카드는 .rptcard 밖이라 .rptcard .rnote 의 11px 이 안 먹는다 — 관리자 줄 글씨를 직접 작게 */
 .cupAdm .rnote{font-size:11px;color:var(--sub);line-height:1.5}
@@ -2327,38 +2336,38 @@ const PATCH_L = {
 };
 const PATCH_URL_LANG = {ko:"ko",en:"en",ja:"jp",zh:"cn"};   // 공식 페이지 언어 코드
 const HERO_PATCHES = {
-  /* 🎮 2026-08-27 게임 2.2.0.
-     ⚠️ 공식 패치노트 페이지(patchnotes_2.2.0_en)의 내용이 **2.1.1 그대로**다 — 영웅 이름만 2.2.0 것으로 바뀌었고
-     수치·개발자 코멘트는 예전 것이다. 레메디에게 포탑, 노바에게 지팡이, 오니에게 오버드라이브 수치가 붙어 있고
-     칼리브리와 트윙클 항목은 글자까지 동일하다. 게다가 **방향이 게임 내 공지와 정반대**다
-     (공지: 레메디·노바·오니 약화 / 칼리브리·트윙클 강화 ↔ 페이지: 노바·오니 강화 / 칼리브리·트윙클 약화).
-     → kind 는 **게임 내 공지(공식 릴리스 노트)** 기준으로 두고, 페이지 수치는 "오류로 보임" 표시와 함께 그대로 싣는다.
-     개발사가 페이지를 고치면 이 주석과 경고 문구를 지우고 수치만 남길 것. */
-  remedy:[{ver:"2.2.0",kind:"nerf",url:"https://niceplans.studio/patchnotes_2.2.0_en",notes:{
-    ko:["게임 내 공지 — 약간 <b>약해졌어요</b>","⚠️ 아래는 <b>공식 패치노트 페이지에 적힌 값</b>인데, 레메디에게 없는 <b>포탑</b> 수치예요 (칸의 2.1.1 내용) 개발사 페이지 오류로 보이니 참고만 하세요.","<span style=\"opacity:.7\">궁극기 비용 2600 → 2400</span>","<span style=\"opacity:.7\">포탑 체력 350 → 300</span>","<span style=\"opacity:.7\">포탑 피해 27 → 24 (DPS 108 → 96)</span>","<span style=\"opacity:.7\">포탑 사거리 15 → 13</span>"],
-    en:["In-game notice — slightly <b>weakened</b>","⚠️ Below is <b>what the official patch notes page lists</b>, but these are <b>turret</b> numbers Remedy doesn't have (Khan's 2.1.1 notes) this looks like an error on the developer's page — treat with caution.","<span style=\"opacity:.7\">Ultimate cost 2600 → 2400</span>","<span style=\"opacity:.7\">Turret health 350 → 300</span>","<span style=\"opacity:.7\">Turret shot damage 27 → 24 (DPS 108 → 96)</span>","<span style=\"opacity:.7\">Turret attack range 15 → 13</span>"],
-    ja:["ゲーム内告知 — 少し<b>弱体化</b>","⚠️ 以下は<b>公式パッチノートに記載された値</b>ですが、レメディにない<b>タレット</b>の数値です（カーンの2.1.1の内容） 開発元ページの誤りと思われます。参考程度に。","<span style=\"opacity:.7\">アルティメットのコスト 2600 → 2400</span>","<span style=\"opacity:.7\">タレットの体力 350 → 300</span>","<span style=\"opacity:.7\">タレットの射撃ダメージ 27 → 24（DPS 108 → 96）</span>","<span style=\"opacity:.7\">タレットの攻撃射程 15 → 13</span>"],
-    zh:["遊戲內公告 — 略為<b>削弱</b>","⚠️ 以下是<b>官方更新說明頁所列的數值</b>，但這是 Remedy 沒有的<b>炮台</b>數值（Khan 的 2.1.1 內容） 看來是開發商頁面的錯誤，僅供參考。","<span style=\"opacity:.7\">大招消耗 2600 → 2400</span>","<span style=\"opacity:.7\">炮台生命值 350 → 300</span>","<span style=\"opacity:.7\">炮台單發傷害 27 → 24（DPS 108 → 96）</span>","<span style=\"opacity:.7\">炮台攻擊射程 15 → 13</span>"]}}],
-  nova:[{ver:"2.2.0",kind:"nerf",url:"https://niceplans.studio/patchnotes_2.2.0_en",notes:{
-    ko:["게임 내 공지 — 약간 <b>약해졌어요</b>","⚠️ 아래는 <b>공식 패치노트 페이지에 적힌 값</b>인데, 노바에게 없는 <b>지팡이</b> 수치예요 (벡터의 2.1.1 내용) 개발사 페이지 오류로 보이니 참고만 하세요.","<span style=\"opacity:.7\">탄환 피해 26 → 28 (DPS 98 → 106)</span>","<span style=\"opacity:.7\">궁극기 중 이동 속도 15% → 25%</span>","<span style=\"opacity:.7\">스태프 피해 104 → 100</span>","<span style=\"opacity:.7\">스태프 공격 속도 1.35 → 1.7회/초 (DPS 140 → 170)</span>"],
-    en:["In-game notice — slightly <b>weakened</b>","⚠️ Below is <b>what the official patch notes page lists</b>, but these are <b>staff</b> numbers Nova doesn't have (Vector's 2.1.1 notes) this looks like an error on the developer's page — treat with caution.","<span style=\"opacity:.7\">Bullet damage 26 → 28 (DPS 98 → 106)</span>","<span style=\"opacity:.7\">Ultimate movement speed bonus 15% → 25%</span>","<span style=\"opacity:.7\">Staff damage 104 → 100</span>","<span style=\"opacity:.7\">Staff attack rate 1.35 → 1.7/s (staff DPS 140 → 170)</span>"],
-    ja:["ゲーム内告知 — 少し<b>弱体化</b>","⚠️ 以下は<b>公式パッチノートに記載された値</b>ですが、ノヴァにない<b>スタッフ</b>の数値です（ベクターの2.1.1の内容） 開発元ページの誤りと思われます。参考程度に。","<span style=\"opacity:.7\">弾丸のダメージ 26 → 28（DPS 98 → 106）</span>","<span style=\"opacity:.7\">アルティメット中の移動速度ボーナス 15% → 25%</span>","<span style=\"opacity:.7\">スタッフのダメージ 104 → 100</span>","<span style=\"opacity:.7\">スタッフの攻撃速度 1.35 → 1.7回/秒（DPS 140 → 170）</span>"],
-    zh:["遊戲內公告 — 略為<b>削弱</b>","⚠️ 以下是<b>官方更新說明頁所列的數值</b>，但這是 Nova 沒有的<b>手杖</b>數值（Vector 的 2.1.1 內容） 看來是開發商頁面的錯誤，僅供參考。","<span style=\"opacity:.7\">子彈傷害 26 → 28（DPS 98 → 106）</span>","<span style=\"opacity:.7\">大招移動速度加成 15% → 25%</span>","<span style=\"opacity:.7\">手杖傷害 104 → 100</span>","<span style=\"opacity:.7\">手杖攻擊頻率 1.35 → 1.7次/秒（DPS 140 → 170）</span>"]}}],
-  oni:[{ver:"2.2.0",kind:"nerf",url:"https://niceplans.studio/patchnotes_2.2.0_en",notes:{
-    ko:["게임 내 공지 — 약간 <b>약해졌어요</b>","⚠️ 아래는 <b>공식 패치노트 페이지에 적힌 값</b>인데, 오니에게 없는 <b>오버드라이브</b> 수치예요 (퓨리의 2.1.1 내용) 개발사 페이지 오류로 보이니 참고만 하세요.","<span style=\"opacity:.7\">킥 피해 121 → 133</span>","<span style=\"opacity:.7\">최대 체력 725 → 750</span>","<span style=\"opacity:.7\">오버드라이브 쿨다운 10초 → 8초</span>"],
-    en:["In-game notice — slightly <b>weakened</b>","⚠️ Below is <b>what the official patch notes page lists</b>, but these are <b>Overdrive</b> numbers Oni doesn't have (Fury's 2.1.1 notes) this looks like an error on the developer's page — treat with caution.","<span style=\"opacity:.7\">Kick damage 121 → 133</span>","<span style=\"opacity:.7\">Maximum health 725 → 750</span>","<span style=\"opacity:.7\">Overdrive cooldown 10s → 8s</span>"],
-    ja:["ゲーム内告知 — 少し<b>弱体化</b>","⚠️ 以下は<b>公式パッチノートに記載された値</b>ですが、オニにない<b>オーバードライブ</b>の数値です（フューリーの2.1.1の内容） 開発元ページの誤りと思われます。参考程度に。","<span style=\"opacity:.7\">キックのダメージ 121 → 133</span>","<span style=\"opacity:.7\">最大体力 725 → 750</span>","<span style=\"opacity:.7\">オーバードライブのクールダウン 10秒 → 8秒</span>"],
-    zh:["遊戲內公告 — 略為<b>削弱</b>","⚠️ 以下是<b>官方更新說明頁所列的數值</b>，但這是 Oni 沒有的<b>過載</b>數值（Fury 的 2.1.1 內容） 看來是開發商頁面的錯誤，僅供參考。","<span style=\"opacity:.7\">踢擊傷害 121 → 133</span>","<span style=\"opacity:.7\">最大生命值 725 → 750</span>","<span style=\"opacity:.7\">過載冷卻時間 10秒 → 8秒</span>"]}}],
-  calibri:[{ver:"2.2.0",kind:"buff",url:"https://niceplans.studio/patchnotes_2.2.0_en",notes:{
-    ko:["게임 내 공지 — 약간 <b>강해졌어요</b>","⚠️ 아래는 <b>공식 패치노트 페이지에 적힌 값</b>인데, 칼리브리에게 없는 <b>표식</b> 수치예요 (세진의 2.1.1 내용 · 트윙클과 완전히 동일하게 적혀 있음) 개발사 페이지 오류로 보이니 참고만 하세요.","<span style=\"opacity:.7\">마크당 피해 증가 50% → 35%</span>","<span style=\"opacity:.7\">마크 지속 시간 7초 → 6초</span>"],
-    en:["In-game notice — slightly <b>buffed</b>","⚠️ Below is <b>what the official patch notes page lists</b>, but these are <b>mark</b> numbers Calibri doesn't have (Se-Jin's 2.1.1 notes · identical to Twinkle's) this looks like an error on the developer's page — treat with caution.","<span style=\"opacity:.7\">Damage increase per mark 50% → 35%</span>","<span style=\"opacity:.7\">Mark duration 7s → 6s</span>"],
-    ja:["ゲーム内告知 — 少し<b>強化</b>","⚠️ 以下は<b>公式パッチノートに記載された値</b>ですが、カリブリにない<b>マーク</b>の数値です（セジンの2.1.1の内容・トゥインクルと全く同じ記載） 開発元ページの誤りと思われます。参考程度に。","<span style=\"opacity:.7\">マーク1つあたりのダメージ増加量 50% → 35%</span>","<span style=\"opacity:.7\">マークの持続時間 7秒 → 6秒</span>"],
-    zh:["遊戲內公告 — 略為<b>加強</b>","⚠️ 以下是<b>官方更新說明頁所列的數值</b>，但這是 Calibri 沒有的<b>印記</b>數值（Se-Jin 的 2.1.1 內容・與 Twinkle 完全相同） 看來是開發商頁面的錯誤，僅供參考。","<span style=\"opacity:.7\">每層印記傷害加成 50% → 35%</span>","<span style=\"opacity:.7\">印記持續時間 7秒 → 6秒</span>"]}}],
-  twinkle:[{ver:"2.2.0",kind:"buff",url:"https://niceplans.studio/patchnotes_2.2.0_en",notes:{
-    ko:["게임 내 공지 — 약간 <b>강해졌어요</b>","⚠️ 아래는 <b>공식 패치노트 페이지에 적힌 값</b>인데, 트윙클에게 없는 <b>표식</b> 수치예요 (세진의 2.1.1 내용 · 칼리브리와 완전히 동일하게 적혀 있음) 개발사 페이지 오류로 보이니 참고만 하세요.","<span style=\"opacity:.7\">마크당 피해 증가 50% → 35%</span>","<span style=\"opacity:.7\">마크 지속 시간 7초 → 6초</span>"],
-    en:["In-game notice — slightly <b>buffed</b>","⚠️ Below is <b>what the official patch notes page lists</b>, but these are <b>mark</b> numbers Twinkle doesn't have (Se-Jin's 2.1.1 notes · identical to Calibri's) this looks like an error on the developer's page — treat with caution.","<span style=\"opacity:.7\">Damage increase per mark 50% → 35%</span>","<span style=\"opacity:.7\">Mark duration 7s → 6s</span>"],
-    ja:["ゲーム内告知 — 少し<b>強化</b>","⚠️ 以下は<b>公式パッチノートに記載された値</b>ですが、トゥインクルにない<b>マーク</b>の数値です（セジンの2.1.1の内容・カリブリと全く同じ記載） 開発元ページの誤りと思われます。参考程度に。","<span style=\"opacity:.7\">マーク1つあたりのダメージ増加量 50% → 35%</span>","<span style=\"opacity:.7\">マークの持続時間 7秒 → 6秒</span>"],
-    zh:["遊戲內公告 — 略為<b>加強</b>","⚠️ 以下是<b>官方更新說明頁所列的數值</b>，但這是 Twinkle 沒有的<b>印記</b>數值（Se-Jin 的 2.1.1 內容・與 Calibri 完全相同） 看來是開發商頁面的錯誤，僅供參考。","<span style=\"opacity:.7\">每層印記傷害加成 50% → 35%</span>","<span style=\"opacity:.7\">印記持續時間 7秒 → 6秒</span>"]}}],
+  /* 🎮 2026-08-27 게임 2.2.0 — 공식 패치노트 페이지가 **처음엔 2.1.1 내용이 잘못 올라와** 있다가
+     같은 날 늦게 제대로 갱신됐다. 아래는 갱신된 공식 원문 기준의 실제 수치다.
+     ✅ 교차 검증: 앱 원본 데이터(EntityScenes) diff 에서 나온 값들과 일치한다 —
+        2.448→2.1(레메디 열 배율) · 17→20(트윙클 연사) · 0.4→0.42(연사 간격) · 4.25→3.0, 2.0→1.5(레메디 쿨다운).
+        스냅샷·분석 근거: 게임원본_스냅샷/2.2.0_build421/README.md
+     방향(버프/너프)은 앱스토어 릴리스 노트와도 일치한다(레메디·노바·오니 약화 / 칼리브리·트윙클 강화).
+     ⚠️ 남은 일: 이 수치를 반영해 카운터픽 상성(COUNTER)·티어를 재검토할 것. */
+  remedy:[{ver:"2.2.0",kind:"nerf",nourl:true,notes:{
+    ko:["불가사의 기본 DPS 42.5 → 46.7","불가사의 최대 열 배율 ×2.448 → ×2.1 (최대 DPS 약 104 → 98)","불가사의 열 식는 시간 2초 → 1.5초","불가사의 열 식는 시간(특전) 4초 → 3초"],
+    en:["Enigma base DPS 42.5 → 46.7","Enigma max-heat multiplier ×2.448 → ×2.1 (max DPS ~104 → ~98)","Enigma cooldown 2s → 1.5s","Enigma cooldown (perk) 4s → 3s"],
+    ja:["エニグマ 基本DPS 42.5 → 46.7","エニグマ 最大ヒート倍率 ×2.448 → ×2.1（最大DPS 約104 → 98）","エニグマ クールダウン 2秒 → 1.5秒","エニグマ クールダウン（パーク）4秒 → 3秒"],
+    zh:["謎團 基礎DPS 42.5 → 46.7","謎團 最大熱量倍率 ×2.448 → ×2.1（最大DPS 約104 → 98）","謎團 冷卻 2秒 → 1.5秒","謎團 冷卻（特長）4秒 → 3秒"]}}],
+  nova:[{ver:"2.2.0",kind:"nerf",nourl:true,notes:{
+    ko:["센티널 피해 52 → 50","바인드샷 피해 52 → 50","바인드샷 대기 시간 9초 → 10초","초신성 피해 228 → 215","바인드샷 특전 치명타 배율 ×2.5 → ×2.25"],
+    en:["Sentinel damage 52 → 50","Bindshot damage 52 → 50","Bindshot cooldown 9s → 10s","Supernova damage 228 → 215","Bindshot perk crit multiplier ×2.5 → ×2.25"],
+    ja:["センチネル ダメージ 52 → 50","バインドショット ダメージ 52 → 50","バインドショット クールダウン 9秒 → 10秒","スーパーノヴァ ダメージ 228 → 215","バインドショット パークの会心倍率 ×2.5 → ×2.25"],
+    zh:["哨兵 傷害 52 → 50","束縛彈 傷害 52 → 50","束縛彈 冷卻 9秒 → 10秒","超新星 傷害 228 → 215","束縛彈特長 暴擊倍率 ×2.5 → ×2.25"]}}],
+  oni:[{ver:"2.2.0",kind:"nerf",nourl:true,notes:{
+    ko:["공허 전하 필요 피해량 2100 → 2200","영적 돌진 충전 대기 4초 → 5초","영적 돌진 충전 대기(특전) 3초 → 4초","유령의 손아귀 → 방어막 전환(특전) 50% → 45%","공허 전하 피해(특전) 136 → 115"],
+    en:["Void Charge cost 2100 → 2200","Astral Dash charge cooldown 4s → 5s","Astral Dash charge cooldown (perk) 3s → 4s","Phantom Grasp-to-shield conversion (perk) 50% → 45%","Void Charge damage (perk) 136 → 115"],
+    ja:["ヴォイドチャージ 必要ダメージ 2100 → 2200","アストラルダッシュ チャージ回復 4秒 → 5秒","アストラルダッシュ チャージ回復（パーク）3秒 → 4秒","ファントムグラスプ→シールド変換（パーク）50% → 45%","ヴォイドチャージ ダメージ（パーク）136 → 115"],
+    zh:["虛空充能 所需傷害 2100 → 2200","星界衝刺 充能冷卻 4秒 → 5秒","星界衝刺 充能冷卻（特長）3秒 → 4秒","幽靈之握轉護盾（特長）50% → 45%","虛空充能 傷害（特長）136 → 115"]}}],
+  calibri:[{ver:"2.2.0",kind:"buff",nourl:true,notes:{
+    ko:["총기 모드 ↔ 백조의 노래 교체 대기 7초 → 6초","페이드 대기 시간 12초 → 11초","소용돌이 필요 피해량 2100 → 2000","소용돌이 특전의 백조의 노래 피해 +20% → +25%"],
+    en:["Handgun ↔ Swan Song swap cooldown 7s → 6s","Fade cooldown 12s → 11s","Vortex cost 2100 → 2000","Swan Song damage bonus from Vortex perk +20% → +25%"],
+    ja:["ガンモード ↔ スワンソング 切替クールダウン 7秒 → 6秒","フェード クールダウン 12秒 → 11秒","ヴォルテックス 必要ダメージ 2100 → 2000","ヴォルテックス パークのスワンソング ダメージ +20% → +25%"],
+    zh:["槍械模式 ↔ 天鵝之歌 切換冷卻 7秒 → 6秒","隱沒 冷卻 12秒 → 11秒","漩渦 所需傷害 2100 → 2000","漩渦特長的天鵝之歌傷害 +20% → +25%"]}}],
+  twinkle:[{ver:"2.2.0",kind:"buff",nourl:true,notes:{
+    ko:["작은 공포 연사 속도 17 → 20","연사 사이 간격 0.4초 → 0.42초","작은 공포 공격 각도 14° → 17°","집속 수류탄·소형 수류탄 피해 32 → 40"],
+    en:["Tiny Terror burst fire rate 17 → 20","Interval between bursts 0.4s → 0.42s","Tiny Terror attack cone 14° → 17°","Cluster Grenade & mini-grenade damage 32 → 40"],
+    ja:["タイニーテラー 連射速度 17 → 20","連射の間隔 0.4秒 → 0.42秒","タイニーテラー 攻撃角度 14° → 17°","クラスターグレネード・小型グレネード ダメージ 32 → 40"],
+    zh:["小恐怖 連射速度 17 → 20","連射間隔 0.4秒 → 0.42秒","小恐怖 攻擊角度 14° → 17°","集束手榴彈與小型手榴彈 傷害 32 → 40"]}}],
   khan:[{ver:"2.1.1",kind:"nerf",notes:{
     ko:["궁극기 비용 2600 → 2400","포탑 체력 350 → 300","포탑 피해 27 → 24 (DPS 108 → 96)","포탑 사거리 15 → 13"],
     en:["Ultimate cost 2600 → 2400","Turret health 350 → 300","Turret shot damage 27 → 24 (DPS 108 → 96)","Turret attack range 15 → 13"],
@@ -3102,32 +3111,34 @@ const GAME_PATCH = {
      2.1.4는 2026-08-04 기준 `patchnotes_2.1.4_en`·`_ko` 둘 다 404 → 빈 문자열.
      빈 값이면 ncardPatch()가 "공식 패치노트 보기" 링크를 아예 안 그린다(죽은 링크 방지).
      나중에 페이지가 올라오면 여기 주소만 넣으면 링크가 다시 나온다. */
-  ver:"v2.2.0", date:"2026-08-27", url:"https://niceplans.studio/patchnotes_2.2.0_en",   /* 앱스토어 출시 2026-08-27 18:32 KST (itunes lookup 으로 확인) */
+  ver:"v2.2.0", date:"2026-08-27", url:"",   /* MAMMON 요청(2026-08-27): 공식 패치노트 링크는 노출하지 않는다 */   /* 앱스토어 출시 2026-08-27 18:32 KST (itunes lookup 으로 확인) */
   /* ⚠️ 2.2.0: patchnotes_2.2.0_en 은 200으로 열리지만 **내용이 2.1.1 그대로**다(영웅 이름만 바뀌고 수치·개발자 코멘트는 예전 것,
      칼리브리와 트윙클 설명이 서로 완전히 동일). ko/jp/cn 은 404. 잘못된 수치로 안내하지 않기 위해 url 을 비워 링크를 감춘다.
      개발사가 페이지를 고치면 여기에 주소를 넣고, HERO_PATCHES 의 2.2.0 항목에 수치를 채우며 nourl 을 지울 것. */
   head:{ ko:"🎮 게임 패치 소식", en:"🎮 Game patch news", ja:"🎮 ゲームパッチ情報", zh:"🎮 遊戲更新消息" ,fr:"🎮 Actus des patchs du jeu",de:"🎮 Spiel-Patch-News",es:"🎮 Novedades de parches del juego",pt:"🎮 Novidades de patch do jogo",ru:"🎮 Новости патчей игры"},
+  /* ⚖️ 밸런스 상세 — HERO_PATCHES 의 해당 버전 항목을 그대로 읽어 소식 카드에 펼쳐 보여준다(자료 중복 없음). */
+  balHead:{ ko:"⚖️ 밸런스 조정 — 영웅별 상세", en:"⚖️ Balance changes — by hero", ja:"⚖️ バランス調整 — ヒーロー別", zh:"⚖️ 平衡調整 — 各英雄" },
   more:{ ko:"공식 패치노트 보기 ↗", en:"View official patch notes ↗", ja:"公式パッチノートを見る ↗", zh:"查看官方更新說明 ↗" ,fr:"Voir les notes de patch officielles ↗",de:"Offizielle Patchnotes ansehen ↗",es:"Ver las notas de parche oficiales ↗",pt:"Ver as notas de patch oficiais ↗",ru:"Открыть официальные патчноуты ↗"},
   items:{
     ko:["👑 <b>VIP 보상</b>이 생겼어요 — 게임 내 구매에 따라 해금되는 보너스입니다",
         "☀️ <b>여름 테마 한정 코스메틱</b> — 지금이 아니면 못 구해요",
         "⚖️ <b>밸런스 조정</b> — <b>레메디·노바·오니</b>는 약간 약해지고, <b>칼리브리·트윙클</b>은 약간 강해졌어요",
-        "⚠️ <b>공식 패치노트 페이지가 잘못돼 있어요</b> — 이전 패치(2.1.1) 수치가 그대로 올라와 있고, 게임 내 공지와 <b>방향이 정반대</b>예요(공지는 노바·오니 약화인데 페이지는 강화로 적혀 있음). 영웅별 화면에 그 값을 표시했지만 <b>참고만</b> 하세요. 한국어 페이지는 아직 없습니다",
+        "🎁 VIP 보상은 <b>자동으로 안 들어와요</b> — <b>VIP 보상 화면에서 직접 받아야</b> 합니다. 플레이어 카드에 VIP 레벨도 표시할 수 있어요",
         "<span style=\"opacity:.75\">이전 2.1.5 — 공식 웹샵 오픈(store.niceplans.studio · 젬이 게임 안보다 저렴 · 매일 접속 보상 · 플레이어 ID로 로그인)</span>"],
     en:["👑 <b>VIP rewards</b> added — bonuses unlocked by in-game purchases",
         "☀️ <b>Summer-themed limited cosmetics</b> — available only for now",
         "⚖️ <b>Balance changes</b> — <b>Remedy, Nova, Oni</b> slightly weakened; <b>Calibri, Twinkle</b> slightly buffed",
-        "⚠️ <b>The official patch notes page is wrong</b> — it still lists 2.1.1 numbers and they <b>contradict the in-game notice</b> (the notice says Nova/Oni were weakened, the page shows buffs). We show those numbers on each hero page, but <b>treat them with caution</b>",
+        "🎁 VIP rewards are <b>not credited automatically</b> — you must <b>claim them on the VIP Rewards screen</b>. You can also show your VIP level on your player card",
         "<span style=\"opacity:.75\">Previously 2.1.5 — official web shop opened (store.niceplans.studio · gems cheaper than in-game · daily login reward · log in with player ID)</span>"],
     ja:["👑 <b>VIP報酬</b>が追加 — ゲーム内購入で解放されるボーナスです",
         "☀️ <b>夏テーマの期間限定コスメ</b> — 今しか手に入りません",
         "⚖️ <b>バランス調整</b> — <b>レメディ・ノヴァ・オニ</b>は少し弱体化、<b>カリブリ・トゥインクル</b>は少し強化",
-        "⚠️ <b>公式パッチノートが誤っています</b> — 前パッチ(2.1.1)の数値がそのまま載っており、ゲーム内告知と<b>方向が逆</b>です（告知はノヴァ・オニ弱体化、ページは強化）。各ヒーロー画面に数値を表示していますが<b>参考程度</b>に。日本語ページはまだありません",
+        "🎁 VIP報酬は<b>自動では付与されません</b> — <b>VIP報酬画面で自分で受け取る</b>必要があります。プレイヤーカードにVIPレベルを表示することもできます",
         "<span style=\"opacity:.75\">前回 2.1.5 — 公式ウェブショップ開設（store.niceplans.studio・ジェムがゲーム内より安い・毎日ログイン報酬・プレイヤーIDでログイン）</span>"],
     zh:["👑 新增 <b>VIP 獎勵</b> — 依遊戲內購買解鎖的加碼獎勵",
         "☀️ <b>夏日主題限定造型</b> — 錯過就沒有了",
         "⚖️ <b>平衡調整</b> — <b>Remedy、Nova、Oni</b> 略為削弱，<b>Calibri、Twinkle</b> 略為加強",
-        "⚠️ <b>官方更新說明有誤</b> — 仍是前一版(2.1.1)的數值，且與遊戲內公告<b>方向相反</b>（公告說 Nova/Oni 削弱，頁面卻是加強）。各英雄頁面已列出這些數值，但請<b>僅供參考</b>。目前沒有中文頁面",
+        "🎁 VIP 獎勵<b>不會自動發放</b> — 必須到 <b>VIP 獎勵畫面自行領取</b>。也可在玩家卡片顯示 VIP 等級",
         "<span style=\"opacity:.75\">先前 2.1.5 — 官方網頁商店開張（store.niceplans.studio・寶石比遊戲內便宜・每日登入獎勵・以玩家 ID 登入）</span>"]
   }
 };
@@ -3525,8 +3536,23 @@ function ncardPatch(){
   const link = g.url
     ? `<p class="npatchlink"><a href="${g.url}" target="_blank" rel="noopener noreferrer">${g.more[L]||g.more.ko}</a></p>`
     : "";
-  return `<div class="ncard"><h4>${g.head[L]||g.head.ko} <span class="patchver">${g.ver}</span><span class="patchdate">${g.date}</span></h4><ul>${items}</ul>`
-    +`${link}</div>`;
+  /* ⚖️ 이 버전에 해당하는 영웅별 밸런스 항목을 HERO_PATCHES 에서 모아 펼쳐 보여준다.
+     예전엔 "레메디·노바·오니 약화" 한 줄뿐이라 무엇이 어떻게 바뀌었는지 볼 수가 없었다(MAMMON 지적 2026-08-27). */
+  const vn = String(g.ver).replace(/^v/,"");
+  const rows = Object.entries(HERO_PATCHES)
+    .map(([id,l]) => [id, (l||[]).find(p => p.ver === vn)])
+    .filter(([id,p]) => p && HEROES[id])
+    .map(([id,p]) => {
+      const nm = HEROES[id][L] || HEROES[id].ko || id;
+      const ns = p.notes[L] || p.notes.en || p.notes.ko || [];
+      const body = ns.map(x=>`<li>${x}</li>`).join("");
+      return `<div class="npbal"><div class="npbalh"><b>${nm}</b>`
+        + `<span class="pnbadge ${p.kind}">${PN_ARROW[p.kind]}${PATCH_L[p.kind][L]||PATCH_L[p.kind].ko}</span></div>`
+        + `<ul class="npballist">${body}</ul></div>`;
+    }).join("");
+  const bal = rows ? `<div class="npbalwrap"><h5>${g.balHead[L]||g.balHead.ko}</h5>${rows}</div>` : "";
+  return `<div class="ncard" id="gamepatch"><h4>${g.head[L]||g.head.ko} <span class="patchver">${g.ver}</span><span class="patchdate">${g.date}</span></h4><ul>${items}</ul>`
+    +`${bal}${link}</div>`;
 }
 function ncardRoadmap(){
   const g=GAME_ROADMAP, L=LANG;
@@ -4338,7 +4364,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.27-b";
+const SITE_VERSION = "2026.08.27-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -4371,6 +4397,16 @@ function rsUrlRestore(){
     /* 🪤 경기분석 딥링크(m=코드)는 **여기서 붙잡아 둔다** — 아래 rsUrlSync()가 주소를
        정리하면서 m을 지우는데, 모듈 스크립트(defer)는 그 뒤에 실행돼 못 읽는다(실측). */
     window.__rptDeepM = (p.get("m") || "").toUpperCase();
+    /* 🔗 2026-08-27: ?go=patch 로 들어오면 게임 패치 카드까지 바로 스크롤한다(공유용).
+       아래 rsUrlSync 가 주소를 정리하면서 go 를 지우므로 여기서 붙잡아 둔다. */
+    if((p.get("go") || "") === "patch"){
+      const jump = (n) => {
+        const el = document.getElementById("gamepatch");
+        if(el){ el.scrollIntoView({block:"start"}); window.scrollBy(0,-70); return; }
+        if(n > 0) setTimeout(() => jump(n-1), 300);   // 공지 카드는 늦게 그려질 수 있다
+      };
+      setTimeout(() => jump(12), 400);
+    }
     const en = (p.get("enemy") || "").split(",").map(s=>s.trim()).filter(Boolean);
     if(en.length) enemies = en.filter(id => HEROES[id]).slice(0,3);   // 모르는 id는 조용히 무시
     if(tab && SUB_OF[tab]) goSub(tab);
