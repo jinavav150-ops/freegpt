@@ -1101,10 +1101,10 @@
 .t10ico.rSupport{border-color:rgba(74,222,128,.45)}
 .t10hn{font-size:11.5px;color:#c3cbdb;width:54px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .t10track{flex-grow:1;min-width:0;height:7px;border-radius:4px;background:#1a2130;overflow:hidden}
-.t10fill{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#8a5f14,#c98d1d)}
+.t10fill{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#2f6ea8,#5da9ff)}   /* 2·3순위 = 파랑 (1순위만 금색 — MAMMON 2026-08-29) */
 .t10row.lead .t10fill{background:linear-gradient(90deg,#c98d1d,#ffb02e)}
 .t10row.lead .t10hn{color:#fff;font-weight:500}
-.t10sc{font-size:11px;color:#9aa5ba;width:48px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+.t10sc{font-size:11px;color:#8fb8e8;width:48px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
 .t10row.lead .t10sc{color:#ffd257;font-weight:700}
 .t10sub{font-size:10px;color:var(--sub);margin-top:7px}
 .cupAdm{margin-top:9px;padding-top:8px;border-top:1px dashed #2a3347}
@@ -3277,6 +3277,46 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-08-29",
+    ko:"🏅 티어표에 <b>프로 랭킹 TOP 10의 주력 영웅</b> 코너가 생겼어요 (공략 > 티어표) — 실제 게임 랭킹 상위 10명이 어떤 영웅을 파는지 보여주고, <b>30분마다 자동 갱신</b>됩니다. 커뮤니티 투표 티어와 나란히 비교해 보세요",
+    en:"🏅 The tier list now shows the <b>main heroes of the pro-ranking TOP 10</b> (Guides > Tier list) — what the actual top 10 players grind, from real ranking data, <b>auto-refreshed every 30 minutes</b>. Compare it side by side with the community-vote tiers",
+    ja:"🏅 ティア表に<b>プロランキングTOP10の主力ヒーロー</b>コーナーが登場（攻略 > ティア表）— 実際の上位10人が何を使い込んでいるかをランキングデータで表示し、<b>30分ごとに自動更新</b>されます。コミュニティ投票ティアと見比べてみてください",
+    zh:"🏅 梯度表新增<b>職業排行 TOP 10 的主力英雄</b>專區（攻略 > 梯度表）— 以真實排行資料顯示前 10 名玩家主練的英雄，<b>每 30 分鐘自動更新</b>。可與社群投票梯度並排比較",
+    fr:"🏅 La tier list affiche désormais les <b>héros principaux du TOP 10 du classement pro</b> (Guides > Tier list) — basé sur les vraies données de classement, <b>actualisé toutes les 30 minutes</b>",
+    de:"🏅 Die Tierliste zeigt jetzt die <b>Haupthelden der TOP 10 der Pro-Rangliste</b> (Guides > Tierliste) — aus echten Ranglistendaten, <b>alle 30 Minuten automatisch aktualisiert</b>",
+    es:"🏅 La tier list ahora muestra los <b>héroes principales del TOP 10 del ranking pro</b> (Guías > Tier list) — con datos reales de clasificación, <b>actualizado cada 30 minutos</b>",
+    pt:"🏅 A tier list agora mostra os <b>heróis principais do TOP 10 do ranking pro</b> (Guias > Tier list) — com dados reais de ranking, <b>atualizado a cada 30 minutos</b>",
+    ru:"🏅 В тир-листе появился раздел с <b>основными героями TOP 10 про-рейтинга</b> (Гайды > Тир-лист) — по реальным данным рейтинга, <b>автообновление каждые 30 минут</b>" },
+  { date:"2026-08-27",
+    ko:"🎮 게임 <b>2.2.0</b>을 반영했어요 — 이 공지 위의 패치 소식에서 <b>영웅별 밸런스 변화를 수치까지</b> 바로 볼 수 있습니다 (레메디·노바·오니 약화 / 칼리브리·트윙클 강화). VIP 보상은 자동 지급이 아니니 VIP 화면에서 직접 받으세요",
+    en:"🎮 Game <b>2.2.0</b> is reflected — the patch news above now shows <b>per-hero balance changes with exact numbers</b> (Remedy/Nova/Oni down, Calibri/Twinkle up). Note: VIP rewards are not automatic — claim them on the VIP screen",
+    ja:"🎮 ゲーム<b>2.2.0</b>を反映しました — 上のパッチ情報で<b>ヒーロー別のバランス変更を数値まで</b>確認できます（レメディ・ノヴァ・オニ弱体化／カリブリ・トゥインクル強化）。VIP報酬は自動付与ではないのでVIP画面で受け取りを",
+    zh:"🎮 已反映遊戲 <b>2.2.0</b> — 上方的更新消息可直接查看<b>各英雄的平衡調整與數值</b>（Remedy/Nova/Oni 削弱、Calibri/Twinkle 加強）。VIP 獎勵不會自動發放，請到 VIP 畫面領取",
+    fr:"🎮 Le jeu <b>2.2.0</b> est pris en compte — les notes de patch ci-dessus montrent les <b>changements d'équilibrage par héros avec les chiffres</b>. Les récompenses VIP ne sont pas automatiques — réclamez-les sur l'écran VIP",
+    de:"🎮 Spiel <b>2.2.0</b> ist eingepflegt — die Patch-News oben zeigen die <b>Balance-Änderungen pro Held mit Zahlen</b>. VIP-Belohnungen gibt es nicht automatisch — im VIP-Bildschirm abholen",
+    es:"🎮 El juego <b>2.2.0</b> ya está reflejado — las notas de parche de arriba muestran los <b>cambios de balance por héroe con cifras</b>. Las recompensas VIP no son automáticas — reclámalas en la pantalla VIP",
+    pt:"🎮 O jogo <b>2.2.0</b> já está refletido — as notas de patch acima mostram as <b>mudanças de balanceamento por herói com números</b>. As recompensas VIP não são automáticas — resgate na tela VIP",
+    ru:"🎮 Игра <b>2.2.0</b> учтена — в патч-новостях выше теперь видны <b>изменения баланса по героям с цифрами</b>. Награды VIP не начисляются автоматически — забирайте их на экране VIP" },
+  { date:"2026-08-26",
+    ko:"🛠️ 대회 신청의 문제들을 고쳤어요 — '닉네임을 정해주세요'로 신청이 막히던 문제, 팀 엠블럼이 엉뚱하게 보이던 문제, 그리고 <b>연락처(카톡·디스코드)가 저장되지 않던 문제</b>까지. 이미 신청한 팀은 <b>연락처만 한 번 다시 입력</b>해 주세요 🙏 팀 카드도 팀원이 또렷이 보이게 새로 디자인했습니다",
+    en:"🛠️ Fixed the Cup sign-up issues — the 'set your nickname first' block, wrong team emblems, and <b>contacts (Discord) not being saved</b>. If you already signed up, please <b>re-enter your contact once</b> 🙏 Team cards were also redesigned so members are easier to read",
+    ja:"🛠️ 大会申込の不具合を修正しました — 「ニックネームを設定してください」で申込が止まる問題、チームエンブレムの表示違い、そして<b>連絡先（Discord）が保存されない問題</b>。すでに申込済みのチームは<b>連絡先だけもう一度入力</b>をお願いします 🙏 チームカードもメンバーが見やすいよう新デザインに",
+    zh:"🛠️ 修正了盃賽報名的問題 — 「請先設定暱稱」擋住報名、隊徽顯示錯誤、以及<b>聯絡方式（Discord）沒有被儲存</b>的問題。已報名的隊伍請<b>再輸入一次聯絡方式</b> 🙏 隊伍卡片也重新設計，隊員一目了然",
+    fr:"🛠️ Corrections des inscriptions à la Cup — le blocage « définis ton pseudo », les mauvais emblèmes d'équipe, et <b>les contacts (Discord) qui n'étaient pas enregistrés</b>. Si tu es déjà inscrit, <b>ressaisis ton contact une fois</b> 🙏",
+    de:"🛠️ Cup-Anmeldeprobleme behoben — die 'Nickname festlegen'-Blockade, falsche Team-Embleme und <b>nicht gespeicherte Kontakte (Discord)</b>. Wer schon angemeldet ist: <b>Kontakt bitte einmal neu eintragen</b> 🙏",
+    es:"🛠️ Corregidos los problemas de inscripción de la Cup — el bloqueo de 'define tu apodo', emblemas de equipo equivocados y <b>contactos (Discord) que no se guardaban</b>. Si ya te inscribiste, <b>vuelve a introducir tu contacto una vez</b> 🙏",
+    pt:"🛠️ Corrigidos os problemas de inscrição da Cup — o bloqueio de 'defina seu apelido', emblemas errados e <b>contatos (Discord) que não eram salvos</b>. Se você já se inscreveu, <b>reinsira seu contato uma vez</b> 🙏",
+    ru:"🛠️ Исправлены проблемы записи на кубок — блокировка «сначала укажите ник», неверные эмблемы команд и <b>несохранявшиеся контакты (Discord)</b>. Если вы уже записались — <b>введите контакт ещё раз</b> 🙏" },
+  { date:"2026-08-25",
+    ko:"🏆 <b>Asia Community Cup #1 — 팀 접수가 열렸어요!</b> 9월 19일(토) 저녁 8시(한국 시간) · 접수 마감 9월 14일(월). 대회 메뉴에서 팀(3인+예비)으로 신청하세요 — 팀이 없으면 솔로 신청으로 매칭을 도와드립니다. <b>선착순이 아니에요</b>, 마감 전이면 모두 참가할 수 있습니다",
+    en:"🏆 <b>Asia Community Cup #1 — team sign-ups are open!</b> Saturday, Sept 19, 20:00 KST · deadline Sept 14 (Mon). Register your squad (3 + optional sub) in the Cup menu — no team? Sign up solo and we will match you. <b>Not first-come-first-served</b> — everyone who registers before the deadline is in",
+    ja:"🏆 <b>Asia Community Cup #1 — チーム受付開始！</b> 9月19日(土) 20時（韓国時間）・締切9月14日(月)。大会メニューからチーム（3人+補欠）で申込を — チームがない方はソロ申込でマッチングします。<b>先着順ではありません</b>、締切前ならどなたでも参加できます",
+    zh:"🏆 <b>Asia Community Cup #1 — 隊伍報名開始！</b> 9月19日(六) 20:00（韓國時間）・截止 9月14日(一)。請至盃賽選單以隊伍（3人+替補）報名 — 沒有隊伍可先個人報名，我們協助組隊。<b>並非先到先得</b>，截止前報名都能參加",
+    fr:"🏆 <b>Asia Community Cup #1 — inscriptions ouvertes !</b> Samedi 19 sept, 20 h KST · clôture le 14 sept (lun). Inscris ton équipe (3 + remplaçant) dans le menu Cup — pas d'équipe ? Inscris-toi en solo. <b>Pas de premier arrivé, premier servi</b>",
+    de:"🏆 <b>Asia Community Cup #1 — Team-Anmeldung offen!</b> Samstag, 19. Sept., 20:00 KST · Schluss am 14. Sept. (Mo). Melde dein Team (3 + Ersatz) im Cup-Menü an — ohne Team einfach solo anmelden. <b>Kein Windhundprinzip</b>",
+    es:"🏆 <b>Asia Community Cup #1 — ¡inscripciones abiertas!</b> Sábado 19 de sept, 20:00 KST · cierre el 14 de sept (lun). Inscribe a tu equipo (3 + suplente) en el menú Cup — ¿sin equipo? Inscríbete en solitario. <b>No es por orden de llegada</b>",
+    pt:"🏆 <b>Asia Community Cup #1 — inscrições abertas!</b> Sábado, 19 de set, 20:00 KST · prazo 14 de set (seg). Inscreva seu time (3 + reserva) no menu Cup — sem time? Inscreva-se solo. <b>Não é por ordem de chegada</b>",
+    ru:"🏆 <b>Asia Community Cup #1 — открыта запись команд!</b> Суббота 19 сентября, 20:00 KST · дедлайн 14 сентября (пн). Записывайте команду (3 + запасной) в меню кубка — нет команды? Запишитесь соло. <b>Не в порядке очереди</b>" },
   { date:"2026-08-19",
     ko:"🙋 <b>커뮤니티 컵 — 참가 의향 조사</b>를 시작했어요. 상단 <b>대회</b> 메뉴에서 닉네임과 팀 유무만 남기면 됩니다(30초, 아직 접수 아님). 누가 손 들었는지 다 보여요. 개발사가 말했어요 — <b>참가 팀이 많을수록 상품이 커집니다.</b>",
     en:"🙋 <b>Community Cup — interest check</b> is open. In the new top-level <b>Cup</b> menu, just leave your nickname and whether you have a squad (30 seconds, not a sign-up yet). You can see who's in. The studio said it: <b>the more teams enter, the bigger the rewards.</b>",
@@ -4475,7 +4515,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.29-a";
+const SITE_VERSION = "2026.08.29-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
