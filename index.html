@@ -1076,6 +1076,61 @@
 .npbalh b{font-size:13px;color:#fff}
 .npballist{margin:6px 0 0;padding-left:16px}
 .npballist li{font-size:11.5px;color:#c8d0de;line-height:1.65;margin:1px 0}
+/* 🏅 프로 랭킹 탭 (2026-08-29) — Qwaser 제안 반영: 영웅별 실제 레이팅 증감·프로 K/D·팀메이트 승률 */
+.prHead{display:flex;align-items:center;gap:8px;margin:2px 0 5px}
+.prHead b{font-family:'Black Han Sans',sans-serif;font-size:17px;font-weight:400;color:#fff;letter-spacing:.02em;flex-shrink:0}
+.prHead i{height:1px;flex-grow:1;background:linear-gradient(90deg,#2a3347,rgba(42,51,71,0));display:block}
+.prNote{font-size:11px;color:var(--sub);line-height:1.65;margin:0 0 12px}
+.prCard{position:relative;background:#151b2a;border-radius:12px;overflow:hidden;padding:12px 13px 12px 17px;margin-top:9px}
+.prCard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#2a3347}
+.prCard.top:before{background:linear-gradient(180deg,#ffb02e,#b87708)}
+.prCard.top{background:linear-gradient(180deg,#18202f,#151b2a)}
+/* 헤더 = 접기 버튼. 접었을 땐 순위·닉네임·점수만 보인다(10명이 한 화면에 들어오게). */
+.prTop{display:flex;align-items:center;gap:8px;min-width:0;width:100%;
+  background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.prTop:focus-visible{outline:2px solid #ffb02e;outline-offset:3px;border-radius:6px}
+.prChev{flex-shrink:0;width:16px;height:16px;margin-left:2px;color:var(--sub);transition:transform .22s ease}
+.prChev svg{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.prCard.open .prChev{transform:rotate(180deg);color:#ffb02e}
+/* grid-template-rows 0fr→1fr : 내용 높이를 몰라도 부드럽게 펼쳐진다 */
+.prBody{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s ease}
+.prCard.open .prBody{grid-template-rows:1fr}
+.prBody>div{overflow:hidden;min-height:0}
+@media (prefers-reduced-motion: reduce){ .prBody,.prChev{transition:none} }
+.prRank{font-family:'Black Han Sans',sans-serif;font-size:17px;font-weight:400;color:#97a2b7;flex-shrink:0;min-width:20px}
+.prCard.top .prRank{color:#ffb02e}
+.prName{font-size:14px;font-weight:700;color:#fff;flex-grow:1;min-width:0;word-break:break-all;line-height:1.3}
+.prCard:not(.open){padding-bottom:11px}
+.prRate{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#ffd257;flex-shrink:0}
+.prRateL{font-size:9.5px;color:var(--sub);margin-left:2px;font-family:'Noto Sans KR',sans-serif}
+/* 요약 3칸: 전적 · 승률 · K/D */
+.prStats{display:flex;gap:7px;margin-top:9px}
+.prStat{flex:1;background:#1a2130;border:1px solid #232b3d;border-radius:8px;padding:6px 4px;text-align:center;min-width:0}
+.prStatV{font-family:'Black Han Sans',sans-serif;font-size:15px;font-weight:400;color:#fff;line-height:1.2}
+.prStat.kd .prStatV{color:#ffd257}
+.prStatL{font-size:9.5px;color:var(--sub);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prSecL{font-size:10px;color:var(--sub);margin:11px 0 5px;letter-spacing:.02em}
+/* 영웅 행 */
+.prHero{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 0}
+.prIco{width:24px;height:24px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid #2a3347;background:#0e1320}
+.prIco img{width:100%;height:100%;object-fit:cover;display:block}
+.prHn{font-size:11.5px;color:#c3cbdb;width:52px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prWl{font-size:10.5px;color:var(--sub);width:42px;flex-shrink:0;text-align:right;font-variant-numeric:tabular-nums}
+.prBarWrap{flex-grow:1;min-width:0;height:7px;border-radius:4px;background:#1a2130;position:relative;overflow:hidden}
+.prBar{position:absolute;top:0;bottom:0;border-radius:4px}
+.prBar.up{background:linear-gradient(90deg,#2f6ea8,#5da9ff)}
+.prBar.down{background:linear-gradient(90deg,#a8443c,#ff7a6e)}
+.prDelta{font-size:11px;width:46px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;font-weight:700}
+.prDelta.up{color:#7fc4ff}
+.prDelta.down{color:#ff8a7d}
+.prDelta.zero{color:var(--sub);font-weight:400}
+/* 팀메이트 */
+.prMates{display:flex;flex-wrap:wrap;gap:5px}
+.prMate{display:inline-flex;align-items:center;gap:6px;font-size:11px;background:#1a2130;border:1px solid #232b3d;border-radius:999px;padding:3px 9px;max-width:100%}
+.prMate b{font-weight:500;color:#d6dcea;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.prMate span{color:#7fc4ff;font-weight:700;flex-shrink:0}
+.prMate.perfect span{color:#4ade80}
+.prFoot{font-size:10px;color:var(--sub);text-align:center;margin-top:12px;line-height:1.6}
 /* 🏅 프로 랭킹 TOP 10 주력 영웅 (A안 「선수 카드」 — MAMMON 확정 2026-08-29) */
 .t10head{display:flex;align-items:center;gap:8px;margin:2px 0 5px}
 .t10head b{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#fff;letter-spacing:.02em;flex-shrink:0}
@@ -1450,6 +1505,12 @@
       </div>
       <div class="gdone" id="gDone" style="display:none"></div>
     </div>
+  </section>
+
+  <!-- 🏅 프로 랭킹 탭 (2026-08-29) — 내용은 renderProRank 가 Firebase top10deep 을 읽어 4개 언어로 렌더.
+       랭킹 3위 GG Qwaser 의 디스코드 제안(영웅별 실제 레이팅 증감·프로 K/D·팀메이트 승률)을 반영해 만든 화면. -->
+  <section id="tab-prorank" class="tab">
+    <div id="proRankBody"></div>
   </section>
 
   <!-- 🚨 알려진 이슈 탭 (내용은 renderIssues가 GAME_ISSUES에서 4개 언어로 렌더) -->
@@ -2639,6 +2700,113 @@ function renderTop10(){
 }
 window.rsRenderTop10 = renderTop10;
 
+/* ══════════════════════════════════════════════════════════════════════════════
+   🏅 프로 랭킹 탭 (2026-08-29)
+   랭킹 3위 GG Qwaser 가 디스코드로 요청한 세 가지를 그대로 화면으로 만든 것:
+     ① 영웅별로 실제 얻은 레이팅 증감 (지면 마이너스가 찍힌다)
+     ② 팀메이트별 승률 — 누구와 뛸 때 실제로 이기는가
+     ③ 프로 전용 K/D — 게임 안에도 없는 숫자
+
+   데이터는 리코스탯/top10_deep.py 가 게임 메타서버의 get_match_results_info 로 뽑아
+   Firebase `top10deep` 에 올린다. 사이트는 그 노드를 구독하므로 배포 없이 갱신된다.
+   PRODEEP 는 마지막으로 확인된 값 — 파이어베이스가 안 붙어도 화면이 비지 않게 하는 폴백.
+
+   ⚠️ 최근 25경기 창이다(서버가 그만큼만 보관). 통산이 아니라는 걸 화면에 반드시 적어둘 것. */
+const PRODEEP = {"asOf":"2026-08-29 21:33","season":"202608","window":25,"rows":[{"r":1,"n":"Marsーyuuu","s":2108,"mp":25,"w":17,"l":8,"k":156,"d":32,"kd":4.88,"heroes":[{"cur":7225,"d":70,"g":12,"id":"leo","w":8},{"cur":9250,"d":70,"g":6,"id":"calibri","w":5},{"cur":4785,"d":-70,"g":5,"id":"remedy","w":3},{"cur":3340,"g":1,"id":"nova","w":1},{"cur":3725,"g":1,"id":"vector","w":0}],"mates":[["baizarsanma",5,7],["Venusーあろめん侍",15,22],["M A G N U S.굳",2,3],["탄지로",2,3],["꼬꼬꼬",9,14]]},{"r":2,"n":"GG Qwaser","s":2090,"mp":25,"w":25,"l":0,"k":181,"d":19,"kd":9.53,"heroes":[{"cur":6550,"d":245,"g":8,"id":"oni","w":8},{"cur":4485,"d":175,"g":6,"id":"remedy","w":6},{"cur":2945,"d":175,"g":6,"id":"calibri","w":6},{"cur":5665,"d":140,"g":5,"id":"nova","w":5}],"mates":[["GG ABRS",14,14],["Md Henks",8,8],["GG planctonQ",8,8],["MD smoke Weed",6,6],["W Brassybabe",4,4]]},{"r":3,"n":"Venusーあろめん侍","s":2071,"mp":25,"w":22,"l":3,"k":213,"d":21,"kd":10.14,"heroes":[{"cur":4810,"d":595,"g":22,"id":"calibri","w":19},{"cur":12560,"d":70,"g":3,"id":"sejin","w":3},{"cur":11530,"g":1,"id":"dread","w":0}],"mates":[["uranus一rover",11,11],["시바견",2,2],["레간자",21,24],["earthᅳ레오갓",9,12]]},{"r":4,"n":"xR4y","s":2059,"mp":25,"w":17,"l":8,"k":169,"d":72,"kd":2.35,"heroes":[{"cur":5945,"d":140,"g":9,"id":"remedy","w":7},{"cur":10500,"d":0,"g":11,"id":"magnus","w":7},{"cur":6240,"d":0,"g":3,"id":"leo","w":1},{"cur":6735,"g":1,"id":"vector","w":0},{"cur":4825,"g":1,"id":"khan","w":1}],"mates":[["1337",10,13],["Md Henks",14,20],["K D  kingtaha",3,6]]},{"r":5,"n":"BANGBK24","s":2050,"mp":25,"w":24,"l":1,"k":168,"d":16,"kd":10.5,"heroes":[{"cur":45285,"d":595,"g":21,"id":"remedy","w":20},{"cur":2855,"d":70,"g":3,"id":"vector","w":3},{"cur":4040,"g":1,"id":"jagger","w":1}],"mates":[["VisioИ",24,25],["mrweed",20,21]]},{"r":6,"n":"gg lazar","s":2049,"mp":25,"w":20,"l":5,"k":200,"d":54,"kd":3.7,"heroes":[{"cur":8670,"d":210,"g":13,"id":"magnus","w":11},{"cur":4675,"d":35,"g":11,"id":"vector","w":8},{"cur":2770,"g":1,"id":"leo","w":1}],"mates":[["Karol",4,4],["Deadman",4,4],["Gonirea",7,10],["gg jeed",7,10],["w AwesomeTree",0,2]]},{"r":7,"n":"earthᅳ레오갓","s":2041,"mp":25,"w":22,"l":3,"k":223,"d":32,"kd":6.97,"heroes":[{"cur":5055,"d":420,"g":14,"id":"leo","w":12},{"cur":4390,"d":105,"g":4,"id":"dread","w":4},{"cur":6245,"d":70,"g":7,"id":"fury","w":5},{"cur":5370,"g":1,"id":"calibri","w":1}],"mates":[["꼬꼬꼬",5,5],["아이스아메리카노",5,5],["ᅠᅠᅠ",4,4],["uranus一rover",3,3],["囧囧丸",2,2]]},{"r":8,"n":"탄지로","s":2016,"mp":25,"w":15,"l":10,"k":194,"d":57,"kd":3.4,"heroes":[{"cur":2255,"d":0,"g":2,"id":"calibri","w":2},{"cur":10340,"d":-315,"g":24,"id":"leo","w":14}],"mates":[["관소비",3,6],["Marsーyuuu",5,11],["M A G N U S.굳",3,7],["친절한서노씨",1,4],["味方運ゲーすぎ",0,2]]},{"r":9,"n":"Mis DeiMudda","s":1999,"mp":25,"w":21,"l":4,"k":189,"d":60,"kd":3.15,"heroes":[{"cur":3420,"d":175,"g":7,"id":"remedy","w":7},{"cur":9330,"d":105,"g":8,"id":"oni","w":7},{"cur":4720,"d":35,"g":2,"id":"nova","w":2},{"cur":3195,"d":35,"g":2,"id":"fury","w":1},{"cur":2585,"d":35,"g":2,"id":"dread","w":2}],"mates":[["Lamschinator",7,7],["MD Moanzart",7,7],["pedro",2,2],["MD Greatstuff",3,4],["Snake",3,4]]},{"r":10,"n":"uranus一rover","s":1988,"mp":25,"w":24,"l":1,"k":186,"d":16,"kd":11.62,"heroes":[{"cur":9305,"d":525,"g":16,"id":"remedy","w":16},{"cur":4715,"d":70,"g":3,"id":"fury","w":3},{"cur":4035,"d":35,"g":2,"id":"sejin","w":2},{"cur":4190,"d":0,"g":4,"id":"jagger","w":3}],"mates":[["Venusーあろめん侍",21,21],["레간자",11,11],["풍산개",4,4]]}]};
+const PR_L = {
+  head:{ko:"프로 랭킹 심층 지표",en:"Pro ranking deep stats",ja:"プロランキング詳細スタッツ",zh:"職業排行深度數據"},
+  intro:{ko:"프로 상위 10명의 <b>최근 25경기</b>를 경기 단위로 확인해본 겁니다 — 영웅별로 레이팅을 실제로 얼마나 얻고 잃었는지, 누구와 같은 팀일 때 이기는지, 프로에서만의 K/D.",
+         en:"A match-by-match look at the <b>last 25 games</b> of the top 10 pro players — how much rating each hero actually gained or lost, who they win with, and their pro-only K/D.",
+         ja:"プロ上位10名の<b>直近25試合</b>を試合単位で確認したものです — ヒーローごとに実際どれだけレーティングを得て失ったか、誰と組むと勝つのか、プロ限定のK/D。",
+         zh:"將職業前 10 名的<b>最近 25 場</b>逐場確認 — 每個英雄實際獲得或失去多少評分、和誰同隊會贏、以及職業專用 K/D。"},
+  games:{ko:"전적",en:"Record",ja:"戦績",zh:"戰績"},
+  wr:{ko:"승률",en:"Win rate",ja:"勝率",zh:"勝率"},
+  kd:{ko:"K/D",en:"K/D",ja:"K/D",zh:"K/D"},
+  wl:{ko:"{w}승 {l}패",en:"{w}W {l}L",ja:"{w}勝 {l}敗",zh:"{w}勝 {l}敗"},
+  secHero:{ko:"영웅별 레이팅 증감",en:"Rating gained / lost per hero",ja:"ヒーロー別レーティング増減",zh:"各英雄評分增減"},
+  secMate:{ko:"같은 팀일 때 승률",en:"Win rate with teammates",ja:"同じチームでの勝率",zh:"同隊時的勝率"},
+  noHero:{ko:"2경기 이상 쓴 영웅이 아직 없어요",en:"No hero played twice or more yet",ja:"2試合以上使ったヒーローがまだありません",zh:"尚無使用兩場以上的英雄"},
+  noMate:{ko:"2경기 이상 함께한 팀메이트가 없어요",en:"No teammate with 2+ games together",ja:"2試合以上一緒に戦った味方がいません",zh:"沒有同隊 2 場以上的隊友"},
+  rate:{ko:"점",en:"pts",ja:"点",zh:"分"},
+  foot:{ko:"{d} 기준 · 30분마다 갱신 · 서버가 보관하는 <b>최근 25경기</b>만 집계합니다(통산 아님). 표본이 작으니 승률은 참고용으로 봐주세요.",
+        en:"As of {d} · updated every 30 min · only the <b>last 25 matches</b> the server keeps (not lifetime). Small sample — treat win rates as a hint, not proof.",
+        ja:"{d} 時点 · 30分ごと更新 · サーバーが保持する<b>直近25試合</b>のみ集計(通算ではありません)。標本が小さいので勝率は参考程度に。",
+        zh:"{d} 為準 · 每 30 分鐘更新 · 僅統計伺服器保留的<b>最近 25 場</b>(非生涯)。樣本較小，勝率請當作參考。"},
+  /* 순위는 30분마다 바뀌므로 "3위" 같은 숫자를 문구에 박아두지 않는다 — 곧 틀린 말이 된다 */
+  credit:{ko:"프로 <b>GG Qwaser</b> 님의 제안으로 만들었습니다. 고마워요!",
+          en:"Built from a suggestion by pro player <b>GG Qwaser</b>. Thanks!",
+          ja:"プロ <b>GG Qwaser</b> さんの提案で作りました。ありがとう!",
+          zh:"根據職業選手 <b>GG Qwaser</b> 的建議製作。感謝!"}
+};
+const PRL = k => { const o=PR_L[k]||{}; return o[LANG]!==undefined?o[LANG]:(o.en!==undefined?o.en:o.ko); };
+
+/* 펼쳐둔 카드의 순위를 기억한다 — 30분마다 오는 갱신이나 언어 전환으로 다시 그려도 접히지 않게.
+   처음 들어오면 1위만 펼쳐진 상태(prOpenInit 로 첫 렌더인지 구분). */
+let prOpen = new Set([1]);
+function prToggle(btn){
+  const card = btn.closest(".prCard"); if(!card) return;
+  const on = card.classList.toggle("open");
+  btn.setAttribute("aria-expanded", on ? "true" : "false");
+  const r = parseInt(card.dataset.rank, 10);
+  if(on) prOpen.add(r); else prOpen.delete(r);
+}
+window.prToggle = prToggle;
+const PR_CHEV = '<svg viewBox="0 0 24 24"><path d="M6 9.5l6 6 6-6"/></svg>';
+
+function renderProRank(){
+  const box = document.getElementById("proRankBody"); if(!box) return;
+  const live = window.RS_PRODEEP_LIVE;
+  const D = (live && live.rows && live.rows.length) ? live : PRODEEP;
+
+  const cards = D.rows.map(p => {
+    /* 영웅 막대: 그 선수 안에서 증감폭이 가장 큰 값을 100% 로 잡는다(선수끼리 비교하는 게 아님) */
+    const hs = (p.heroes||[]).filter(h => h.d !== null && h.d !== undefined);
+    const mx = Math.max.apply(null, hs.map(h => Math.abs(h.d)).concat([1]));
+    const heroRows = hs.map(h => {
+      const H = HEROES[h.id] || {};
+      const nm = (typeof T === "function") ? T(H.ko || h.id) : (H.ko || h.id);
+      const pic = (typeof PIC !== "undefined" && PIC[h.id]) ? PIC[h.id] : "";
+      const up = h.d > 0, zero = h.d === 0;
+      const w = Math.max(Math.round(Math.abs(h.d)/mx*100), h.d ? 6 : 0);
+      return `<div class="prHero">`
+        + `<span class="prIco">${pic?`<img src="${pic}" alt="" loading="lazy">`:""}</span>`
+        + `<span class="prHn" title="${prEsc(nm)}">${prEsc(nm)}</span>`
+        + `<span class="prWl">${h.w}-${h.g-h.w}</span>`
+        + `<span class="prBarWrap"><i class="prBar ${up?"up":"down"}" style="width:${w}%"></i></span>`
+        + `<span class="prDelta ${zero?"zero":(up?"up":"down")}">${h.d>0?"+":""}${h.d.toLocaleString()}</span></div>`;
+    }).join("") || `<div class="prStatL" style="padding:2px 0">${PRL("noHero")}</div>`;
+
+    const mates = (p.mates||[]).map(m => {
+      const nm = m[0], mw = m[1], mg = m[2], pc = Math.round(mw/mg*100);
+      return `<span class="prMate${pc===100?" perfect":""}"><b title="${prEsc(nm)}">${prEsc(nm)}</b>`
+        + `<span>${pc}%</span> <span style="color:var(--sub);font-weight:400">${mw}/${mg}</span></span>`;
+    }).join("") || `<div class="prStatL">${PRL("noMate")}</div>`;
+
+    const wr = p.mp ? Math.round(p.w/p.mp*100) : 0;
+    const open = prOpen.has(p.r);
+    return `<div class="prCard${p.r<=3?" top":""}${open?" open":""}" data-rank="${p.r}">`
+      + `<button type="button" class="prTop" aria-expanded="${open?"true":"false"}" onclick="prToggle(this)">`
+      +   `<span class="prRank">${p.r}</span><span class="prName">${prEsc(p.n)}</span>`
+      +   `<span class="prRate">${p.s.toLocaleString()}<span class="prRateL">${PRL("rate")}</span></span>`
+      +   `<span class="prChev" aria-hidden="true">${PR_CHEV}</span></button>`
+      + `<div class="prBody"><div>`
+      + `<div class="prStats">`
+      +   `<div class="prStat"><div class="prStatV">${PRL("wl").replace("{w}",p.w).replace("{l}",p.l)}</div><div class="prStatL">${PRL("games")}</div></div>`
+      +   `<div class="prStat"><div class="prStatV">${wr}%</div><div class="prStatL">${PRL("wr")}</div></div>`
+      +   `<div class="prStat kd"><div class="prStatV">${p.kd===null||p.kd===undefined?"—":p.kd.toFixed(2)}</div><div class="prStatL">${PRL("kd")} (${p.k}/${p.d})</div></div>`
+      + `</div>`
+      + `<div class="prSecL">${PRL("secHero")}</div>${heroRows}`
+      + `<div class="prSecL">${PRL("secMate")}</div><div class="prMates">${mates}</div>`
+      + `</div></div></div>`;
+  }).join("");
+
+  box.innerHTML = `<div class="prHead"><b>${PRL("head")}</b><i></i></div>`
+    + `<p class="prNote">${PRL("intro")}</p>${cards}`
+    + `<div class="prFoot">${PRL("foot").replace("{d}", prEsc(D.asOf||""))}<br>${PRL("credit")}</div>`;
+}
+const prEsc = t10esc;   /* 같은 스크립트 블록 — esc() 가 없어서 t10esc 를 그대로 쓴다 */
+window.rsRenderProRank = renderProRank;
+
 function renderDex(){
   const si = document.getElementById("dexSearch"); if(si) si.placeholder = DEX_SEARCH_PH[LANG] || DEX_SEARCH_PH.ko;
   const dexEl = document.getElementById("dex");
@@ -3277,6 +3445,16 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-08-29",
+    ko:"📊 새 메뉴 <b>프로 랭킹</b>이 생겼어요 (공략 > 프로 랭킹) — 상위 10명의 <b>최근 25경기</b>를 경기 단위로 확인해서 <b>영웅별로 레이팅을 얼마나 얻고 잃었는지</b>, <b>누구와 같은 팀일 때 이기는지</b>, <b>프로에서만의 K/D</b>를 보여줍니다. 프로 <b>GG Qwaser</b> 님의 제안으로 만들었습니다",
+    en:"📊 New menu: <b>Pro ranking</b> (Guides > Pro ranking) — a match-by-match look at the top 10 players' <b>last 25 games</b>: <b>rating actually gained or lost per hero</b>, <b>who they win with</b>, and their <b>pro-only K/D</b>. Built from a suggestion by pro player <b>GG Qwaser</b>",
+    ja:"📊 新メニュー<b>プロランキング</b>が登場（攻略 > プロランキング）— 上位10人の<b>直近25試合</b>を試合単位で確認し、<b>ヒーローごとに実際どれだけレーティングを得て失ったか</b>、<b>誰と組むと勝つのか</b>、<b>プロ限定のK/D</b>を表示します。プロ <b>GG Qwaser</b> さんの提案で作りました",
+    zh:"📊 新選單<b>職業排行</b>上線（攻略 > 職業排行）— 將前 10 名的<b>最近 25 場</b>逐場確認，顯示<b>每個英雄實際獲得或失去多少評分</b>、<b>和誰同隊會贏</b>，以及<b>職業專用 K/D</b>。根據職業選手 <b>GG Qwaser</b> 的建議製作",
+    fr:"📊 Nouveau menu <b>Classement pro</b> (Guides > Classement pro) — analyse match par match des <b>25 dernières parties</b> du top 10 : <b>points de classement réellement gagnés ou perdus par héros</b>, <b>avec qui ils gagnent</b>, et leur <b>K/D pro uniquement</b>",
+    de:"📊 Neues Menü <b>Pro-Rangliste</b> (Guides > Pro-Rangliste) — die <b>letzten 25 Spiele</b> der Top 10 Spiel für Spiel aufgeschlüsselt: <b>tatsächlich gewonnene oder verlorene Wertung pro Held</b>, <b>mit wem sie gewinnen</b> und ihr <b>reines Pro-K/D</b>",
+    es:"📊 Nuevo menú <b>Ranking pro</b> (Guías > Ranking pro) — desglose partida a partida de las <b>últimas 25 partidas</b> del top 10: <b>puntos realmente ganados o perdidos por héroe</b>, <b>con quién ganan</b> y su <b>K/D solo de pro</b>",
+    pt:"📊 Novo menu <b>Ranking pro</b> (Guias > Ranking pro) — análise partida a partida das <b>últimas 25 partidas</b> do top 10: <b>pontos realmente ganhos ou perdidos por herói</b>, <b>com quem vencem</b> e o <b>K/D só de pro</b>",
+    ru:"📊 Новый раздел <b>Про-рейтинг</b> (Гайды > Про-рейтинг) — разбор <b>последних 25 матчей</b> топ-10 по каждой игре: <b>сколько рейтинга реально набрано или потеряно на каждом герое</b>, <b>с кем они выигрывают</b> и их <b>K/D только в про</b>" },
   { date:"2026-08-29",
     ko:"🏅 티어표에 <b>프로 랭킹 TOP 10의 주력 영웅</b> 코너가 생겼어요 (공략 > 티어표) — 실제 게임 랭킹 상위 10명이 어떤 영웅을 파는지 보여주고, <b>30분마다 자동 갱신</b>됩니다. 커뮤니티 투표 티어와 나란히 비교해 보세요",
     en:"🏅 The tier list now shows the <b>main heroes of the pro-ranking TOP 10</b> (Guides > Tier list) — what the actual top 10 players grind, from real ranking data, <b>auto-refreshed every 30 minutes</b>. Compare it side by side with the community-vote tiers",
@@ -4008,7 +4186,7 @@ function applyHeader(){
 const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, board:{g:"talk", view:"board"},
-  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"tourney", view:"tourney"}, trrules:{g:"tourney", view:"trrules"}, trbracket:{g:"tourney", view:"trbracket"}, trhall:{g:"tourney", view:"trhall"}, creators:{g:"guide", view:"creators"},
+  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, prorank:{g:"guide", view:"prorank"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"tourney", view:"tourney"}, trrules:{g:"tourney", view:"trrules"}, trbracket:{g:"tourney", view:"trbracket"}, trhall:{g:"tourney", view:"trhall"}, creators:{g:"guide", view:"creators"},
   dex:{g:"codex", view:"dex"}, info:{g:"codex", view:"info"}, codes:{g:"codex", view:"codes"}, issues:{g:"codex", view:"issues"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
@@ -4021,7 +4199,9 @@ const CODES_ENABLED = true;   /* 2026-07-25 복구: 구글 검토 통과 후 안
 const NAV_GROUPS = {
   notice:{ subs:["notice"], solo:true },
   talk:{ subs:["chat","board"] },
-  guide:{ subs:["pick","replay","builds","tier","tips","creators"] },
+  /* 순서 = 화면 서브탭 순서 (MAMMON 지정 2026-08-29): 카운터픽 → 빌드 → 프로 랭킹 → 티어표 → 경기 분석 → 팁.
+     크리에이터는 명단이 비면 숨겨지므로 항상 맨 끝. */
+  guide:{ subs:["pick","builds","prorank","tier","replay","tips","creators"] },
   tourney:{ subs:["tourney","trrules","trbracket","trhall"] },   /* 🏆 대회 = 대분류(2026-08-19 MAMMON). 꺼져 있으면 nav 버튼 자체를 숨김.
      서브: 참가 · 규칙(항상) · 대진표 · 명예의 전당(데이터 있을 때만 — 크리에이터 탭과 같은 방식) */
   codex:{ subs:["dex","info","codes","issues"] },
@@ -4042,6 +4222,7 @@ const SUB_LABEL = {
   chat:{ko:"채팅",en:"Chat",ja:"チャット",zh:"聊天",fr:"Chat",de:"Chat",es:"Chat",pt:"Chat",ru:"Чат"},
   board:{ko:"자유게시판",en:"Board",ja:"掲示板",zh:"留言板",fr:"Forum",de:"Forum",es:"Foro",pt:"Fórum",ru:"Форум"},
   pick:{ko:"카운터픽",en:"Counters",ja:"カウンター",zh:"克制",fr:"Counters",de:"Counter",es:"Counters",pt:"Counters",ru:"Контрпики"},
+  prorank:{ko:"프로 랭킹",en:"Pro ranking",ja:"プロランキング",zh:"職業排行",fr:"Classement pro",de:"Pro-Rangliste",es:"Ranking pro",pt:"Ranking pro",ru:"Про-рейтинг"},
   replay:{ko:"경기 분석",en:"Match Report",ja:"試合分析",zh:"對局分析",fr:"Analyse",de:"Analyse",es:"Análisis",pt:"Análise",ru:"Разбор матча"},
   dex:{ko:"도감",en:"Codex",ja:"図鑑",zh:"圖鑑",fr:"Codex",de:"Kodex",es:"Códice",pt:"Códex",ru:"Кодекс"},
   builds:{ko:"빌드",en:"Builds",ja:"ビルド",zh:"打法",fr:"Builds",de:"Builds",es:"Builds",pt:"Builds",ru:"Билды"},
@@ -4074,7 +4255,8 @@ const SUB_ICON = {
   trrules:'<svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="8.5" y1="16" x2="12.5" y2="16"/></svg>',
   trbracket:'<svg viewBox="0 0 24 24"><path d="M4 6h5v4H4zM4 14h5v4H4z"/><path d="M9 8h3v8H9"/><path d="M12 12h4"/><path d="M16 10h4v4h-4z"/></svg>',
   trhall:'<svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4 6.7 19.1l1-5.8-4.2-4.1 5.9-.9z"/></svg>',
-  creators:'<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10.3 9.3l4.6 2.7-4.6 2.7z"/></svg>'
+  creators:'<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10.3 9.3l4.6 2.7-4.6 2.7z"/></svg>',
+  prorank:'<svg viewBox="0 0 24 24"><path d="M4 19.5V13"/><path d="M9.3 19.5V8"/><path d="M14.7 19.5v-4"/><path d="M20 19.5V4.5"/></svg>'
 };
 const SL = s => (SUB_LABEL[s]||{})[LANG] || (SUB_LABEL[s]||{}).ko || s;
 const GRL = g => (GROUP_LABEL[g]||{})[LANG] || (GROUP_LABEL[g]||{}).ko || g;
@@ -4088,6 +4270,7 @@ function showView(view){
     if(window.commView) window.commView(view.slice(5));
   }else{
     const el=document.getElementById("tab-"+view); if(el) el.classList.add("on");
+    if(view === "prorank" && window.rsRenderProRank) window.rsRenderProRank();   /* 🏅 프로 랭킹 심층 지표 */
   }
   CURVIEW=view; applyHeader();
 }
@@ -4428,6 +4611,7 @@ function setLang(l){
   applyStatic();
   renderGrid(); renderRecs(); renderDex(); renderEdit(); renderInfo();
   if(window.rsRenderTop10) window.rsRenderTop10();   // 🏅 프로 TOP 10 (영웅 이름·문구가 언어를 탄다)
+  if(window.rsRenderProRank) window.rsRenderProRank();   // 🏅 프로 랭킹 심층 지표 (위와 같은 이유)
   document.dispatchEvent(new Event("rs-lang-changed"));
 }
 
@@ -4515,7 +4699,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.29-b";
+const SITE_VERSION = "2026.08.29-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6843,6 +7027,13 @@ FB.onValue(FB.ref(FB.db, "top10"), snap => {
   window.RS_TOP10_LIVE = (v && v.rows && v.rows.length) ? v : null;
   if(window.rsRenderTop10) window.rsRenderTop10();
 }, () => { window.RS_TOP10_LIVE = null; });
+
+/* 🏅 프로 랭킹 심층 지표 — 리코스탯 top10_deep.py 가 올린다(규칙 v34, 읽기 공개) */
+FB.onValue(FB.ref(FB.db, "top10deep"), snap => {
+  const v = snap.val();
+  window.RS_PRODEEP_LIVE = (v && v.rows && v.rows.length) ? v : null;
+  if(window.rsRenderProRank) window.rsRenderProRank();
+}, () => { window.RS_PRODEEP_LIVE = null; });
 
 FB.onValue(FB.ref(FB.db, "tourney/meta"), snap => {
   const v = snap.val();
