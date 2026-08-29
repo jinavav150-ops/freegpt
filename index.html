@@ -1110,6 +1110,8 @@
 .prStat.kd .prStatV{color:#ffd257}
 .prStatL{font-size:9.5px;color:var(--sub);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prSecL{font-size:10px;color:var(--sub);margin:11px 0 5px;letter-spacing:.02em}
+/* 모드 구성 줄 — 이 카드의 숫자가 어느 모드에서 나왔는지 밝힌다(2026-08-30) */
+.prModes{margin-top:2px;color:#8d97ab}
 /* 영웅 행 */
 .prHero{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 0}
 .prIco{width:24px;height:24px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid #2a3347;background:#0e1320}
@@ -2705,33 +2707,53 @@ window.rsRenderTop10 = renderTop10;
    랭킹 3위 GG Qwaser 가 디스코드로 요청한 세 가지를 그대로 화면으로 만든 것:
      ① 영웅별로 실제 얻은 레이팅 증감 (지면 마이너스가 찍힌다)
      ② 팀메이트별 승률 — 누구와 뛸 때 실제로 이기는가
-     ③ 프로 전용 K/D — 게임 안에도 없는 숫자
+     ③ K/D — 게임 안에도 없는 숫자
+
+   ⚠️ 2026-08-30 정정: 처음엔 이 25경기가 전부 프로인 줄 알았다. MatchType 을 거꾸로 읽은 탓이다.
+      게임 파일의 실제 정의는 Training=0 · **Pro=1** · **Casual=2** — 2를 프로로 착각했다.
+      실측하면 상위 10명의 최근 25경기 중 프로는 5% 안팎이고 나머지는 캐주얼이다(제보: 프로 GG Qwaser).
+      그래서 화면은 "프로 기록"이라 말하지 않고, 카드마다 md(프로/캐주얼/기타 경기 수)를 함께 보여준다.
+      순위와 점수(s)는 프로 리더보드 rating_pro_0_<시즌> 에서 오므로 그건 진짜 프로가 맞다.
 
    데이터는 리코스탯/top10_deep.py 가 게임 메타서버의 get_match_results_info 로 뽑아
    Firebase `top10deep` 에 올린다. 사이트는 그 노드를 구독하므로 배포 없이 갱신된다.
    PRODEEP 는 마지막으로 확인된 값 — 파이어베이스가 안 붙어도 화면이 비지 않게 하는 폴백.
 
    ⚠️ 최근 25경기 창이다(서버가 그만큼만 보관). 통산이 아니라는 걸 화면에 반드시 적어둘 것. */
-const PRODEEP = {"asOf":"2026-08-29 21:33","season":"202608","window":25,"rows":[{"r":1,"n":"Marsーyuuu","s":2108,"mp":25,"w":17,"l":8,"k":156,"d":32,"kd":4.88,"heroes":[{"cur":7225,"d":70,"g":12,"id":"leo","w":8},{"cur":9250,"d":70,"g":6,"id":"calibri","w":5},{"cur":4785,"d":-70,"g":5,"id":"remedy","w":3},{"cur":3340,"g":1,"id":"nova","w":1},{"cur":3725,"g":1,"id":"vector","w":0}],"mates":[["baizarsanma",5,7],["Venusーあろめん侍",15,22],["M A G N U S.굳",2,3],["탄지로",2,3],["꼬꼬꼬",9,14]]},{"r":2,"n":"GG Qwaser","s":2090,"mp":25,"w":25,"l":0,"k":181,"d":19,"kd":9.53,"heroes":[{"cur":6550,"d":245,"g":8,"id":"oni","w":8},{"cur":4485,"d":175,"g":6,"id":"remedy","w":6},{"cur":2945,"d":175,"g":6,"id":"calibri","w":6},{"cur":5665,"d":140,"g":5,"id":"nova","w":5}],"mates":[["GG ABRS",14,14],["Md Henks",8,8],["GG planctonQ",8,8],["MD smoke Weed",6,6],["W Brassybabe",4,4]]},{"r":3,"n":"Venusーあろめん侍","s":2071,"mp":25,"w":22,"l":3,"k":213,"d":21,"kd":10.14,"heroes":[{"cur":4810,"d":595,"g":22,"id":"calibri","w":19},{"cur":12560,"d":70,"g":3,"id":"sejin","w":3},{"cur":11530,"g":1,"id":"dread","w":0}],"mates":[["uranus一rover",11,11],["시바견",2,2],["레간자",21,24],["earthᅳ레오갓",9,12]]},{"r":4,"n":"xR4y","s":2059,"mp":25,"w":17,"l":8,"k":169,"d":72,"kd":2.35,"heroes":[{"cur":5945,"d":140,"g":9,"id":"remedy","w":7},{"cur":10500,"d":0,"g":11,"id":"magnus","w":7},{"cur":6240,"d":0,"g":3,"id":"leo","w":1},{"cur":6735,"g":1,"id":"vector","w":0},{"cur":4825,"g":1,"id":"khan","w":1}],"mates":[["1337",10,13],["Md Henks",14,20],["K D  kingtaha",3,6]]},{"r":5,"n":"BANGBK24","s":2050,"mp":25,"w":24,"l":1,"k":168,"d":16,"kd":10.5,"heroes":[{"cur":45285,"d":595,"g":21,"id":"remedy","w":20},{"cur":2855,"d":70,"g":3,"id":"vector","w":3},{"cur":4040,"g":1,"id":"jagger","w":1}],"mates":[["VisioИ",24,25],["mrweed",20,21]]},{"r":6,"n":"gg lazar","s":2049,"mp":25,"w":20,"l":5,"k":200,"d":54,"kd":3.7,"heroes":[{"cur":8670,"d":210,"g":13,"id":"magnus","w":11},{"cur":4675,"d":35,"g":11,"id":"vector","w":8},{"cur":2770,"g":1,"id":"leo","w":1}],"mates":[["Karol",4,4],["Deadman",4,4],["Gonirea",7,10],["gg jeed",7,10],["w AwesomeTree",0,2]]},{"r":7,"n":"earthᅳ레오갓","s":2041,"mp":25,"w":22,"l":3,"k":223,"d":32,"kd":6.97,"heroes":[{"cur":5055,"d":420,"g":14,"id":"leo","w":12},{"cur":4390,"d":105,"g":4,"id":"dread","w":4},{"cur":6245,"d":70,"g":7,"id":"fury","w":5},{"cur":5370,"g":1,"id":"calibri","w":1}],"mates":[["꼬꼬꼬",5,5],["아이스아메리카노",5,5],["ᅠᅠᅠ",4,4],["uranus一rover",3,3],["囧囧丸",2,2]]},{"r":8,"n":"탄지로","s":2016,"mp":25,"w":15,"l":10,"k":194,"d":57,"kd":3.4,"heroes":[{"cur":2255,"d":0,"g":2,"id":"calibri","w":2},{"cur":10340,"d":-315,"g":24,"id":"leo","w":14}],"mates":[["관소비",3,6],["Marsーyuuu",5,11],["M A G N U S.굳",3,7],["친절한서노씨",1,4],["味方運ゲーすぎ",0,2]]},{"r":9,"n":"Mis DeiMudda","s":1999,"mp":25,"w":21,"l":4,"k":189,"d":60,"kd":3.15,"heroes":[{"cur":3420,"d":175,"g":7,"id":"remedy","w":7},{"cur":9330,"d":105,"g":8,"id":"oni","w":7},{"cur":4720,"d":35,"g":2,"id":"nova","w":2},{"cur":3195,"d":35,"g":2,"id":"fury","w":1},{"cur":2585,"d":35,"g":2,"id":"dread","w":2}],"mates":[["Lamschinator",7,7],["MD Moanzart",7,7],["pedro",2,2],["MD Greatstuff",3,4],["Snake",3,4]]},{"r":10,"n":"uranus一rover","s":1988,"mp":25,"w":24,"l":1,"k":186,"d":16,"kd":11.62,"heroes":[{"cur":9305,"d":525,"g":16,"id":"remedy","w":16},{"cur":4715,"d":70,"g":3,"id":"fury","w":3},{"cur":4035,"d":35,"g":2,"id":"sejin","w":2},{"cur":4190,"d":0,"g":4,"id":"jagger","w":3}],"mates":[["Venusーあろめん侍",21,21],["레간자",11,11],["풍산개",4,4]]}]};
+const PRODEEP = {"asOf":"2026-08-30 00:12","season":"202608","window":25,"rows":[{"r":1,"n":"Marsーyuuu","s":2108,"mp":25,"w":23,"l":2,"k":161,"d":25,"kd":6.44,"md":{"casual":25,"etc":0,"pro":0},"heroes":[{"cur":9255,"d":350,"g":17,"id":"fury","w":15},{"cur":9495,"d":210,"g":7,"id":"calibri","w":7},{"cur":3305,"g":1,"id":"jagger","w":1}],"mates":[["Venusーあろめん侍",23,25],["earthᅳ레오갓",23,25]]},{"r":2,"n":"GG Qwaser","s":2090,"mp":25,"w":24,"l":1,"k":200,"d":22,"kd":9.09,"md":{"casual":25,"etc":0,"pro":0},"heroes":[{"cur":6550,"d":210,"g":7,"id":"oni","w":7},{"cur":5665,"d":140,"g":5,"id":"nova","w":5},{"cur":3085,"d":105,"g":7,"id":"calibri","w":6},{"cur":4555,"d":35,"g":2,"id":"remedy","w":2},{"cur":5375,"d":35,"g":2,"id":"sejin","w":2},{"cur":6080,"g":1,"id":"dread","w":1},{"cur":4705,"g":1,"id":"fury","w":1}],"mates":[["GG Hydropote",10,10],["GG ABRS",8,8],["GG planctonQ",8,8],["VaDiMuS",6,6],["Md Henks",2,2]]},{"r":3,"n":"Venusーあろめん侍","s":2071,"mp":25,"w":23,"l":2,"k":137,"d":47,"kd":2.91,"md":{"casual":25,"etc":0,"pro":0},"heroes":[{"cur":13015,"d":350,"g":11,"id":"sejin","w":11},{"cur":5965,"d":245,"g":8,"id":"leo","w":8},{"cur":6595,"d":105,"g":4,"id":"oni","w":4},{"cur":11460,"d":-70,"g":2,"id":"dread","w":0}],"mates":[["earthᅳ레오갓",23,25],["Marsーyuuu",23,25]]},{"r":4,"n":"xR4y","s":2059,"mp":25,"w":17,"l":8,"k":169,"d":72,"kd":2.35,"md":{"casual":8,"etc":17,"pro":0},"heroes":[{"cur":5945,"d":140,"g":9,"id":"remedy","w":7},{"cur":10500,"d":0,"g":11,"id":"magnus","w":7},{"cur":6240,"d":0,"g":3,"id":"leo","w":1},{"cur":6735,"g":1,"id":"vector","w":0},{"cur":4825,"g":1,"id":"khan","w":1},{"cur":4090,"g":1,"id":"fury","w":1},{"cur":5335,"g":1,"id":"dread","w":1}],"mates":[["1337",10,13],["Md Henks",14,20],["K D  kingtaha",3,6]]},{"r":5,"n":"BANGBK24","s":2050,"mp":25,"w":23,"l":2,"k":168,"d":28,"kd":6.0,"md":{"casual":25,"etc":0,"pro":0},"heroes":[{"cur":45705,"d":630,"g":25,"id":"remedy","w":23}],"mates":[["piveteX7",5,5],["Wuuz3y",5,5],["VisioИ",12,13],["mrweed",9,10],["sweetpain",9,10]]},{"r":6,"n":"gg lazar","s":2049,"mp":25,"w":20,"l":5,"k":200,"d":54,"kd":3.7,"md":{"casual":24,"etc":0,"pro":1},"heroes":[{"cur":8670,"d":210,"g":13,"id":"magnus","w":11},{"cur":4675,"d":35,"g":11,"id":"vector","w":8},{"cur":2770,"g":1,"id":"leo","w":1}],"mates":[["Karol",4,4],["Deadman",4,4],["Gonirea",7,10],["gg jeed",7,10],["w AwesomeTree",0,2]]},{"r":7,"n":"earthᅳ레오갓","s":2041,"mp":25,"w":23,"l":2,"k":141,"d":50,"kd":2.82,"md":{"casual":25,"etc":0,"pro":0},"heroes":[{"cur":8485,"d":385,"g":15,"id":"remedy","w":13},{"cur":5230,"d":245,"g":8,"id":"leo","w":8},{"cur":4895,"d":35,"g":2,"id":"nova","w":2}],"mates":[["Venusーあろめん侍",23,25],["Marsーyuuu",23,25]]},{"r":8,"n":"탄지로","s":2016,"mp":25,"w":15,"l":10,"k":194,"d":57,"kd":3.4,"md":{"casual":15,"etc":0,"pro":10},"heroes":[{"cur":2255,"d":0,"g":2,"id":"calibri","w":2},{"cur":10340,"d":-315,"g":24,"id":"leo","w":14}],"mates":[["관소비",3,6],["Marsーyuuu",5,11],["M A G N U S.굳",3,7],["친절한서노씨",1,4],["味方運ゲーすぎ",0,2]]},{"r":9,"n":"Mis DeiMudda","s":1999,"mp":25,"w":22,"l":3,"k":226,"d":50,"kd":4.52,"md":{"casual":24,"etc":0,"pro":1},"heroes":[{"cur":3420,"d":70,"g":4,"id":"remedy","w":4},{"cur":9330,"d":70,"g":4,"id":"oni","w":4},{"cur":4755,"d":70,"g":3,"id":"nova","w":3},{"cur":3530,"d":70,"g":3,"id":"twinkle","w":3},{"cur":3195,"d":35,"g":5,"id":"fury","w":4},{"cur":2585,"d":35,"g":2,"id":"dread","w":2},{"cur":3060,"d":-70,"g":2,"id":"leo","w":1},{"cur":2705,"g":1,"id":"khan","w":1},{"cur":2865,"g":1,"id":"sejin","w":1},{"cur":2720,"g":1,"id":"vector","w":0}],"mates":[["Md Henks",8,8],["gg jeed",8,8],["Lamschinator",4,4],["MD Moanzart",4,4],["pedro",2,2]]},{"r":10,"n":"uranus一rover","s":1988,"mp":25,"w":24,"l":1,"k":186,"d":16,"kd":11.62,"md":{"casual":25,"etc":0,"pro":0},"heroes":[{"cur":9305,"d":525,"g":16,"id":"remedy","w":16},{"cur":4715,"d":70,"g":3,"id":"fury","w":3},{"cur":4035,"d":35,"g":2,"id":"sejin","w":2},{"cur":4190,"d":0,"g":4,"id":"jagger","w":3}],"mates":[["Venusーあろめん侍",21,21],["레간자",11,11],["풍산개",4,4]]}]};
 const PR_L = {
   head:{ko:"프로 랭킹 심층 지표",en:"Pro ranking deep stats",ja:"プロランキング詳細スタッツ",zh:"職業排行深度數據"},
-  intro:{ko:"프로 상위 10명의 <b>최근 25경기</b>를 경기 단위로 확인해본 겁니다 — 영웅별로 레이팅을 실제로 얼마나 얻고 잃었는지, 누구와 같은 팀일 때 이기는지, 프로에서만의 K/D.",
-         en:"A match-by-match look at the <b>last 25 games</b> of the top 10 pro players — how much rating each hero actually gained or lost, who they win with, and their pro-only K/D.",
-         ja:"プロ上位10名の<b>直近25試合</b>を試合単位で確認したものです — ヒーローごとに実際どれだけレーティングを得て失ったか、誰と組むと勝つのか、プロ限定のK/D。",
-         zh:"將職業前 10 名的<b>最近 25 場</b>逐場確認 — 每個英雄實際獲得或失去多少評分、和誰同隊會贏、以及職業專用 K/D。"},
+  /* ⚠️ 2026-08-30: 프로 선수 GG Qwaser 의 지적으로 바로잡은 문구.
+     순위·점수는 프로 리더보드가 맞지만, 최근 25경기는 서버가 모드를 안 가려주므로 캐주얼이 섞인다.
+     실측 결과 프로는 5% 안팎 — 그래서 카드마다 실제 모드 구성을 함께 적는다. 프로 전용 집계는 별도 과제. */
+  intro:{ko:"순위와 점수는 <b>프로 랭킹</b> 그대로예요. 그 아래 기록은 각 선수의 <b>최근 25경기</b>를 경기 단위로 확인한 건데, 서버가 모드를 가려서 주지 않아 <b>프로와 캐주얼이 섞여 있습니다</b> — 그래서 선수마다 실제 모드 구성을 같이 적어뒀어요.",
+         en:"The rank and score come straight from the <b>pro leaderboard</b>. Everything below is each player's <b>last 25 matches</b>, broken down game by game — but the server won't let us filter by mode, so <b>Pro and Casual are mixed in</b>. That's why every card shows its actual mode breakdown.",
+         ja:"順位とスコアは<b>プロランキング</b>そのものです。その下の記録は各選手の<b>直近25試合</b>を試合単位で見たものですが、サーバーがモードを分けてくれないため<b>プロとカジュアルが混ざっています</b> — なので選手ごとに実際のモード構成も併記しています。",
+         zh:"名次與分數直接來自<b>職業排行榜</b>。下方記錄是各選手<b>最近 25 場</b>的逐場拆解，但伺服器不提供模式篩選，因此<b>職業與休閒是混在一起的</b> — 所以每張卡片都會標示實際的模式組成。"},
   games:{ko:"전적",en:"Record",ja:"戦績",zh:"戰績"},
+  recent:{ko:"최근 25경기",en:"Last 25 matches",ja:"直近25試合",zh:"最近 25 場"},
+  mPro:{ko:"프로",en:"Pro",ja:"プロ",zh:"職業"},
+  mCas:{ko:"캐주얼",en:"Casual",ja:"カジュアル",zh:"休閒"},
+  mEtc:{ko:"기타",en:"Other",ja:"その他",zh:"其他"},
   wr:{ko:"승률",en:"Win rate",ja:"勝率",zh:"勝率"},
   kd:{ko:"K/D",en:"K/D",ja:"K/D",zh:"K/D"},
   wl:{ko:"{w}승 {l}패",en:"{w}W {l}L",ja:"{w}勝 {l}敗",zh:"{w}勝 {l}敗"},
-  secHero:{ko:"영웅별 레이팅 증감",en:"Rating gained / lost per hero",ja:"ヒーロー別レーティング増減",zh:"各英雄評分增減"},
+  secHero:{ko:"영웅별 점수 증감",en:"Score gained / lost per hero",ja:"ヒーロー別スコア増減",zh:"各英雄分數增減"},
   secMate:{ko:"같은 팀일 때 승률",en:"Win rate with teammates",ja:"同じチームでの勝率",zh:"同隊時的勝率"},
-  noHero:{ko:"2경기 이상 쓴 영웅이 아직 없어요",en:"No hero played twice or more yet",ja:"2試合以上使ったヒーローがまだありません",zh:"尚無使用兩場以上的英雄"},
+  noHero:{ko:"집계된 영웅이 아직 없어요",en:"No heroes on record yet",ja:"集計されたヒーローがまだありません",zh:"尚無統計到的英雄"},
+  once:{ko:"1경기만 써서 증감을 계산할 수 없어요",en:"Played once — no rating change to measure",ja:"1試合のみのため増減を計算できません",zh:"僅使用一場，無法計算增減"},
+  /* ⚠️ 실제 제보로 추가된 문구(2026-08-29): 영웅별 승패 합이 위 전적과 안 맞는다는 지적.
+     원인은 한 경기에서 영웅을 바꾸면 양쪽에 기록되기 때문 — 데이터의 성질이라 설명으로 남긴다. */
+  hnote:{ko:"영웅별 승패를 더해도 위 전적과 딱 맞지 않을 수 있어요 — 한 경기에서 영웅을 바꾸면 두 영웅 모두에 기록되거든요. 레이팅 증감은 2경기 이상 쓴 영웅만 나오고, 1경기만 쓴 영웅은 —로 표시됩니다.",
+         en:"Per-hero W-L won't always add up to the record above — swapping heroes mid-match counts on both. Rating change needs 2+ games on a hero; heroes played once show —.",
+         ja:"ヒーローごとの勝敗を足しても上の戦績とぴったり合わないことがあります — 試合中にヒーローを変えると両方に記録されるためです。レーティング増減は2試合以上使ったヒーローのみで、1試合だけのヒーローは — と表示されます。",
+         zh:"各英雄的勝敗加總不一定等於上方戰績 — 一場中換英雄會同時記在兩個英雄上。評分增減只在使用 2 場以上時顯示，只打過 1 場的英雄顯示 —。"},
   noMate:{ko:"2경기 이상 함께한 팀메이트가 없어요",en:"No teammate with 2+ games together",ja:"2試合以上一緒に戦った味方がいません",zh:"沒有同隊 2 場以上的隊友"},
   rate:{ko:"점",en:"pts",ja:"点",zh:"分"},
-  foot:{ko:"{d} 기준 · 30분마다 갱신 · 서버가 보관하는 <b>최근 25경기</b>만 집계합니다(통산 아님). 표본이 작으니 승률은 참고용으로 봐주세요.",
-        en:"As of {d} · updated every 30 min · only the <b>last 25 matches</b> the server keeps (not lifetime). Small sample — treat win rates as a hint, not proof.",
-        ja:"{d} 時点 · 30分ごと更新 · サーバーが保持する<b>直近25試合</b>のみ集計(通算ではありません)。標本が小さいので勝率は参考程度に。",
-        zh:"{d} 為準 · 每 30 分鐘更新 · 僅統計伺服器保留的<b>最近 25 場</b>(非生涯)。樣本較小，勝率請當作參考。"},
+  foot:{ko:"{d} 기준 · 30분마다 갱신 · 서버가 보관하는 <b>최근 25경기</b>만 집계합니다(통산 아님). 표본이 작으니 승률은 참고용으로 봐주세요. <b>프로 경기만 따로 모으는 작업은 준비 중</b>이에요.",
+        en:"As of {d} · updated every 30 min · only the <b>last 25 matches</b> the server keeps (not lifetime). Small sample — treat win rates as a hint, not proof. <b>A Pro-only version is in the works.</b>",
+        ja:"{d} 時点 · 30分ごと更新 · サーバーが保持する<b>直近25試合</b>のみ集計(通算ではありません)。標本が小さいので勝率は参考程度に。<b>プロ試合だけを集める仕組みは準備中</b>です。",
+        zh:"{d} 為準 · 每 30 分鐘更新 · 僅統計伺服器保留的<b>最近 25 場</b>(非生涯)。樣本較小，勝率請當作參考。<b>只收集職業場的版本正在準備中。</b>"},
   /* 순위는 30분마다 바뀌므로 "3위" 같은 숫자를 문구에 박아두지 않는다 — 곧 틀린 말이 된다 */
   credit:{ko:"프로 <b>GG Qwaser</b> 님의 제안으로 만들었습니다. 고마워요!",
           en:"Built from a suggestion by pro player <b>GG Qwaser</b>. Thanks!",
@@ -2759,21 +2781,26 @@ function renderProRank(){
   const D = (live && live.rows && live.rows.length) ? live : PRODEEP;
 
   const cards = D.rows.map(p => {
-    /* 영웅 막대: 그 선수 안에서 증감폭이 가장 큰 값을 100% 로 잡는다(선수끼리 비교하는 게 아님) */
-    const hs = (p.heroes||[]).filter(h => h.d !== null && h.d !== undefined);
-    const mx = Math.max.apply(null, hs.map(h => Math.abs(h.d)).concat([1]));
+    /* 쓴 영웅은 전부 보여준다. 예전엔 증감이 계산되는 영웅만 보여줬는데(1경기짜리는 숨김),
+       그러면 영웅별 승패를 더해도 위 전적과 안 맞아서 오류처럼 보였다(2026-08-29 제보).
+       증감이 없는 영웅은 막대 없이 "—" 로 표시한다.
+       막대는 그 선수 안에서 증감폭이 가장 큰 값을 100% 로 잡는다(선수끼리 비교하는 게 아님). */
+    const hs = (p.heroes||[]);
+    const hasD = h => h.d !== null && h.d !== undefined;
+    const mx = Math.max.apply(null, hs.filter(hasD).map(h => Math.abs(h.d)).concat([1]));
     const heroRows = hs.map(h => {
       const H = HEROES[h.id] || {};
       const nm = (typeof T === "function") ? T(H.ko || h.id) : (H.ko || h.id);
       const pic = (typeof PIC !== "undefined" && PIC[h.id]) ? PIC[h.id] : "";
-      const up = h.d > 0, zero = h.d === 0;
-      const w = Math.max(Math.round(Math.abs(h.d)/mx*100), h.d ? 6 : 0);
+      const on = hasD(h), up = on && h.d > 0, zero = on && h.d === 0;
+      const w = on ? Math.max(Math.round(Math.abs(h.d)/mx*100), h.d ? 6 : 0) : 0;
+      const txt = on ? ((h.d>0?"+":"") + h.d.toLocaleString()) : "—";
       return `<div class="prHero">`
         + `<span class="prIco">${pic?`<img src="${pic}" alt="" loading="lazy">`:""}</span>`
         + `<span class="prHn" title="${prEsc(nm)}">${prEsc(nm)}</span>`
         + `<span class="prWl">${h.w}-${h.g-h.w}</span>`
-        + `<span class="prBarWrap"><i class="prBar ${up?"up":"down"}" style="width:${w}%"></i></span>`
-        + `<span class="prDelta ${zero?"zero":(up?"up":"down")}">${h.d>0?"+":""}${h.d.toLocaleString()}</span></div>`;
+        + `<span class="prBarWrap">${w?`<i class="prBar ${up?"up":"down"}" style="width:${w}%"></i>`:""}</span>`
+        + `<span class="prDelta ${(zero||!on)?"zero":(up?"up":"down")}"${on?"":` title="${prEsc(PRL("once"))}"`}>${txt}</span></div>`;
     }).join("") || `<div class="prStatL" style="padding:2px 0">${PRL("noHero")}</div>`;
 
     const mates = (p.mates||[]).map(m => {
@@ -2783,6 +2810,10 @@ function renderProRank(){
     }).join("") || `<div class="prStatL">${PRL("noMate")}</div>`;
 
     const wr = p.mp ? Math.round(p.w/p.mp*100) : 0;
+    /* 실제 모드 구성 — 0인 항목은 적지 않는다(캐주얼 25 한 줄이 깔끔하다) */
+    const md = p.md || {};
+    const modeTxt = [["mPro", md.pro], ["mCas", md.casual], ["mEtc", md.etc]]
+      .filter(x => x[1]).map(x => ` · ${PRL(x[0])} ${x[1]}`).join("");
     const open = prOpen.has(p.r);
     return `<div class="prCard${p.r<=3?" top":""}${open?" open":""}" data-rank="${p.r}">`
       + `<button type="button" class="prTop" aria-expanded="${open?"true":"false"}" onclick="prToggle(this)">`
@@ -2790,6 +2821,7 @@ function renderProRank(){
       +   `<span class="prRate">${p.s.toLocaleString()}<span class="prRateL">${PRL("rate")}</span></span>`
       +   `<span class="prChev" aria-hidden="true">${PR_CHEV}</span></button>`
       + `<div class="prBody"><div>`
+      + `<div class="prSecL prModes">${PRL("recent")}${modeTxt}</div>`
       + `<div class="prStats">`
       +   `<div class="prStat"><div class="prStatV">${PRL("wl").replace("{w}",p.w).replace("{l}",p.l)}</div><div class="prStatL">${PRL("games")}</div></div>`
       +   `<div class="prStat"><div class="prStatV">${wr}%</div><div class="prStatL">${PRL("wr")}</div></div>`
@@ -2802,7 +2834,7 @@ function renderProRank(){
 
   box.innerHTML = `<div class="prHead"><b>${PRL("head")}</b><i></i></div>`
     + `<p class="prNote">${PRL("intro")}</p>${cards}`
-    + `<div class="prFoot">${PRL("foot").replace("{d}", prEsc(D.asOf||""))}<br>${PRL("credit")}</div>`;
+    + `<div class="prFoot">${PRL("hnote")}<br><br>${PRL("foot").replace("{d}", prEsc(D.asOf||""))}<br>${PRL("credit")}</div>`;
 }
 const prEsc = t10esc;   /* 같은 스크립트 블록 — esc() 가 없어서 t10esc 를 그대로 쓴다 */
 window.rsRenderProRank = renderProRank;
@@ -3446,10 +3478,10 @@ const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 —
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-08-29",
-    ko:"📊 새 메뉴 <b>프로 랭킹</b>이 생겼어요 (공략 > 프로 랭킹) — 상위 10명의 <b>최근 25경기</b>를 경기 단위로 확인해서 <b>영웅별로 레이팅을 얼마나 얻고 잃었는지</b>, <b>누구와 같은 팀일 때 이기는지</b>, <b>프로에서만의 K/D</b>를 보여줍니다. 프로 <b>GG Qwaser</b> 님의 제안으로 만들었습니다",
-    en:"📊 New menu: <b>Pro ranking</b> (Guides > Pro ranking) — a match-by-match look at the top 10 players' <b>last 25 games</b>: <b>rating actually gained or lost per hero</b>, <b>who they win with</b>, and their <b>pro-only K/D</b>. Built from a suggestion by pro player <b>GG Qwaser</b>",
-    ja:"📊 新メニュー<b>プロランキング</b>が登場（攻略 > プロランキング）— 上位10人の<b>直近25試合</b>を試合単位で確認し、<b>ヒーローごとに実際どれだけレーティングを得て失ったか</b>、<b>誰と組むと勝つのか</b>、<b>プロ限定のK/D</b>を表示します。プロ <b>GG Qwaser</b> さんの提案で作りました",
-    zh:"📊 新選單<b>職業排行</b>上線（攻略 > 職業排行）— 將前 10 名的<b>最近 25 場</b>逐場確認，顯示<b>每個英雄實際獲得或失去多少評分</b>、<b>和誰同隊會贏</b>，以及<b>職業專用 K/D</b>。根據職業選手 <b>GG Qwaser</b> 的建議製作",
+    ko:"📊 새 메뉴 <b>프로 랭킹</b>이 생겼어요 (공략 > 프로 랭킹) — 프로 랭킹 상위 10명의 <b>최근 25경기</b>를 경기 단위로 확인해서 <b>영웅별 점수 증감</b>, <b>누구와 같은 팀일 때 이기는지</b>, <b>K/D</b>를 보여줍니다. 최근 경기에는 캐주얼이 섞여 있어 카드마다 실제 모드 구성도 함께 적었어요. 프로 <b>GG Qwaser</b> 님의 제안으로 만들었습니다",
+    en:"📊 New menu: <b>Pro ranking</b> (Guides > Pro ranking) — a match-by-match look at the <b>last 25 matches</b> of the top 10 on the pro leaderboard: <b>score gained or lost per hero</b>, <b>who they win with</b>, and <b>K/D</b>. Those recent matches include Casual games, so every card shows its actual mode breakdown. Built from a suggestion by pro player <b>GG Qwaser</b>",
+    ja:"📊 新メニュー<b>プロランキング</b>が登場（攻略 > プロランキング）— プロランキング上位10人の<b>直近25試合</b>を試合単位で確認し、<b>ヒーロー別スコア増減</b>、<b>誰と組むと勝つのか</b>、<b>K/D</b>を表示します。直近の試合にはカジュアルが混ざるため、カードごとに実際のモード構成も併記しています。プロ <b>GG Qwaser</b> さんの提案で作りました",
+    zh:"📊 新選單<b>職業排行</b>上線（攻略 > 職業排行）— 將職業排行前 10 名的<b>最近 25 場</b>逐場確認，顯示<b>各英雄分數增減</b>、<b>和誰同隊會贏</b>，以及<b>K/D</b>。最近的對戰混有休閒場，因此每張卡片都標示實際的模式組成。根據職業選手 <b>GG Qwaser</b> 的建議製作",
     fr:"📊 Nouveau menu <b>Classement pro</b> (Guides > Classement pro) — analyse match par match des <b>25 dernières parties</b> du top 10 : <b>points de classement réellement gagnés ou perdus par héros</b>, <b>avec qui ils gagnent</b>, et leur <b>K/D pro uniquement</b>",
     de:"📊 Neues Menü <b>Pro-Rangliste</b> (Guides > Pro-Rangliste) — die <b>letzten 25 Spiele</b> der Top 10 Spiel für Spiel aufgeschlüsselt: <b>tatsächlich gewonnene oder verlorene Wertung pro Held</b>, <b>mit wem sie gewinnen</b> und ihr <b>reines Pro-K/D</b>",
     es:"📊 Nuevo menú <b>Ranking pro</b> (Guías > Ranking pro) — desglose partida a partida de las <b>últimas 25 partidas</b> del top 10: <b>puntos realmente ganados o perdidos por héroe</b>, <b>con quién ganan</b> y su <b>K/D solo de pro</b>",
@@ -4699,7 +4731,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.29-c";
+const SITE_VERSION = "2026.08.30-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
