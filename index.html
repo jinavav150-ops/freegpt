@@ -1112,6 +1112,9 @@
 .prSecL{font-size:10px;color:var(--sub);margin:11px 0 5px;letter-spacing:.02em}
 /* 모드 구성 줄 — 이 카드의 숫자가 어느 모드에서 나왔는지 밝힌다(2026-08-30) */
 .prModes{margin-top:2px;color:#8d97ab}
+/* 🗓️ 시즌 전환 안내 — 지난 시즌 최종 순위를 보여주는 동안만 뜬다 */
+.rsSeasonNote{font-size:11px;line-height:1.6;color:#ffd257;background:rgba(255,176,46,.08);border:1px solid rgba(255,176,46,.35);border-radius:9px;padding:8px 11px;margin:0 0 12px}
+.rsSeasonNote b{color:#ffb02e}
 /* 영웅 행 */
 .prHero{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 0}
 .prIco{width:24px;height:24px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid #2a3347;background:#0e1320}
@@ -1133,37 +1136,6 @@
 .prMate span{color:#7fc4ff;font-weight:700;flex-shrink:0}
 .prMate.perfect span{color:#4ade80}
 .prFoot{font-size:10px;color:var(--sub);text-align:center;margin-top:12px;line-height:1.6}
-/* 🏅 프로 랭킹 TOP 10 주력 영웅 (A안 「선수 카드」 — MAMMON 확정 2026-08-29) */
-.t10head{display:flex;align-items:center;gap:8px;margin:2px 0 5px}
-.t10head b{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#fff;letter-spacing:.02em;flex-shrink:0}
-.t10head i{height:1px;flex-grow:1;background:linear-gradient(90deg,#2a3347,rgba(42,51,71,0));display:block}
-.t10note{font-size:11px;color:var(--sub);line-height:1.6;margin:0 0 11px}
-.t10card{position:relative;background:#151b2a;border-radius:12px;overflow:hidden;padding:11px 13px 11px 17px;margin-top:8px}
-.t10card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#2a3347}
-.t10card.top:before{background:linear-gradient(180deg,#ffb02e,#b87708)}
-.t10card.top{background:linear-gradient(180deg,#18202f,#151b2a)}
-.t10top{display:flex;align-items:baseline;gap:8px;min-width:0}
-.t10rank{font-family:'Black Han Sans',sans-serif;font-size:17px;font-weight:400;color:#97a2b7;flex-shrink:0;min-width:20px}
-.t10card.top .t10rank{color:#ffb02e}
-.t10name{font-size:14px;font-weight:700;color:#fff;flex-grow:1;min-width:0;word-break:break-all;line-height:1.3}
-.t10rate{font-family:'Black Han Sans',sans-serif;font-size:17px;font-weight:400;color:#ffd257;flex-shrink:0}
-.t10rateL{font-size:9.5px;color:var(--sub);margin-left:2px;font-family:'Noto Sans KR',sans-serif}
-.t10tie{font-size:9.5px;color:var(--sub);border:1px solid #2a3347;border-radius:4px;padding:1px 5px;flex-shrink:0}
-.t10rule{height:1px;background:linear-gradient(90deg,#2a3347,rgba(42,51,71,0));margin:9px 0 8px}
-.t10row{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 0}
-.t10ico{width:24px;height:24px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid #2a3347;background:#0e1320}
-.t10ico img{width:100%;height:100%;object-fit:cover;display:block}
-.t10ico.rDamage{border-color:rgba(255,93,93,.45)}
-.t10ico.rTank{border-color:rgba(93,169,255,.45)}
-.t10ico.rSupport{border-color:rgba(74,222,128,.45)}
-.t10hn{font-size:11.5px;color:#c3cbdb;width:54px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t10track{flex-grow:1;min-width:0;height:7px;border-radius:4px;background:#1a2130;overflow:hidden}
-.t10fill{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#2f6ea8,#5da9ff)}   /* 2·3순위 = 파랑 (1순위만 금색 — MAMMON 2026-08-29) */
-.t10row.lead .t10fill{background:linear-gradient(90deg,#c98d1d,#ffb02e)}
-.t10row.lead .t10hn{color:#fff;font-weight:500}
-.t10sc{font-size:11px;color:#8fb8e8;width:48px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
-.t10row.lead .t10sc{color:#ffd257;font-weight:700}
-.t10sub{font-size:10px;color:var(--sub);margin-top:7px}
 .cupAdm{margin-top:9px;padding-top:8px;border-top:1px dashed #2a3347}
 /* 팀 카드는 .rptcard 밖이라 .rptcard .rnote 의 11px 이 안 먹는다 — 관리자 줄 글씨를 직접 작게 */
 .cupAdm .rnote{font-size:11px;color:var(--sub);line-height:1.5}
@@ -1716,9 +1688,6 @@
     <div class="vstats" id="voteStats"><span>투표 집계 준비 중…</span></div>
     <div class="setupbox" style="margin-bottom:11px" data-ko="🏆 영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다. 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 득표 분포를 볼 수 있습니다.">🏆 영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다. 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 득표 분포를 볼 수 있습니다.</div>
     <div id="tierBoard" class="tierboard"></div>
-
-    <!-- 🏅 프로 랭킹 TOP 10 주력 영웅 (2026-08-29) — 커뮤니티 의견 바로 아래에 "실제 상위권 선택"을 놓아 비교되게 -->
-    <div id="top10Wrap" style="margin-top:22px"></div>
 
     <h2 style="margin-top:22px"><span data-ko="내 투표">내 투표</span> <small data-ko="영웅마다 1표 · 다시 누르면 변경">영웅마다 1표 · 다시 누르면 변경</small></h2>
     <div class="votehint" id="voteHint">🔒 연결 중… 잠시만 기다려주세요</div>
@@ -2626,82 +2595,17 @@ function renderBuildDetail(){
 function buildSelect(id){ buildSel=id; renderBuilds(); const d=document.getElementById("buildDetail"); if(d&&d.scrollIntoView) try{d.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(e){} }
 function buildToDex(id){ const n=HEROES[id]?HEROES[id].en:""; goSub("dex"); const si=document.getElementById("dexSearch"); if(si) si.value=n; if(typeof dexSearchInput==="function") dexSearchInput(n); }
 window.buildSelect=buildSelect; window.buildToDex=buildToDex;
-/* ══════ 🏅 프로 랭킹 TOP 10 — 주력 영웅 3종 (2026-08-29) ══════
-   출처: 리코스탯 수집 데이터(게임 서버 리더보드). 추출 스크립트 = 작업만하는 파일용/top10_extract.py
-   ⚠️ 점수의 정체: 영웅별 보드의 score 는 **실력 레이팅이 아니라 플레이하며 쌓이는 누적 포인트**다.
-      (검증 근거: 하루 단위 변화가 4번 중 3번 상승 · 전부 5의 배수 · 플레이시간과 상관 0.62)
-      그래서 화면에서 "레이팅"이라 부르지 않고, 막대는 **한 선수 안에서만** 비교한다
-      (6위 BANGBK24 의 레메디 64,600 은 진짜 원트릭이라 정상값이지만, 사람끼리 비교하면 다른 값이 다 뭉개진다).
-   ⚠️ 시즌: 프로 보드가 2026-08-15/16 에 리셋됐다. 현재 시즌만 쓰면 일주일치라 흔들려서
-      **현재+직전 시즌 합산**을 쓴다(이 조합이 플레이시간 순위와 가장 잘 맞았다).
-   ⚠️ 갱신: 프로 시즌은 2026-09-15 에 끝난다. 그 뒤 순위가 리셋되므로 재수집 필요. */
-const TOP10 = {
-  asOf:"2026-08-29",
-  rows:[
-  {r:1,n:"Marsーyuuu",s:2108,h:[["calibri",15825],["fury",13960],["leo",13445]]},
-  {r:2,n:"Venusーあろめん侍",s:2093,h:[["dread",23480],["sejin",18185],["vector",11040]]},
-  {r:3,n:"GG Qwaser",s:2090,h:[["oni",12940],["dread",10600],["nova",10370]]},
-  {r:4,n:"xR4y",s:2059,h:[["magnus",17745],["vector",13715],["oni",12040]]},
-  {r:5,n:"earthᅳ레오갓",s:2053,h:[["leo",15600],["oni",13725],["calibri",12605]]},
-  {r:6,n:"BANGBK24",s:2050,h:[["remedy",76955],["magnus",20005]]},
-  {r:7,n:"gg lazar",s:2042,h:[["nova",16870],["magnus",11895],["sejin",11600]]},
-  {r:8,n:"たんじろう",s:1999,h:[["leo",15485],["sejin",4550]]},
-  {r:9,n:"HrnshnGG",s:1990,h:[["oni",15725],["nova",9570],["vector",8940]]},
-  {r:10,n:"rover",s:1988,h:[["calibri",15140],["remedy",12445],["nova",8665]]}
-  ]
-};
-const T10_L = {
-  head:{ko:"프로 랭킹 TOP 10",en:"Pro ranking TOP 10",ja:"プロランキング TOP 10",zh:"職業排行 TOP 10"},
-  sub:{ko:"주력 영웅 3종",en:"Their 3 main heroes",ja:"主力ヒーロー3種",zh:"主力英雄 3 種"},
-  note:{ko:"막대는 <b>그 선수 안에서의 비중</b>이에요 — 사람끼리 비교하는 숫자가 아닙니다. 숫자는 그 영웅으로 <b>쌓은 플레이 포인트</b>(실력 점수가 아니에요).",
-        en:"Bars compare heroes <b>within one player only</b> — not between players. The numbers are <b>accumulated play points</b> on that hero, not a skill rating.",
-        ja:"バーは<b>その選手の中での比重</b>です — 選手同士を比べる数字ではありません。数値はそのヒーローで<b>積み上げたプレイポイント</b>で、実力レーティングではありません。",
-        zh:"長條是<b>該選手內部的比重</b> — 不是選手之間的比較。數字是該英雄<b>累積的遊玩點數</b>，並非實力評分。"},
-  rate:{ko:"점",en:"pts",ja:"点",zh:"分"},
-  tie:{ko:"공동",en:"tied",ja:"同率",zh:"並列"},
-  only2:{ko:"집계된 주력 영웅 2종",en:"2 main heroes on record",ja:"集計された主力ヒーロー2種",zh:"統計到的主力英雄 2 種"},
-  asOf:{ko:"{d} 기준 · 프로 시즌은 주기적으로 초기화돼요",en:"As of {d} · the pro season resets periodically",ja:"{d} 時点 · プロシーズンは定期的にリセットされます",zh:"{d} 為準 · 職業賽季會定期重置"}
-};
-const T10L = k => { const o=T10_L[k]||{}; return o[LANG]!==undefined?o[LANG]:(o.en!==undefined?o.en:o.ko); };
 /* ⚠️ 이 스크립트 블록에는 esc() 가 없다(4566줄의 esc 는 아래쪽 module 블록 소속) — 자체 이스케이프를 쓴다.
    닉네임에 사용자 입력이 들어오므로 반드시 거쳐야 한다. */
 const t10esc = x => String(x).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function renderTop10(){
-  const wrap = document.getElementById("top10Wrap"); if(!wrap) return;
-  /* 서버(Firebase top10) 값이 있으면 그걸, 없으면 코드에 내장된 마지막 값(TOP10)을 쓴다 — 오프라인·규칙 문제에도 화면은 산다 */
-  const live = window.RS_TOP10_LIVE;
-  const D = (live && live.rows && live.rows.length) ? live : TOP10;
-  const cards = D.rows.map(p => {
-    const top3 = p.r <= 3;
-    const max = Math.max.apply(null, p.h.map(x=>x[1])) || 1;
-    const tie = D.rows.some(q => q !== p && q.s === p.s);
-    const rows = p.h.map(([id,sc],i) => {
-      const H = HEROES[id] || {};
-      /* 영웅 이름은 HEROES 에 ko/en 만 있고 ja/zh 는 I18N 번역표를 탄다 — 사이트 전체와 같은 방식으로 T() 를 쓴다 */
-      const nm = (typeof T === "function") ? T(H.ko || id) : (H[LANG] || H.ko || id);
-      const pic = (typeof PIC !== "undefined" && PIC[id]) ? PIC[id] : "";
-      const role = "r" + (H.role || "Damage");
-      return `<div class="t10row${i===0?" lead":""}">`
-        + `<span class="t10ico ${role}">${pic?`<img src="${pic}" alt="" loading="lazy">`:""}</span>`
-        + `<span class="t10hn" title="${t10esc(nm)}">${t10esc(nm)}</span>`
-        + `<span class="t10track"><i class="t10fill" style="width:${Math.round(sc/max*100)}%"></i></span>`
-        + `<span class="t10sc">${sc.toLocaleString()}</span></div>`;
-    }).join("");
-    return `<div class="t10card${top3?" top":""}">`
-      + `<div class="t10top"><span class="t10rank">${p.r}</span>`
-      +   `<span class="t10name">${t10esc(p.n)}</span>`
-      +   (tie?`<span class="t10tie">${T10L("tie")}</span>`:"")
-      +   `<span class="t10rate">${p.s.toLocaleString()}<span class="t10rateL">${T10L("rate")}</span></span></div>`
-      + `<div class="t10rule"></div>${rows}`
-      + (p.h.length < 3 ? `<div class="t10sub">${T10L("only2")}</div>` : "")
-      + `</div>`;
-  }).join("");
-  wrap.innerHTML = `<div class="t10head"><b>${T10L("head")}</b><span style="font-size:11px;color:var(--sub)">${T10L("sub")}</span><i></i></div>`
-    + `<p class="t10note">${T10L("note")}</p>${cards}`
-    + `<div class="t10sub" style="text-align:center;margin-top:10px">${T10L("asOf").replace("{d}", D.asOf)}</div>`;
+/* 🗓️ 시즌 전환 공백 안내 (2026-09-02) — 수집기가 prevSeason 을 켜 보낸 경우에만 문구를 만든다.
+   9월 1일 시즌이 바뀌자 새 프로 보드에 1명뿐이라 1명짜리 TOP 10 이 떴던 일의 재발 방지. */
+const rsSeasonFmt = c => { c = String(c || ""); return c.length === 6 ? c.slice(0,4) + "-" + c.slice(4) : c; };
+function rsSeasonNote(D, tpl, cls){
+  if(!D || !D.prevSeason || !tpl) return "";
+  const txt = tpl.replace("{p}", rsSeasonFmt(D.season)).replace("{n}", rsSeasonFmt(D.newSeason)).replace("{k}", D.newSize == null ? "?" : D.newSize);
+  return `<p class="${cls}">${txt}</p>`;
 }
-window.rsRenderTop10 = renderTop10;
-
 /* ══════════════════════════════════════════════════════════════════════════════
    🏅 프로 랭킹 탭 (2026-08-29)
    랭킹 3위 GG Qwaser 가 디스코드로 요청한 세 가지를 그대로 화면으로 만든 것:
@@ -2732,6 +2636,10 @@ const PR_L = {
          zh:"名次與分數直接來自<b>職業排行榜</b>。下方記錄是各選手<b>最近 25 場</b>的逐場拆解，但伺服器不提供模式篩選，因此<b>職業與休閒是混在一起的</b> — 所以每張卡片都會標示實際的模式組成。"},
   games:{ko:"전적",en:"Record",ja:"戦績",zh:"戰績"},
   recent:{ko:"최근 25경기",en:"Last 25 matches",ja:"直近25試合",zh:"最近 25 場"},
+  prevSeason:{ko:"지금 보이는 건 <b>지난 시즌({p}) 최종 순위</b>예요 — 새 시즌({n})은 방금 시작해 프로 순위에 아직 {k}명뿐이라, 10명이 채워지면 자동으로 새 시즌으로 바뀝니다.",
+            en:"You\u2019re looking at the <b>final standings of last season ({p})</b> — the new season ({n}) just started and its pro board has only {k} player(s) so far. It switches to the new season automatically once there are 10.",
+            ja:"表示中は<b>前シーズン({p})の最終順位</b>です — 新シーズン({n})は始まったばかりでプロランキングにまだ{k}人しかいないため、10人揃うと自動で新シーズンに切り替わります。",
+            zh:"目前顯示的是<b>上一賽季（{p}）的最終排名</b> — 新賽季（{n}）剛開始，職業排行目前只有 {k} 位玩家，滿 10 人後會自動切換到新賽季。"},
   mPro:{ko:"프로",en:"Pro",ja:"プロ",zh:"職業"},
   mCas:{ko:"캐주얼",en:"Casual",ja:"カジュアル",zh:"休閒"},
   mEtc:{ko:"기타",en:"Other",ja:"その他",zh:"其他"},
@@ -2833,7 +2741,7 @@ function renderProRank(){
   }).join("");
 
   box.innerHTML = `<div class="prHead"><b>${PRL("head")}</b><i></i></div>`
-    + `<p class="prNote">${PRL("intro")}</p>${cards}`
+    + `<p class="prNote">${PRL("intro")}</p>${rsSeasonNote(D, PRL("prevSeason"), "rsSeasonNote")}${cards}`
     + `<div class="prFoot">${PRL("hnote")}<br><br>${PRL("foot").replace("{d}", prEsc(D.asOf||""))}<br>${PRL("credit")}</div>`;
 }
 const prEsc = t10esc;   /* 같은 스크립트 블록 — esc() 가 없어서 t10esc 를 그대로 쓴다 */
@@ -3487,16 +3395,6 @@ const SITE_UPDATES = [
     es:"📊 Nuevo menú <b>Ranking pro</b> (Guías > Ranking pro) — desglose partida a partida de las <b>últimas 25 partidas</b> del top 10: <b>puntos realmente ganados o perdidos por héroe</b>, <b>con quién ganan</b> y su <b>K/D solo de pro</b>",
     pt:"📊 Novo menu <b>Ranking pro</b> (Guias > Ranking pro) — análise partida a partida das <b>últimas 25 partidas</b> do top 10: <b>pontos realmente ganhos ou perdidos por herói</b>, <b>com quem vencem</b> e o <b>K/D só de pro</b>",
     ru:"📊 Новый раздел <b>Про-рейтинг</b> (Гайды > Про-рейтинг) — разбор <b>последних 25 матчей</b> топ-10 по каждой игре: <b>сколько рейтинга реально набрано или потеряно на каждом герое</b>, <b>с кем они выигрывают</b> и их <b>K/D только в про</b>" },
-  { date:"2026-08-29",
-    ko:"🏅 티어표에 <b>프로 랭킹 TOP 10의 주력 영웅</b> 코너가 생겼어요 (공략 > 티어표) — 실제 게임 랭킹 상위 10명이 어떤 영웅을 파는지 보여주고, <b>30분마다 자동 갱신</b>됩니다. 커뮤니티 투표 티어와 나란히 비교해 보세요",
-    en:"🏅 The tier list now shows the <b>main heroes of the pro-ranking TOP 10</b> (Guides > Tier list) — what the actual top 10 players grind, from real ranking data, <b>auto-refreshed every 30 minutes</b>. Compare it side by side with the community-vote tiers",
-    ja:"🏅 ティア表に<b>プロランキングTOP10の主力ヒーロー</b>コーナーが登場（攻略 > ティア表）— 実際の上位10人が何を使い込んでいるかをランキングデータで表示し、<b>30分ごとに自動更新</b>されます。コミュニティ投票ティアと見比べてみてください",
-    zh:"🏅 梯度表新增<b>職業排行 TOP 10 的主力英雄</b>專區（攻略 > 梯度表）— 以真實排行資料顯示前 10 名玩家主練的英雄，<b>每 30 分鐘自動更新</b>。可與社群投票梯度並排比較",
-    fr:"🏅 La tier list affiche désormais les <b>héros principaux du TOP 10 du classement pro</b> (Guides > Tier list) — basé sur les vraies données de classement, <b>actualisé toutes les 30 minutes</b>",
-    de:"🏅 Die Tierliste zeigt jetzt die <b>Haupthelden der TOP 10 der Pro-Rangliste</b> (Guides > Tierliste) — aus echten Ranglistendaten, <b>alle 30 Minuten automatisch aktualisiert</b>",
-    es:"🏅 La tier list ahora muestra los <b>héroes principales del TOP 10 del ranking pro</b> (Guías > Tier list) — con datos reales de clasificación, <b>actualizado cada 30 minutos</b>",
-    pt:"🏅 A tier list agora mostra os <b>heróis principais do TOP 10 do ranking pro</b> (Guias > Tier list) — com dados reais de ranking, <b>atualizado a cada 30 minutos</b>",
-    ru:"🏅 В тир-листе появился раздел с <b>основными героями TOP 10 про-рейтинга</b> (Гайды > Тир-лист) — по реальным данным рейтинга, <b>автообновление каждые 30 минут</b>" },
   { date:"2026-08-27",
     ko:"🎮 게임 <b>2.2.0</b>을 반영했어요 — 이 공지 위의 패치 소식에서 <b>영웅별 밸런스 변화를 수치까지</b> 바로 볼 수 있습니다 (레메디·노바·오니 약화 / 칼리브리·트윙클 강화). VIP 보상은 자동 지급이 아니니 VIP 화면에서 직접 받으세요",
     en:"🎮 Game <b>2.2.0</b> is reflected — the patch news above now shows <b>per-hero balance changes with exact numbers</b> (Remedy/Nova/Oni down, Calibri/Twinkle up). Note: VIP rewards are not automatic — claim them on the VIP screen",
@@ -4642,7 +4540,6 @@ function setLang(l){
   langMenuRender();
   applyStatic();
   renderGrid(); renderRecs(); renderDex(); renderEdit(); renderInfo();
-  if(window.rsRenderTop10) window.rsRenderTop10();   // 🏅 프로 TOP 10 (영웅 이름·문구가 언어를 탄다)
   if(window.rsRenderProRank) window.rsRenderProRank();   // 🏅 프로 랭킹 심층 지표 (위와 같은 이유)
   document.dispatchEvent(new Event("rs-lang-changed"));
 }
@@ -4731,7 +4628,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.08.30-a";
+const SITE_VERSION = "2026.09.02-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7053,13 +6950,6 @@ document.addEventListener("click", async e => {
 });
 
 /* ── Firebase 구독 (규칙 미게시면 조용히 빈 값 — 다른 기능은 정상) ── */
-/* 🏅 프로 TOP 10 — 리코스탯 top10_live.py 가 30분마다 갱신(규칙 v32). 값이 오면 화면의 내장 데이터 대신 이걸 쓴다. */
-FB.onValue(FB.ref(FB.db, "top10"), snap => {
-  const v = snap.val();
-  window.RS_TOP10_LIVE = (v && v.rows && v.rows.length) ? v : null;
-  if(window.rsRenderTop10) window.rsRenderTop10();
-}, () => { window.RS_TOP10_LIVE = null; });
-
 /* 🏅 프로 랭킹 심층 지표 — 리코스탯 top10_deep.py 가 올린다(규칙 v34, 읽기 공개) */
 FB.onValue(FB.ref(FB.db, "top10deep"), snap => {
   const v = snap.val();
@@ -8300,7 +8190,6 @@ window.commView = v => {
   const el = document.getElementById("commv-" + v);
   if(el) el.style.display = "";
   if(v === "chat") chatToBottom();   // 숨김 시 리셋된 스크롤 복원
-  if(v === "tier" && window.rsRenderTop10) window.rsRenderTop10();   // 🏅 프로 TOP 10 주력 영웅
   if(v === "fb") renderMyFb(true);   // 내 피드백 + 운영자 답장 (열람 = 새 답장 확인 처리)
   document.querySelectorAll("#commTabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
 };
