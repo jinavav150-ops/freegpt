@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Ricochet Squad Community Voice</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,500;100,700;110,800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--ground:#F1F2EF;--surface:#FFFFFF;--ink:#1B2028;--muted:#5C6572;--hair:#D8DBD4;--accent:#B8791A;--accent-ink:#8F5C0F;--bar:#2F6EA8;--bar-soft:#DCE8F3;--quote-rule:#C9CED6;--jp:#1F7A6D;--jp-soft:#DDEFEA;--redact:#EFE4CC}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#0E1320;--surface:#151B2A;--ink:#E8ECF2;--muted:#97A2B7;--hair:#2A3347;--accent:#FFB02E;--accent-ink:#FFC65C;--bar:#5DA9FF;--bar-soft:#1C2A40;--quote-rule:#2F3A50;--jp:#5FD1BE;--jp-soft:#123A35;--redact:#3A3120}}
+:root[data-theme="dark"]{--ground:#0E1320;--surface:#151B2A;--ink:#E8ECF2;--muted:#97A2B7;--hair:#2A3347;--accent:#FFB02E;--accent-ink:#FFC65C;--bar:#5DA9FF;--bar-soft:#1C2A40;--quote-rule:#2F3A50;--jp:#5FD1BE;--jp-soft:#123A35;--redact:#3A3120}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Hiragino Sans","Noto Sans KR",system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+h1,h2,.disp{font-family:Archivo,"IBM Plex Sans KR",system-ui,sans-serif;font-stretch:110%;text-wrap:balance}
+h1{font-size:30px;font-weight:800;letter-spacing:-.01em;line-height:1.15;margin:0 0 6px}
+h2{font-size:13px;font-weight:700;font-stretch:100%;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin:56px 0 18px;padding-top:18px;border-top:1px solid var(--hair)}
+.meta{color:var(--muted);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;letter-spacing:.02em}
+.lede{margin:22px 0 0;max-width:62ch;color:var(--ink)}
+.lede p{margin:0 0 10px}
+.note{color:var(--muted);font-size:13.5px;max-width:62ch}
+/* 빈도 막대 — 단일 계열, 값은 텍스트 토큰으로 */
+.freq{display:grid;grid-template-columns:2ch 1fr;column-gap:14px;row-gap:9px;align-items:center;font-variant-numeric:tabular-nums}
+.freq .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:14px;font-weight:500;text-align:right;color:var(--ink)}
+.freq .row{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.freq .lab{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.3}
+.freq .lab b{font-weight:600}
+.freq .lab span{color:var(--muted);font-size:13px;text-align:right}
+@media (max-width:560px){.freq .lab{flex-direction:column;gap:1px}.freq .lab span{text-align:left;font-size:12px}}
+.freq .track{height:8px;background:var(--bar-soft);border-radius:4px;overflow:hidden}
+.freq .fill{height:100%;background:var(--bar);border-radius:4px}
+.singles{margin:22px 0 0;padding:0;list-style:none;columns:2;column-gap:28px;font-size:13.5px;color:var(--muted)}
+.singles li{break-inside:avoid;padding:3px 0;display:flex;justify-content:space-between;gap:10px}
+.singles li b{color:var(--ink);font-weight:500}
+@media (max-width:560px){.singles{columns:1}}
+.jp-note{margin-top:18px;display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);max-width:62ch}
+.jp-dot{flex:none;margin-top:7px;width:8px;height:8px;border-radius:50%;background:var(--jp)}
+/* 인용 — 유저의 말 */
+blockquote{margin:0;padding:2px 0 2px 16px;border-left:3px solid var(--quote-rule);white-space:pre-wrap;word-break:break-word;font-size:14.5px;line-height:1.7}
+.pull{display:grid;gap:22px;margin-top:6px}
+.pull .who{font-family:Archivo,system-ui,sans-serif;font-weight:700;font-size:14px;margin:0 0 6px}
+.pull .who small{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:400;color:var(--muted);font-size:12px;margin-left:8px}
+.pull blockquote{border-left-color:var(--accent);background:var(--surface);padding:12px 16px;border-radius:0 6px 6px 0}
+/* 사람별 */
+details.person{border-top:1px solid var(--hair);padding:18px 0 6px}
+details.person:last-of-type{border-bottom:1px solid var(--hair)}
+summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+summary::-webkit-details-marker{display:none}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+.name{font-family:Archivo,"IBM Plex Sans KR",system-ui,sans-serif;font-stretch:110%;font-weight:800;font-size:19px;letter-spacing:-.01em;line-height:1.2}
+.name .jp{display:inline-block;vertical-align:2px;margin-left:8px;padding:1px 7px;border-radius:999px;font:600 10.5px/1.6 "IBM Plex Mono",monospace;letter-spacing:.06em;background:var(--jp-soft);color:var(--jp)}
+.who2{color:var(--muted);font-size:13px;margin-top:3px}
+.tags{margin-top:6px;font-size:12.5px;color:var(--accent-ink);font-weight:500}
+.tags i{font-style:normal;color:var(--hair);margin:0 6px}
+.chev{width:22px;height:22px;flex:none;color:var(--muted);transition:transform .2s;margin-top:4px}
+details[open] .chev{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+.entry{margin:16px 0 14px}
+.when{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:0 0 8px 19px}
+.redact{background:var(--redact);color:var(--muted);padding:0 6px;border-radius:3px;font-size:13px}
+.tools{display:flex;gap:14px;margin:0 0 14px;font-size:13px}
+.tools button{background:none;border:1px solid var(--hair);color:var(--muted);font:inherit;padding:5px 12px;border-radius:999px;cursor:pointer}
+.tools button:hover{color:var(--ink);border-color:var(--muted)}
+.tools button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+footer{margin-top:64px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--hair);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>What Korean and Japanese players told me</h1>
+<div class="meta">Ricochet Squad · community feedback · September 2–5, 2026 · 13 players</div>
+<div class="lede">
+<p>You asked why Korean players are leaving. I put the question you suggested to five Korean KakaoTalk chats and the Japanese Discord. Thirteen players answered.</p>
+<p class="note">Everything quoted here is <b>verbatim, in the original language</b> — not edited, not softened. The one exception is 포메라니안: his points came out of a conversation with me rather than a written submission, so I condensed that conversation into a list. It is marked where it appears.</p>
+</div>
+
+<h2>What came up most</h2>
+<div class="freq">
+<div class="n">6</div><div class="row"><div class="lab"><b>Bot matching / matchmaking</b><span>봇 매칭</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+<div class="n">5</div><div class="row"><div class="lab"><b>Updates too slow, content goes stale</b><span>업데이트 느림·콘텐츠 부족</span></div><div class="track"><div class="fill" style="width:83%"></div></div></div>
+<div class="n">5</div><div class="row"><div class="lab"><b>New players can&#x27;t get in (cost, level gap)</b><span>신규 유저 진입장벽</span></div><div class="track"><div class="fill" style="width:83%"></div></div></div>
+<div class="n">4</div><div class="row"><div class="lab"><b>Nowhere to spend currency</b><span>재화 쓸 데가 없음</span></div><div class="track"><div class="fill" style="width:67%"></div></div></div>
+<div class="n">4</div><div class="row"><div class="lab"><b>Balance</b><span>밸런스</span></div><div class="track"><div class="fill" style="width:67%"></div></div></div>
+<div class="n">3</div><div class="row"><div class="lab"><b>Block / avoid / report players</b><span>차단·신고</span></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+<div class="n">3</div><div class="row"><div class="lab"><b>Lag and server instability</b><span>렉·서버</span></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+<div class="n">3</div><div class="row"><div class="lab"><b>How the studio communicates</b><span>운영 소통</span></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+<div class="n">2</div><div class="row"><div class="lab"><b>Marketing / getting new players in</b><span>마케팅</span></div><div class="track"><div class="fill" style="width:33%"></div></div></div>
+<div class="n">2</div><div class="row"><div class="lab"><b>Guild / clan system</b><span>길드·클랜</span></div><div class="track"><div class="fill" style="width:33%"></div></div></div>
+<div class="n">2</div><div class="row"><div class="lab"><b>Training mode options</b><span>훈련 모드</span></div><div class="track"><div class="fill" style="width:33%"></div></div></div>
+<div class="n">2</div><div class="row"><div class="lab"><b>1v1 / 2v2 / duo modes</b><span>1대1·2대2 모드</span></div><div class="track"><div class="fill" style="width:33%"></div></div></div>
+</div>
+<ul class="singles">
+<li><b>Hero select in Casual</b><span>윈터</span></li>
+<li><b>Solo queue separated from 2- and 3-stacks</b><span>스팅어</span></li>
+<li><b>Server-wide in-game chat</b><span>꼬꼬꼬</span></li>
+<li><b>Live spectating and whispers</b><span>셰퍼드</span></li>
+<li><b>Region-split leaderboards</b><span>정근영</span></li>
+<li><b>Pro-only ban/pick and season rewards</b><span>정근영</span></li>
+<li><b>Vector rework</b><span>꼬꼬꼬</span></li>
+<li><b>Balance decided on Europe&#x27;s feedback only</b><span>윈터</span></li>
+<li><b>Wind map optimization</b><span>정근영</span></li>
+</ul>
+<h2>The answer to your question</h2>
+<p class="note" style="margin:0 0 18px">Two players who have never met, in different chats, said the same thing: they are still here for the people, not for the game.</p>
+<div class="pull">
+<div><p class="who">포메라니안 <small>leads a team · Sep 2</small></p><blockquote>에이 제가 이렇게 얘기해봐야 뭐가 되겠습니까
+그냥 친한 사람들과 게임하는 재미로 버티는거죠</blockquote></div>
+<div><p class="who">스팅어 <small>Sep 3</small></p><blockquote>전 그냥 여기에 있는 분들이랑 &lt;정&gt;때문에 이겜 아직 제 핸드폰에 있는거에요. 겜 자체는 이젠 실망할만큼 해가지구요...솔직히 접속하면 누구있지.? 누구랑 겜해야하지.? 지금 인원 실력에 어떤팀은 피해야지.? 이런것도 질리고 역겹구요</blockquote></div>
+<div><p class="who">임태산 <small>Sep 3 · one point, said three ways</small></p><blockquote>1번 사람이없다. 컴퓨터랑 뜨려고 대전게임하는거 아니다.
+2번 업데이트가 너무너무너무 느려서 재미붙인 사람마저 나가서 사람이없다.
+3번 재화가 너무비싸서 뉴비가 게임에흥미를 못붙여서 접어서 사람이없다.
+결론 사람이없다.
+업데이트 팍팍 매주 하나씩해야지 
+광고 팡팡 해서 사람좀 데리고와라</blockquote></div>
+</div>
+<p class="note" style="margin-top:22px">The players who answered are the ones still attached enough to answer. The ones who already left wrote nothing. On September 2nd a long-time player said goodbye in the main chat — no complaint; he thanked everyone and said he barely plays anymore. That is what leaving looks like here.</p>
+<h2>Every response, in full</h2>
+<div class="tools"><button type="button" onclick="document.querySelectorAll('details.person').forEach(d=>d.open=true)">Expand all</button><button type="button" onclick="document.querySelectorAll('details.person').forEach(d=>d.open=false)">Collapse all</button></div>
+<details class="person" open><summary><div><div class="name">윈터</div><div class="who2">Korean · main chat · Green team</div><div class="tags">봇 매칭<i>·</i>재화 쓸 데가 없음<i>·</i>밸런스<i>·</i>차단·신고<i>·</i>렉·서버</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-02 16:14</div><blockquote>1. 캐주얼 모드에서도 예전 처럼(현 프로처럼) 챔프 선정, 변경 가능하게
+ - 프로모드 연습차원에서 다양한 챔프 활용 하여 상대에 대응 할 수 있게 개선
+
+2. 프로모드의 경우 봇 매칭 시스템 개선
+ - 어차피 프로 점수별 매칭 시킬거면, 봇 차이 심각하지 않은 수준에서 랜덤 매칭되게 개선
+
+3. 특정 인원 친추 차단 또는 친추 받지않게 시스템 설정
+<span class="redact">[a specific player&#x27;s name — removed by MAMMON]</span>
+
+4. 고의 트롤러 떰즈다운 시스템
+ - 위클리 게임 정지(운영진 사후 관리해야해서 안하겠지만)</blockquote></div>
+<div class="entry"><div class="when">2026-09-03 20:53</div><blockquote>1. 요즘 서버 불안정 
+ - 딜 넣다가 삑사리난개 한두번이 아님
+
+2. 유럽서버 한정 챔프 버프/너프
+- 아시아에서 너프 각인 챔프인데 유럽 말만듣고 버프 해주는 사태 (칼리브리 등)
+- 아시아에서 버프 각인 챔프인데 유럽 말만듣고 너프 해주는 사태(노바 등)
+
+3. 돈만 챙기려는 심산
+- 다이아 쓰지도 못하고 있는데 계속 다이아 사는 정책만 있음</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">RANNY</div><div class="who2">Korean · main chat</div><div class="tags">봇 매칭<i>·</i>차단·신고<i>·</i>훈련 모드</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-02 16:30</div><blockquote>1. 특정 유저 밴 시스템 필요. 너무 넘사벽이거나 비매너거나 트롤러거나 등등 매칭 원하지 않게 부탁합니다
+
+2. 봇을 선택할 수 있으면 좋겠습니다. 내 케릭에 궁합이 맞는 봇으로 선택해서 경기하면 더 재미 있을거 같습니다.
+
+3.훈련소에서도 2:1 / 3:1  선택 가능했으면 합니다. 또 봇의 티어도 선택 가능했으면 합니다.</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">스팅어</div><div class="who2">Korean · main chat</div><div class="tags">봇 매칭</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-03 21:27</div><blockquote>혼자인 사람들 겜하기 편한 환경은 솔랭모드 밖에서 없어요. 2인큐는 2인큐끼리 3인은 3인끼리 매칭하게끔 10분이든 20분이든 1시간이든 매칭 안되면 자기네들 알아서 솔랭 오겠죠.</blockquote></div>
+<div class="entry"><div class="when">2026-09-03 21:43</div><blockquote>전 그냥 여기에 있는 분들이랑 &lt;정&gt;때문에 이겜 아직 제 핸드폰에 있는거에요. 겜 자체는 이젠 실망할만큼 해가지구요...솔직히 접속하면 누구있지.? 누구랑 겜해야하지.? 지금 인원 실력에 어떤팀은 피해야지.? 이런것도 질리고 역겹구요</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">꼬꼬꼬</div><div class="who2">Korean · Yellow team</div><div class="tags">봇 매칭<i>·</i>업데이트 느림·콘텐츠 부족<i>·</i>신규 유저 진입장벽<i>·</i>밸런스</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-03 22:22</div><blockquote>운영자님 바보세요?
+(운영자)본인 휴식시간 , 휴일에 Ricochet squad를 직접 플레이 해보세요. 아니, 시간 날때마다 플레이하세요.
+이 게임이 하기 싫어질때 까지 해보세요.
+그럼 문제점이 눈에 띄겠죠?
+
+1. 멍청한 봇.. 개선이 전혀 안됨(솔로매칭 이면 봇챔프 내가 선택 하고싶다)
+2. 이후 유입된 신규유저의 레벨업 재화비용(너무 비쌈)
+그만큼 오래 걸리는데 높은 레벨의 유저와 매칭
+3. 최고의 문제점 느린 업데이트 
+인게임 서버 전체채팅 창이 생겼으면 좋겠음</blockquote></div>
+<div class="entry"><div class="when">2026-09-04 15:56</div><blockquote>벡터 리메이크 :
+
+• 워프 쿨타임 감소 요청
+= 오니와 레오의 이동기 쿨타임 과 동일하게 변경
++ 워프 2충전 추가 (오니, 레오 를 봐도 이동기 최소 2충전 인데 벡터는.. ? )
+
+• 궁극기 개선
+- 퓨리, 세진, 드레드 만 봐도 궁극기 취소 버튼이 있는데 벡터는?
+- 또는 리메이크 :
+궁극기 사용중 권총 사용허가
+거리비례 권총과 공명으로 공격
+&amp; 궁극기 사용중 이동속도 최대치로 변경
+(예: 스피드 드롭상자 의 버프 속도 와 똑같게 변경)
+마지막으로 명중시 체력회복 특전 회복량 대폭증가 변경
+
+☆제발 직접 실제 유저와 플레이 해봐라tlgkf</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">임태산</div><div class="who2">Korean · Yellow team</div><div class="tags">봇 매칭<i>·</i>업데이트 느림·콘텐츠 부족<i>·</i>신규 유저 진입장벽<i>·</i>마케팅</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-03 22:37</div><blockquote>1번 사람이없다. 컴퓨터랑 뜨려고 대전게임하는거 아니다.
+2번 업데이트가 너무너무너무 느려서 재미붙인 사람마저 나가서 사람이없다.
+3번 재화가 너무비싸서 뉴비가 게임에흥미를 못붙여서 접어서 사람이없다.
+결론 사람이없다.
+업데이트 팍팍 매주 하나씩해야지 
+광고 팡팡 해서 사람좀 데리고와라</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">정근영</div><div class="who2">Korean · Yellow team</div><div class="tags">봇 매칭<i>·</i>업데이트 느림·콘텐츠 부족<i>·</i>신규 유저 진입장벽<i>·</i>재화 쓸 데가 없음<i>·</i>렉·서버<i>·</i>운영 소통</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-04 00:33</div><blockquote>1. 순위표 및 보상 개편
+
+서버/지역별 순위표 분리 또는 글로벌 매칭 도입
+
+실제 인터랙션이 없는 타 국가 유저가 순위표에 섞여 나오는 현상을 막기 위해 글로벌 통합 서버 매칭을 지원하거나, 매칭이 불가능한 구조라면 순위표를 지역별로 분리하여 직관성을 높입니다.
+
+성장 단계별 맞춤형 보상 체계 구축
+
+신규/복귀 유저: 초반 정착 및 성장에 필요한 핵심 재화/재료 지급
+
+숙련/상위 유저: 고유 칭호, 전용 코스튬, 프로필 테두리, 하이엔드 강화 재화 등 희소성 높은 명예성 보상 배치로 도전 욕구 자극
+
+2. 밸런스 및 모드(프로 vs 캐주얼) 차별화
+
+AI 봇 및 레벨링 매칭 알고리즘 개선
+
+단순 레벨 기반이 아닌 MMR(실력 기반 점수)을 적용하여 초보가 고수나 고성능 AI를 만나 일방적으로 패배하는 불쾌감 완화
+
+프로 모드만의 독자적 경쟁 요소 추가
+
+규칙 차별화: 밴/픽(Ban-Pick) 시스템 도입, 맵/아이템 제약, 랭크 승급전/단위전 구축
+
+전용 보상: 캐주얼 모드에서는 얻을 수 없는 프로 모드 전용 시즌 리워드(시즌 한정 스킨, 랭크 로딩창 등) 제공으로 플레이 동기 부여
+
+3. 네트워크 안정화 및 특정 맵 최적화
+
+서버 인프라 및 핑(Ping) 품질 개선
+
+&#x27;바람맵&#x27; 리소스 및 연산 최적화
+
+바람 이펙트, 물리 연산, 파티클 효과가 과도하게 발생하여 렉을 유발할 가능성이 높으므로, 해당 맵의 물리 연산 단순화 및 클라이언트 최적화 패치 진행 
+
+
+4. 업데이트 프로세스 및 소통 개선
+
+운영진에 과장된 표현을 지양하고, 실제 패치될 분량과 구체적인 내용을 담은 수기형 개발자 노트 위주로 소통 방식 전환
+
+연간/분기별 공식 개발 로드맵을 공개하여 유저들의 막연한 기다림 완화
+
+콘텐츠 공급 주기 최적화
+
+대규모 업데이트 사이의 공백기를 메울 수 있는 주기적 미니 이벤트 및 랭킹 로테이션 시스템 도입
+
+반복적 노동 플레이를 줄이고 신선함을 줄 수 있는 기간 한정 이벤트 모드 제공
+
+5. 재화 소진처 및 디자인 퀄리티 개선
+
+쌓이는 재화를 소진할 수 있는 재화 교환소, 일일 랜덤 상점, 프로필/임팩트 꾸미기 요소 구매 창구 신설
+
+보유 재화량에 따라 소모할 수 있는 소모성 버프 아이템이나 컬렉션 완성 요소 추가
+
+캐릭터 스킨,무기 외형 개선
+
+캐릭터 외형 및 무기 스킨의 디테일(질감, 이펙트, 모션) 개선</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">포메라니안</div><div class="who2">Korean · leads the Pomeranian team · direct message</div><div class="tags">업데이트 느림·콘텐츠 부족<i>·</i>운영 소통<i>·</i>마케팅<i>·</i>1대1·2대2 모드</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-02 · condensed from a conversation, not verbatim</div><blockquote>1. 다른 게임들에 비해 업데이트가 매우 늦다. 업데이트 하나로 정해진 메타가 다음 업데이트까지 2~3개월 그대로 가니 뻔하고 지루하다.
+2. 신캐릭터·신맵·신스킨이 더 자주 나와야 한다. 새 캐릭도 임팩트가 없고, 드레드는 나오는 게 손에 꼽는다.
+3. 신스킨이 VIP 스킨뿐이라 말 그대로 현질하란 느낌이고, 더 사라는 느낌으로 극한 버프까지 붙는다.
+4. 제일 중요한 건 인플루언서 섭외다. 빠져나가는 유저는 어쩔 수 없고, 각국 게임 BJ에게 광고를 의뢰해 신규 유저가 들어오게 해야 한다. 한국 크리에이터는 있지도 않았다. 게임이 맘에 들어 하는 신생 크리에이터에게 맡길 게 아니라, 돈 주고 제대로 고용해서 홍보해야 한다.</blockquote></div><div class="entry"><div class="when">2026-09-05 18:23</div><blockquote>1ㄷ1 2ㄷ2 모드도 만들어주면 좋겠습니다!!</blockquote></div></details>
+<details class="person" open><summary><div><div class="name">あろめーん<span class="jp">JP</span></div><div class="who2">Japanese · the strongest player on the Asia server · Discord</div><div class="tags">업데이트 느림·콘텐츠 부족<i>·</i>재화 쓸 데가 없음<i>·</i>밸런스<i>·</i>차단·신고</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-03 21:59</div><blockquote>・既に出ているものへの賛同
+ブロック機能
+アップデートが遅くマンネリ化
+VIPの値段が高い。途中にパークボックスとかコインとかわざわざVIPに入れる必要がなく、古参プレイヤーは課金したところでジェムの使いどころがない
+
+・新しい意見
+現環境、オニが弱くなりすぎたせいでフュリー&amp;レメディを止めれるキャラクターがいなくて、キャラクターが固定化されてる。例（フュリー&amp;レメディ＋カリブリorレオ）
+タンクゴリ押しの環境はプレイヤーに悪影響をもらたす。</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">고려 광개토 그랜저</div><div class="who2">Korean · main chat · Subakba alliance</div><div class="tags">신규 유저 진입장벽<i>·</i>훈련 모드</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-02 16:47</div><blockquote>게임을 새로 접하는 뉴비분들이 느껴보고 차이를 확실히 알수있게 훈련장이나 훈련모드 이런곳에서는 원하는 영웅의 만렙+특전을 모두 사용해볼수있도록 하게해주면 좋을것같아요. 
+처음 만렙 올특전만나면 그냥 뚝배기 깨지면서 흥미가 싹 사라질것같네요. 직접 느껴보면서 뭐부터 키울지 특전은 뭐가 좋을지 알게될것같아요</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">민돌</div><div class="who2">Korean · main chat</div><div class="tags">신규 유저 진입장벽<i>·</i>운영 소통</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-02 20:11</div><blockquote>1. 업데이트마다 오류가 생기는 일이 너무 빈번합니다. 업데이트에 대한 결과가 기대보다 못한 내용과 예고하지 않는 시스템 업데이트는 유저의 불만을 만들어 낼 수 있습니다. 
+
+2. 유저 건의에 대한 피드백이 너무 늦거나 반응이 없습니다. 
+
+3. 게임 복귀 유저에 대한 혜택이나 신규유저의 혜택이 있다면 좋겠습니다. 
+
+4. 운영사의 미흡한 체계가 유저의 눈에 보인다는 것은 좋은 신호가 아닙니다. 
+마케팅, 기획 등과 같은 운영사의 업무를 유저에게 의존하는 경향이 많이 보입니다. 
+
+다른 분들이 게임 콘텐츠 관련해서 이야기를 하셨길래 다르게 접근해봤습니다 :)</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">MAGNUS.굳</div><div class="who2">Korean · main chat</div><div class="tags">재화 쓸 데가 없음<i>·</i>밸런스<i>·</i>길드·클랜<i>·</i>1대1·2대2 모드</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-02 18:24</div><blockquote>1.망누스 스킬 쿨타임 1초씩 줄이고싶습니다.
+
+2.재거 공변신시 체력이 너무 약해요 차라리 변경전 상태의 재거가 나았던거 같음
+
+3.퓨리와 망누 드래 재거 4명이 탱커인데 
+
+퓨리만큼 나머지 탱커들도 버티는 능력이 좋아지든 체력이늘던 했음 좋겠습니다.
+
+4.현금 결제는 많지만 vip구매후 보석 1만6천개 처리 불가입니다 꾸준한 전설스킨을 원합니다
+
+5.듀오 모드 또는 1vs1솔로모드 출시를 원합니다 
+
+6.클랜시스템. 누구든지 보석 또는 현금이 있으면 클랜생성가능 (클랜을 위한 퀘스트 도입 등 클랜업적  꾸미기등)</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">갓마몽바라기</div><div class="who2">Korean · Subakba alliance</div><div class="tags">렉·서버</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-03 06:21</div><blockquote>채팅렉 잡아주시면 좋을것 같구요
+게임 자체렉이 자주 심해서 이것도 해결해주시면 좋을것 같습니다! 실력으로 지는게 아니고 렉때문에 지면 더 의욕이 사라지는것 같아요!</blockquote></div>
+</details>
+<details class="person" open><summary><div><div class="name">셰퍼드</div><div class="who2">Korean · Pomeranian team · relayed by their team leader</div><div class="tags">길드·클랜</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+<div class="entry"><div class="when">2026-09-03 23:17</div><blockquote>셰퍼드
+
+게임 자체 내에서 길드 시스템이 있으면 좋겠고, 길드 대전이 따로 있으면 좋을꺼같아요. 그리고 가능하다면 실시간 관전기능이 있길바라며, 귓속말 시스템도 해주기면 좋을꺼같습니다. 유틸리티 부분도 신경쓸 수 있으면 좋을꺼 같습니다.</blockquote></div>
+</details>
+<footer>Collected and compiled by MAMMON · ricosquad.netlify.app · Names are the nicknames players posted under. One line naming a specific player was removed and is marked where it was.</footer>
+</div>
+</body>
+</html>
