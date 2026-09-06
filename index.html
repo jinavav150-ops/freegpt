@@ -4651,7 +4651,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.09.02-c";
+const SITE_VERSION = "2026.09.06-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6135,7 +6135,19 @@ const CUP_R = {
   r_reg4:{ko:"예비 선수는 경기 중에는 못 바꾸고, 한 경기가 끝난 뒤에 바꿀 수 있어요.",en:"Subs cannot come in mid-game — swaps happen after a game ends.",ja:"補欠は試合の途中では交代できず、1試合が終わった後に交代できます。",zh:"替補不能在比賽中途上場，須等一場結束後才能更換。"},
   r_set:{ko:"경기 설정",en:"Match setup",ja:"試合設定",zh:"比賽設定"},
   r_set1:{ko:"게임 안 토너먼트 모드로 진행해요.",en:"Matches run in the in-game tournament mode.",ja:"ゲーム内のトーナメントモードで進行します。",zh:"使用遊戲內的錦標賽模式進行。"},
-  r_set2:{ko:"맵 랜덤 · 봇 없음. 한 팀이 방을 만들어 상대 팀 선수 1명을 초대하는 방식이에요. (어느 팀이 방을 만들지는 대진표와 함께 안내)",en:"Random map, no bots. One team hosts the room and invites a player from the other team (who hosts will be announced with the bracket).",ja:"マップはランダム・ボットなし。片方のチームが部屋を作り、相手の1人を招待する方式です。（どちらが作るかは対戦表と一緒に案内）",zh:"地圖隨機・無機器人。由一隊開房並邀請對方1名玩家（由哪隊開房將隨賽程表公布）。"},
+  r_set2:{ko:"맵 랜덤 · 수정자 1개 · 봇 없음.",en:"Random map, one modifier, no bots.",ja:"マップはランダム・修正者1つ・ボットなし。",zh:"地圖隨機・修正者1個・無機器人。"},
+  /* 🎮 게임 모드 규정 (2026-09-06) — 아시아 서버 최상위 선수 あろめーん 의 제안을 받아 확정.
+     점멸: 구역이 좁아 그 안에 설 수 있는 영웅이 퓨리뿐 → 픽이 고정된다.
+     강타: 스폰 타이밍이라는 운이 승패를 가르는 경우가 있다.
+     둘 중 무엇을 쓸지·누가 방을 만들지는 대진표와 함께 안내(크리에이터 관전 방 운영 가능성이 있어 아직 미확정). */
+  r_set2b:{ko:"게임 모드는 <b>사수 · 사냥 · 장악</b> 중에서 나와요. <b>점멸과 강타는 쓰지 않습니다.</b> (점멸은 구역이 좁아 퓨리가 사실상 필수가 되고, 강타는 스폰 타이밍이 승패를 가르는 경우가 있어서예요 — 최상위권 선수들의 의견을 반영했어요.)",
+           en:"Game modes are <b>Secure, Hunt or Control</b>. <b>Flash and Strike are not used</b> — Flash's tight zone makes Fury effectively mandatory, and Strike can be decided by spawn timing. This follows advice from top-ranked players.",
+           ja:"ゲームモードは<b>セキュア・ハント・コントロール</b>から出ます。<b>フラッシュとストライクは使いません</b>（フラッシュはエリアが狭くフュリーが実質必須になり、ストライクはスポーン時間で勝敗が決まることがあるため — トップ選手の意見を反映しました）。",
+           zh:"遊戲模式為<b>沙守・獵殺・控制</b>其中之一。<b>不使用閃現與強擊</b>（閃現區域狹小使芙莉幾乎成為必選，強擊則可能因重生時間決定勝負 — 採納頂尖選手的意見）。"},
+  r_set2c:{ko:"셋 중 무엇으로 할지, 어느 쪽이 방을 만들지는 <b>대진표와 함께 안내</b>할게요.",
+           en:"Which of the three, and who hosts the room, will be announced with the bracket.",
+           ja:"3つのうちどれにするか、どちらが部屋を作るかは<b>対戦表と一緒に案内</b>します。",
+           zh:"採用哪一種、由哪一方開房，將<b>隨賽程表一併公布</b>。"},
   r_set3:{ko:"경기가 끝나면 방장이 매치 코드를 운영자에게 보고해요 — 보고 없는 경기는 인정되지 않아요.",en:"After each match the host reports the match code to the organiser — unreported matches don't count.",ja:"試合後、ホストはマッチコードを運営に報告 — 未報告の試合は無効です。",zh:"每場結束後房主須向管理員回報比賽代碼 — 未回報的比賽不計成績。"},
   r_time:{ko:"출석 · 시간",en:"Attendance & timing",ja:"出席・時間",zh:"出席・時間"},
   r_time1:{ko:"집합 시각에서 15분이 지나도 3명이 안 모이면 몰수패예요. 대회 중에도 자기 경기 시작에 5분 넘게 늦으면 몰수패가 될 수 있어요.",en:"15 minutes after call time with fewer than 3 players = forfeit. During the day, being 5+ minutes late for your own match can also count as a forfeit.",ja:"集合時刻から15分過ぎて3人未満なら没収負け。大会中も自分の試合開始に5分以上遅れると没収負けになることがあります。",zh:"集合後15分鐘未滿3人即判負。當天若自己的比賽開始超過5分鐘未到，也可能被判負。"},
@@ -6579,7 +6591,7 @@ function renderTrRules(){
       +   `</div>`
       + `</div>`)
     + sec('<circle cx="9" cy="8" r="3.5"></circle><path d="M3.5 20c.5-3.5 2.7-5.5 5.5-5.5S14 16.5 14.5 20"></path><path d="M16 8h5M18.5 5.5v5"></path>', CUPR("r_reg"), li(["r_reg1","r_reg2","r_reg3","r_reg4"]))
-    + sec('<path d="M8 5h8v4a4 4 0 0 1-8 0z"></path><path d="M12 12v3M9 20h6M10 17h4v3h-4z"></path>', CUPR("r_set"), li(["r_set1","r_set2","r_set3"]))
+    + sec('<path d="M8 5h8v4a4 4 0 0 1-8 0z"></path><path d="M12 12v3M9 20h6M10 17h4v3h-4z"></path>', CUPR("r_set"), li(["r_set1","r_set2","r_set2b","r_set2c","r_set3"]))
     + sec('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path>', CUPR("r_time"), li(["r_time1","r_time2","r_time3"]))
     + sec('<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path>', CUPR("r_dq"),
         `<div class="cupRuleTx">${CUPR("r_dq_sum")}</div>` + li(["r_dq1","r_dq2","r_dq3","r_dq4","r_dq5"])
